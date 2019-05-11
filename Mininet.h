@@ -6,6 +6,7 @@
 #include "CommandHandler.h"
 #include "Publisher.h"
 #include "Purchase.h"
+
 using namespace std;
 
 class MiniNet{
@@ -15,6 +16,7 @@ public:
 private:
 	int totalNetCredit;
 	CommandHandler* manageCommand;
+	Customer* onlineUser;
 	vector<Customer*> customers;
 	vector<Publisher*> publisher;
 	vector<Purchase*> purchases;

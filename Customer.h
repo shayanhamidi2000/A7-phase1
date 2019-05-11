@@ -12,9 +12,9 @@ class Customer{
 public:
 	Customer(string username , string password , string email , unsigned int id , unsigned int age);
 protected:
+	bool isPublisher;
 	string username;
 	string password;
-	bool isLogedIn;
 	string email;
 	unsigned int id;
 	unsigned int age;

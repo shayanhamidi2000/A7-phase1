@@ -7,6 +7,7 @@
 #define HIGH_RATED 3
 #define LOW_RATED 1
 #define AVERAGE_RATED 2
+
 #define DL_KW "DELETE"
 #define GET_KW "GET"
 #define POST_KW "POST"
@@ -14,17 +15,18 @@
 #define COMMAND_END_SIGN "?"
 #define BASIC_ID_VALUE 1
 #define REGISTER_C0MMAND "signup"
-#define LOGIN_COMMNAD "login"
+#define LOGIN_COMMAND "login"
 #define FILMS_COMMAND "films"
-#define FOLLOWERS_COMMNAD "followers"
+#define FOLLOWERS_COMMAND "followers"
 #define GET_MONEY_COMMAND "money"
-#define REPLY_COMMNAD "replies"
-#define COMMENTS_COMMNAD "comments"
+#define GET_PUBLISHED_FILMS_COMMAND "published"
+#define REPLY_COMMAND "replies"
+#define COMMENTS_COMMAND "comments"
 #define BUY_COMMAND "buy"
 #define RATE_COMMAND "rate"
 #define PURCHASES_COMMAND "purchased"
 #define NOTIFICATIONS_COMMAND "notifications"
-#define READ_COMMAND "read"
+#define READ_NOTIFICATIONS_COMMAND "notificationsread"
 #define EMAIL_KW "email" 
 #define USERNAME_KW "username"
 #define PASSWORD_KW "password"

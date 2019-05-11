@@ -2,7 +2,7 @@
 #define COMMENT_H
 
 #include <string>
-#include <vector>
+#include <map>
 
 using namespace std;
 
@@ -12,7 +12,7 @@ public:
 private:
 	int id;
 	string content;
-	vector<string> replies; 
+	map<string , int> replies; 
 
 };
 
