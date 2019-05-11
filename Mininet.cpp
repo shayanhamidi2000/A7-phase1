@@ -2,9 +2,9 @@
 
 MiniNet::MiniNet(){
 	totalNetCredit = 0;
-	manageCommnad = new CommandHandler();
+	manageCommand = new CommandHandler();
 }
 
-MiniNet::startNet(){
+void MiniNet::startNet(){
 	
 }

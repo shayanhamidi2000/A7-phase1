@@ -1,4 +1,5 @@
-#include "MiniNet.h"
+#include "Mininet.h"
+
 
 using namespace std;
 
