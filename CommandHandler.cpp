@@ -152,3 +152,7 @@ void CommandHandler::recognizeCommandType(string keyCommand , string restOfComma
 	}   
 		
 }
+
+void CommandHandler::manageSignUp(string signUpInfo){
+	
+}
