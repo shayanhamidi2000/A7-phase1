@@ -42,6 +42,7 @@ private:
 	string deleteSpacesOfAString(string aString);
 	string concatenateTwoStrings(string firstString , string secondString);
 	vector<string> splitString(string aString);
+	bool checkCommandValidation(string keyCommand);
 };
 
 

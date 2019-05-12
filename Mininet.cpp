@@ -22,18 +22,18 @@ void MiniNet::startNet(){
 	}
 }
 
-bool Mininet::checkUsernameRepetition(string username){
+bool MiniNet::checkUsernameRepetition(string username){
 	for(unsigned int i = 0 ; i < customers.size() ; i++)
-		if(customers[i].getUsername() == username)
+		if(customers[i]->getUsername() == username)
 			return true;
 
 	for(unsigned int i = 0 ; i < publishers.size() ; i++)
-		if(publishers[i].getUsername() == username)
+		if(publishers[i]->getUsername() == username)
 			return true;	
 
 	return false;	
 }
 
-void registerUser(string email , string username , string password , int age , bool isPublisher){
+void MiniNet::registerUser(string email , string username , string password , int age , bool isPublisher){
 
 }

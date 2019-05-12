@@ -9,8 +9,10 @@ using namespace std;
 class Comment{
 public: 
 	Comment(int id , string content);
+	unsigned int getId() const { return id; }
+	string getContent() const { return content; }
 private:
-	int id;
+	unsigned int id;
 	string content;
 	map<string , int> replies; 
 
