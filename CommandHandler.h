@@ -41,6 +41,7 @@ private:
 	MiniNet* miniNetAccess; 
 	string deleteSpacesOfAString(string aString);
 	string concatenateTwoStrings(string firstString , string secondString);
+	vector<string> splitString(string aString);
 };
 
 

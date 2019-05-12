@@ -13,6 +13,7 @@
 #define POST_KW "POST"
 #define PUT_KW "PUT"
 #define COMMAND_END_SIGN "?"
+#define COMMAND_DELIMITER ' '
 #define BASIC_ID_VALUE 1
 #define REGISTER_C0MMAND "signup"
 #define LOGIN_COMMAND "login"

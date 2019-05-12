@@ -22,14 +22,52 @@ void CommandHandler::getRawCommand(string rawCommandLine){
 		restOfCommand = "";
 	}else{
 		keyCommand = rawCommandLine.substr(0 , rawCommandLine.find_first_of(COMMAND_END_SIGN) - 1);
-		restOfCommand = (rawCommandLine.find_first_of(COMMAND_END_SIGN) + 1);
+		if( (rawCommandLine.find_first_of(COMMAND_END_SIGN) + 1) == rawCommandLine.length() )
+			throw BadRequestException();
+
+		restOfCommand = rawCommandLine.substr(rawCommandLine.find_first_of(COMMAND_END_SIGN) + 1);
 	}
 	keyCommand = deleteSpacesOfAString(keyCommand);
 
 	recognizeCommandType(keyCommand , restOfCommand);
 }
 
+bool CommandHandler::checkCommandValidation(string keyCommand) {
+	string commandSecondPart = deleteSpacesOfAString( splitString(keyCommand)[1] );
+	if(commandSecondPart == REGISTER_C0MMAND)
+		return true;
+	if(commandSecondPart == LOGIN_COMMAND)
+		return true;
+	if(commandSecondPart == FILMS_COMMAND)
+		return true;
+	if(commandSecondPart == FOLLOWERS_COMMAND)
+		return true;
+	if(commandSecondPart == GET_MONEY_COMMAND)
+		return true;
+	if(commandSecondPart == GET_PUBLISHED_FILMS_COMMAND)
+		return true;
+	if(commandSecondPart == REPLY_COMMAND)
+		return true;
+	if(commandSecondPart == COMMENTS_COMMAND)
+		return true;
+	if(commandSecondPart == BUY_COMMAND)
+		return true;
+	if(commandSecondPart == RATE_COMMAND)
+			return true;
+	if(commandSecondPart == PURCHASES_COMMAND)
+		return true;
+	if(commandSecondPart == NOTIFICATIONS_COMMAND)
+		return true;
+	if(commandSecondPart == READ_NOTIFICATIONS_COMMAND)
+		return true;
+	
+	return false;	
+}
+
 void CommandHandler::recognizeCommandType(string keyCommand , string restOfCommand){
+	if(!checkCommandValidation(keyCommand))
+		throw NotFoundException();
+
 	if(concatenateTwoStrings(POST_KW , REGISTER_C0MMAND) == keyCommand){
 		manageSignUp(restOfCommand);
 
@@ -88,7 +126,7 @@ void CommandHandler::recognizeCommandType(string keyCommand , string restOfComma
 		manageAllNotifications(restOfCommand);
 
 	}else{
-		throw NotFoundException();
+		throw BadRequestException();
 	}   
 		
 }
