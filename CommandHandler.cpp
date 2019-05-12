@@ -14,6 +14,28 @@ string CommandHandler::concatenateTwoStrings(string firstString , string secondS
 	return (firstString + secondString);
 }
 
+vector<string> splitString(string aString){
+	vector<string> splitedString;
+	string newSubString;
+	int j;
+	
+	for(unsigned int i = 0 ; i < aString.length() ; i++){
+		if(aString[i] == COMMAND_DELIMITER)
+			continue;
+		j = i;
+		newSubString = "";
+		while(aString[j] != COMMAND_DELIMITER){
+			newSubString += aString[j];
+			j++;
+			if(j == aString.length())
+				break;
+		}
+		splitedString.push_back(newSubString);
+		i = j;
+	}
+	return splitedString;
+}
+
 void CommandHandler::getRawCommand(string rawCommandLine){
 	string keyCommand;
 	string restOfCommand;
