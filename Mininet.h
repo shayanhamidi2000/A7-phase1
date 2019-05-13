@@ -2,6 +2,7 @@
 #define MININET_H
 
 #include <vector>
+#include <iostream>
 #include "Customer.h" 
 #include "CommandHandler.h"
 #include "Publisher.h"
@@ -13,19 +14,19 @@ class MiniNet{
 public:
 	MiniNet();
 	void startNet();
-	void registerUser(string email , string username , string password , int age , bool isPublisher);
+	void registerUser(string email , string username , string password , unsigned int age , bool isPublisher);
 	bool checkUsernameRepetition(string username);
 	Customer* findCustomerById(unsigned int id);
 
 private:
 	unsigned int totalNetCredit;
-	int theIdsAssigned;
+	unsigned int theIdsAssigned;
 	CommandHandler* manageCommand;
 	Customer* onlineUser;
 	vector<Customer*> customers;
-	vector<Publisher*> publishers;
+	vector<Customer*> publishers;
 	vector<Purchase*> purchases;
-
+	void goToNextId() { theIdsAssigned++; }
 };
 
 

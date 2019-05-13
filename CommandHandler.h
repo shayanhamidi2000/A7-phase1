@@ -5,7 +5,9 @@
 #include "Exceptions.h"
 #include <string>
 #include <algorithm>
+#include <ctype.h>
 #include <vector>
+#include <map>
 
 class MiniNet;
 
@@ -40,9 +42,19 @@ public:
 private:	
 	MiniNet* miniNetAccess; 
 	string deleteSpacesOfAString(string aString);
+	bool isConstantNumber(string aPieceOfString);
 	string concatenateTwoStrings(string firstString , string secondString);
 	vector<string> splitString(string aString);
 	bool checkCommandValidation(string keyCommand);
+	bool isEven(unsigned int aNumber);
+	void checkFirstPartAndSecondPartOfCommand(string keyCommand , string restOfCommand);
+	bool checkSecondCommandPartValidation(string secondPart); 
+	void checkSignupKeys(vector<string> keys);
+	vector<string> getKeys(vector<string> keysAndValues , unsigned int minNumberOfKeys , unsigned int maxNumberOfKeys);
+	map<string , string> getMappedKeysAndValues(vector<string> keysAndValues);
+	void checkSignupValues(string username , string password , string age , string email , string isPublisher);
+	bool checkEmailValidation(string email);
+	bool isAcceptableSuffix(string aString);
 };
 
 

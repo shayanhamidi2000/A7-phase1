@@ -1,4 +1,5 @@
 #include "CommandHandler.h"
+#include "Mininet.h"
 #include <iostream>
 
 CommandHandler::CommandHandler(MiniNet* theMiniNet){
@@ -11,8 +12,59 @@ string CommandHandler::deleteSpacesOfAString(string aString){
 	return modifiedString;
 }
 
+bool CommandHandler::isAcceptableSuffix(string aString){
+	for(unsigned int i = 0 ; i < aString.length() ; i++)
+		if(!isalpha((char) aString[i]) || (aString[i] != '.') )
+			return false;
+
+	return true;	
+}
+
+bool CommandHandler::isConstantNumber(string aPieceOfString)
+{
+	for(unsigned int i = 0 ; i < aPieceOfString.length() ; i++)
+		if(!isdigit((char) aPieceOfString[i]))
+			return false;
+
+	return true;
+}
+
+bool CommandHandler::checkSecondCommandPartValidation(string secondPart){
+	vector<string> keywordsAndValues  = splitString(secondPart);
+	if(!isEven(keywordsAndValues.size() ) )
+		return false;
+
+	return true;
+}
+
+vector<string> CommandHandler::getKeys(vector<string> keysAndValues , unsigned int minNumberOfKeys , unsigned int maxNumberOfKeys){
+	if(keysAndValues.size() > maxNumberOfKeys || keysAndValues.size() < minNumberOfKeys )
+		throw BadRequestException();
+
+	vector<string> keys;
+	for(unsigned int i = 0 ; i < keysAndValues.size() ; i++)
+		if(isEven(i))
+			keys.push_back(keysAndValues[i]);
+
+	return keysAndValues;	
+}
+
+map<string , string> CommandHandler::getMappedKeysAndValues(vector<string> keysAndValues) {
+	map<string , string> mappedKeysAndValues;
+	for(unsigned int i = 0 ; i < keysAndValues.size() ; i += 2)
+		mappedKeysAndValues.insert(pair<string , string> (keysAndValues[i] , keysAndValues[i + 1]) );
+
+	return mappedKeysAndValues;
+}
+
 string CommandHandler::concatenateTwoStrings(string firstString , string secondString){
 	return (firstString + secondString);
+}
+
+bool CommandHandler::isEven(unsigned int aNumber){
+	if(aNumber % 2 == 0)
+		return true;
+	return false;
 }
 
 vector<string> CommandHandler::splitString(string aString){
@@ -36,7 +88,7 @@ vector<string> CommandHandler::splitString(string aString){
 	}
 	return splitedString;
 }
-
+//
 void CommandHandler::getRawCommand(string rawCommandLine){
 	string keyCommand;
 	string restOfCommand;
@@ -52,6 +104,7 @@ void CommandHandler::getRawCommand(string rawCommandLine){
 		restOfCommand = rawCommandLine.substr(rawCommandLine.find_first_of(COMMAND_END_SIGN) + 1);
 	}
 
+	checkFirstPartAndSecondPartOfCommand(keyCommand , restOfCommand);
 	recognizeCommandType(keyCommand , restOfCommand);
 }
 
@@ -91,10 +144,15 @@ bool CommandHandler::checkCommandValidation(string keyCommand) {
 	return false;	
 }
 
-void CommandHandler::recognizeCommandType(string keyCommand , string restOfCommand){
+void CommandHandler::checkFirstPartAndSecondPartOfCommand(string keyCommand , string restOfCommand){
 	if(!checkCommandValidation(keyCommand))
 		throw NotFoundException();
 
+	if(!checkSecondCommandPartValidation(restOfCommand))
+		throw BadRequestException();
+}
+
+void CommandHandler::recognizeCommandType(string keyCommand , string restOfCommand){
 	keyCommand = deleteSpacesOfAString(keyCommand);
 
 	if(concatenateTwoStrings(POST_KW , REGISTER_C0MMAND) == keyCommand){
@@ -157,8 +215,83 @@ void CommandHandler::recognizeCommandType(string keyCommand , string restOfComma
 		
 }
 
-void CommandHandler::manageSignUp(string signUpInfo){
+bool CommandHandler::checkEmailValidation(string email){
+	int numberOfDots = count(email.begin() , email.end() , '.'); 
+	int numberOfAsign = count(email.begin() , email.end() , '@');
+	if(numberOfAsign != 1){
+		cout << 12;
+		return false;
+	}
+	if(numberOfDots == 0){
+		cout << 13;
+		return false;
+	}
+	if(email.find_first_of('@') > email.find_first_of('.') ){
+		cout << 14;
+		return false;
+	}
+	if(isConstantNumber(email.substr(0 , email.find_first_of('@') - 1) ) ){
+		cout << 16;
+		return false;
+	}
+	if(isAcceptableSuffix(email.substr(email.find_first_of('@') + 1)) ){
+		cout << 17;
+		return false;
+	}
 
+	return true;
+}
+
+void CommandHandler::checkSignupValues(string username , string password , string age , string email , string isPublisher){
+	if(miniNetAccess->checkUsernameRepetition(username) ){
+		throw BadRequestException();
+	}
+	if(!checkEmailValidation(email) ){
+		throw BadRequestException();
+	}
+	if(!isConstantNumber(age) ){
+		throw BadRequestException();
+	}
+
+	if(isPublisher != IS_NOT_PUBLISHER && isPublisher != IS_PUBLISHER)
+		throw BadRequestException();
+}
+
+void CommandHandler::checkSignupKeys(vector<string> keys){
+	int numberOfEmails = count(keys.begin() , keys.end() , EMAIL_KEY);
+	int numberOfUsernames = count(keys.begin() , keys.end() , USERNAME_KEY);
+	int numberOfPasswords = count(keys.begin() , keys.end() , PASSWORD_KEY);
+	int numberOfAges = count(keys.begin() , keys.end() , AGE_KEY);
+	if((numberOfEmails != 1) || (numberOfUsernames != 1) || (numberOfPasswords != 1) || (numberOfAges != 1) )
+		throw BadRequestException(); 
+
+	if(keys.size() == MAX_KEYS_FOR_SIGNUP){
+		if(count(keys.begin() , keys.end() , PUBLISHER_KEY) != 1)
+			throw BadRequestException();
+	}
+}
+
+void CommandHandler::manageSignUp(string signUpInfo){
+	string username,password,email;
+	unsigned int age;
+	bool isPublisher = false;
+
+	vector<string> keywordsAndValues  = splitString(signUpInfo);
+	vector<string> keys = getKeys(keywordsAndValues , MIN_KEYS_FOR_SIGNUP , MAX_KEYS_FOR_SIGNUP);
+	checkSignupKeys(keys);
+	map<string , string> mappedKeysAndValues = getMappedKeysAndValues(keywordsAndValues);
+	mappedKeysAndValues.insert(pair<string , string> (PUBLISHER_KEY , IS_NOT_PUBLISHER) );
+	checkSignupValues(mappedKeysAndValues[USERNAME_KEY] , mappedKeysAndValues[PASSWORD_KEY] , mappedKeysAndValues[AGE_KEY]
+		, mappedKeysAndValues[EMAIL_KEY] , mappedKeysAndValues[PUBLISHER_KEY]);
+	
+	age = stoi(mappedKeysAndValues[AGE_KEY] );
+	username = mappedKeysAndValues[USERNAME_KEY];
+	password = mappedKeysAndValues[PASSWORD_KEY];
+	email = mappedKeysAndValues[PASSWORD_KEY];
+	if(mappedKeysAndValues[PUBLISHER_KEY] == IS_PUBLISHER)
+		isPublisher = true;
+
+	miniNetAccess->registerUser(email , username , password , age , isPublisher);
 }
 
 void CommandHandler::manageLogin(string loginInfo){

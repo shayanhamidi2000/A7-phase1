@@ -34,6 +34,15 @@ bool MiniNet::checkUsernameRepetition(string username){
 	return false;	
 }
 
-void MiniNet::registerUser(string email , string username , string password , int age , bool isPublisher){
+void MiniNet::registerUser(string email , string username , string password , unsigned int age , bool isPublisher){
+	if(isPublisher){
+		onlineUser = new Publisher(username , password , email , theIdsAssigned , age);
+		customers.push_back(onlineUser);
+	}else{
+		onlineUser = new Customer(username , password , email , theIdsAssigned , age);
+		publishers.push_back(onlineUser);
+	}
+	this->goToNextId();
+	cout << SUCCESS_MESSAGE << endl;
 
 }
