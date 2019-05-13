@@ -15,18 +15,22 @@ public:
 	MiniNet();
 	void startNet();
 	void registerUser(string email , string username , string password , unsigned int age , bool isPublisher);
-	bool checkUsernameRepetition(string username);
-	Customer* findCustomerById(unsigned int id);
+	void loginUser(string username , string password);
+	Customer* findUserByUsername(string username);
+	Customer* findUserById(unsigned int id);
 
 private:
 	unsigned int totalNetCredit;
 	unsigned int theIdsAssigned;
 	CommandHandler* manageCommand;
 	Customer* onlineUser;
-	vector<Customer*> customers;
-	vector<Customer*> publishers;
+	vector<Customer*> users;
 	vector<Purchase*> purchases;
 	void goToNextId() { theIdsAssigned++; }
+	void checkUsernameRepetition(string username);
+	void isUsernameMatchingPassword(string username , string password);
+	void isUsernameExisted(string username);
+	void checkIdExistence(unsigned int id);
 };
 
 

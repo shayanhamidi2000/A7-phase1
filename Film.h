@@ -11,6 +11,7 @@ public:
 	Film(unsigned int id , string name , unsigned manufacturedYear , unsigned int length , 
 		unsigned int price , string summary , string directorName);
 
+	unsigned int getAvailability() const { return isAvailable; }
 	unsigned int getId() const { return id; }
 	double getPoint() const { return averagePoint; }
 	string getName() const { return name; }
@@ -22,6 +23,7 @@ public:
 private:
 	int theIdsAssignedToComments;
 	unsigned int id;
+	bool isAvailable;
 	double averagePoint;
 	unsigned int peopleRatedThisFilm;
 	string name;

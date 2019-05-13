@@ -26,7 +26,7 @@ protected:
 	unsigned int age;
 	unsigned int credit;
 	vector<Message*> messages;
-	vector<Film> purchases;
+	vector<Film*> purchases;
 };
 
 #endif

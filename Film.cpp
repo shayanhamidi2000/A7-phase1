@@ -13,4 +13,5 @@ Film::Film(unsigned int id , string name , unsigned manufacturedYear , unsigned 
 	this->averagePoint = 0;
 	this->peopleRatedThisFilm = 0;
 	this->theIdsAssignedToComments = BASIC_ID_VALUE;
+	this->isAvailable = true;
 }

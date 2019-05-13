@@ -46,15 +46,20 @@ private:
 	string concatenateTwoStrings(string firstString , string secondString);
 	vector<string> splitString(string aString);
 	bool checkCommandValidation(string keyCommand);
-	bool isEven(unsigned int aNumber);
 	void checkFirstPartAndSecondPartOfCommand(string keyCommand , string restOfCommand);
-	bool checkSecondCommandPartValidation(string secondPart); 
-	void checkSignupKeys(vector<string> keys);
+	bool checkSecondCommandPartValidation(string secondPart);
+	bool isEven(unsigned int aNumber);
+	//
 	vector<string> getKeys(vector<string> keysAndValues , unsigned int minNumberOfKeys , unsigned int maxNumberOfKeys);
 	map<string , string> getMappedKeysAndValues(vector<string> keysAndValues);
-	void checkSignupValues(string username , string password , string age , string email , string isPublisher);
+	// 
+	void checkSignupKeys(vector<string> keys);
+	void checkSignupValues(string age , string email , string isPublisher);
 	bool checkEmailValidation(string email);
-	bool isAcceptableSuffix(string aString);
+	bool isAcceptableSuffixForEmail(string aString);
+	//
+	void checkLoginKeys(vector<string> keys);
+	//
 };
 
 

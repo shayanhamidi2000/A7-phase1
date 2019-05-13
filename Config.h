@@ -12,6 +12,8 @@
 #define IS_NOT_PUBLISHER "false"
 #define MAX_KEYS_FOR_SIGNUP 10
 #define MIN_KEYS_FOR_SIGNUP 8
+#define MIN_KEYS_FOR_LOGIN 4
+#define MAX_KEYS_FOR_LOGIN 4
 #define DL_KW "DELETE"
 #define GET_KW "GET"
 #define POST_KW "POST"

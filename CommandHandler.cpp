@@ -12,7 +12,7 @@ string CommandHandler::deleteSpacesOfAString(string aString){
 	return modifiedString;
 }
 
-bool CommandHandler::isAcceptableSuffix(string aString){
+bool CommandHandler::isAcceptableSuffixForEmail(string aString){
 	for(unsigned int i = 0 ; i < aString.length() ; i++)
 		if(!isalpha((char) aString[i]) || (aString[i] != '.') )
 			return false;
@@ -218,34 +218,25 @@ void CommandHandler::recognizeCommandType(string keyCommand , string restOfComma
 bool CommandHandler::checkEmailValidation(string email){
 	int numberOfDots = count(email.begin() , email.end() , '.'); 
 	int numberOfAsign = count(email.begin() , email.end() , '@');
-	if(numberOfAsign != 1){
-		cout << 12;
+	if(numberOfAsign != 1)
 		return false;
-	}
-	if(numberOfDots == 0){
-		cout << 13;
+
+	if(numberOfDots == 0)
 		return false;
-	}
-	if(email.find_first_of('@') > email.find_first_of('.') ){
-		cout << 14;
+
+	if(email.find_first_of('@') > email.find_first_of('.') )
 		return false;
-	}
-	if(isConstantNumber(email.substr(0 , email.find_first_of('@') - 1) ) ){
-		cout << 16;
+
+	if(isConstantNumber(email.substr(0 , email.find_first_of('@') - 1) ) )
 		return false;
-	}
-	if(isAcceptableSuffix(email.substr(email.find_first_of('@') + 1)) ){
-		cout << 17;
+
+	if(isAcceptableSuffixForEmail(email.substr(email.find_first_of('@') + 1)) )
 		return false;
-	}
 
 	return true;
 }
 
-void CommandHandler::checkSignupValues(string username , string password , string age , string email , string isPublisher){
-	if(miniNetAccess->checkUsernameRepetition(username) ){
-		throw BadRequestException();
-	}
+void CommandHandler::checkSignupValues(string age , string email , string isPublisher){
 	if(!checkEmailValidation(email) ){
 		throw BadRequestException();
 	}
@@ -281,9 +272,7 @@ void CommandHandler::manageSignUp(string signUpInfo){
 	checkSignupKeys(keys);
 	map<string , string> mappedKeysAndValues = getMappedKeysAndValues(keywordsAndValues);
 	mappedKeysAndValues.insert(pair<string , string> (PUBLISHER_KEY , IS_NOT_PUBLISHER) );
-	checkSignupValues(mappedKeysAndValues[USERNAME_KEY] , mappedKeysAndValues[PASSWORD_KEY] , mappedKeysAndValues[AGE_KEY]
-		, mappedKeysAndValues[EMAIL_KEY] , mappedKeysAndValues[PUBLISHER_KEY]);
-	
+	checkSignupValues( mappedKeysAndValues[AGE_KEY] , mappedKeysAndValues[EMAIL_KEY] , mappedKeysAndValues[PUBLISHER_KEY]);
 	age = stoi(mappedKeysAndValues[AGE_KEY] );
 	username = mappedKeysAndValues[USERNAME_KEY];
 	password = mappedKeysAndValues[PASSWORD_KEY];
@@ -294,8 +283,25 @@ void CommandHandler::manageSignUp(string signUpInfo){
 	miniNetAccess->registerUser(email , username , password , age , isPublisher);
 }
 
-void CommandHandler::manageLogin(string loginInfo){
+void CommandHandler::checkLoginKeys(vector<string> keys){
+	int numberOfUsernames = count(keys.begin() , keys.end() , USERNAME_KEY);
+	int numberOfPasswords = count(keys.begin() , keys.end() , PASSWORD_KEY);
+	if((numberOfPasswords != 1) || (numberOfUsernames != 1))
+		throw BadRequestException();
+}
 
+void CommandHandler::manageLogin(string loginInfo){
+	string username;
+	string password;
+
+	vector<string> keywordsAndValues = splitString(loginInfo);
+	vector<string> keys = getKeys(keywordsAndValues , MIN_KEYS_FOR_LOGIN , MAX_KEYS_FOR_LOGIN);
+	checkLoginKeys(keys);
+	map<string , string> mappedKeysAndValues = getMappedKeysAndValues(keywordsAndValues);
+	username = mappedKeysAndValues[USERNAME_KEY];
+	password = mappedKeysAndValues[PASSWORD_KEY];
+
+	miniNetAccess->loginUser(username , password);
 }
 
 void CommandHandler::manageFilmUpload(string newFilmInfo){
