@@ -1,6 +1,7 @@
 #include "Mininet.h"
 #include "Config.h"
 #include "Exceptions.h"
+#include "Film.h"
 #include <iostream>
 #include <string>
 
@@ -10,6 +11,7 @@ MiniNet::MiniNet(){
 	theIdsAssigned = BASIC_ID_VALUE; 
 	onlineUser = nullptr;
 	manageCommand = new CommandHandler(this);
+	films = new FilmRepository();
 }
 
 void MiniNet::startNet(){
@@ -76,5 +78,13 @@ void MiniNet::loginUser(string username , string password){
 	isUsernameExisted(username);
 	isUsernameMatchingPassword(username , password);
 	this->onlineUser = findUserByUsername(username);
+
+	cout << SUCCESS_MESSAGE << endl;
+}
+
+void MiniNet::addFilmOnNet(string name , unsigned int year , string director , string summary , unsigned int price , unsigned int length){
+	Film* newFilm = films->addNewFilm(name , year , director , summary , price , length);
+	( (Publisher*) onlineUser)->addToUploadedFilms(newFilm);
+	( (Publisher*) onlineUser)->notifyFollowersOnNewUpload();
 	cout << SUCCESS_MESSAGE << endl;
 }

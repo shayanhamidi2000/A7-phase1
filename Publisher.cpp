@@ -4,3 +4,7 @@ Publisher::Publisher(string username , string password , string email , unsigned
 	: Customer(username , password , email , id , age) {
 		isPublisher = true;
 }
+
+void Publisher::notifyFollowersOnNewUpload(){
+
+}

@@ -60,6 +60,9 @@ private:
 	//
 	void checkLoginKeys(vector<string> keys);
 	//
+	void checkFilmUploadKeys(vector<string> keys);
+	void checkFilmUploadValues(string year , string lenght , string price);
+	//
 };
 
 

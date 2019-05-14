@@ -9,9 +9,11 @@ using namespace std;
 class FilmRepository{
 public: 
 	FilmRepository();
+	Film* addNewFilm(string name , unsigned int year , string director , string summary , unsigned int price , unsigned int length);
 private:
-	int theIdsAssigned;
-	vector<Film*> allFilms;	
+	unsigned int theIdsAssigned;
+	vector<Film*> allFilms;
+	void goToNextId() { theIdsAssigned++; }	
 };
 
 

@@ -4,6 +4,7 @@
 #include <vector>
 #include <iostream>
 #include "Customer.h" 
+#include "FilmRepository.h"
 #include "CommandHandler.h"
 #include "Publisher.h"
 #include "Purchase.h"
@@ -14,6 +15,9 @@ class MiniNet{
 public:
 	MiniNet();
 	void startNet();
+	bool isOnlineUserPublisher() { return onlineUser->getPublishingState(); }
+	bool isAnyOneOnline() { return (onlineUser != nullptr); }
+	void addFilmOnNet(string name , unsigned int year , string director , string summary , unsigned int price , unsigned int length);
 	void registerUser(string email , string username , string password , unsigned int age , bool isPublisher);
 	void loginUser(string username , string password);
 	Customer* findUserByUsername(string username);
@@ -23,6 +27,7 @@ private:
 	unsigned int totalNetCredit;
 	unsigned int theIdsAssigned;
 	CommandHandler* manageCommand;
+	FilmRepository* films;
 	Customer* onlineUser;
 	vector<Customer*> users;
 	vector<Purchase*> purchases;

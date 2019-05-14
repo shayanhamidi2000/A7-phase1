@@ -304,8 +304,43 @@ void CommandHandler::manageLogin(string loginInfo){
 	miniNetAccess->loginUser(username , password);
 }
 
-void CommandHandler::manageFilmUpload(string newFilmInfo){
+void CommandHandler::checkFilmUploadKeys(vector<string> keys){
+	int numberOfYears = count(keys.begin() , keys.end() , FILM_YEAR_KEY);
+	int numberOfDirectors = count(keys.begin() , keys.end() , FILM_DIRECTOR_KEY);
+	int numberOfPrices = count(keys.begin() , keys.end() , FILM_PRICE_KEY);
+	int numberOfLengths = count(keys.begin() , keys.end() , FILM_LENGTH_KEY);
+	int numberOfSummaries = count(keys.begin() , keys.end() , FILM_SUMMARY_KEY);
+	int numberOfNames = count(keys.begin() , keys.end() , FILM_NAME_KEY);
 
+	if( (numberOfNames != 1) || (numberOfPrices != 1) || (numberOfLengths != 1) || (numberOfSummaries != 1) || (numberOfDirectors != 1) || (numberOfYears != 1) )
+		throw BadRequestException();
+}
+
+void CommandHandler::checkFilmUploadValues(string year , string lenght , string price){
+	if(!isConstantNumber(year) || !isConstantNumber(lenght) || !isConstantNumber(price) )
+		throw BadRequestException();
+}
+
+void CommandHandler::manageFilmUpload(string newFilmInfo){
+	if(!miniNetAccess->isAnyOneOnline() || !miniNetAccess->isOnlineUserPublisher())
+		throw PermissionDenialException();
+
+	string name , director , summary;
+	unsigned int price , length , year;
+
+	vector<string> keywordsAndValues = splitString(newFilmInfo);
+	vector<string> keys = getKeys(keywordsAndValues , MIN_KEYS_FOR_FILM_UPLOAD , MAX_KEYS_FOR_FILM_UPLOAD);
+	checkFilmUploadKeys(keys);
+	map<string , string> mappedKeysAndValues = getMappedKeysAndValues(keywordsAndValues);
+	checkFilmUploadValues( mappedKeysAndValues[FILM_YEAR_KEY] , mappedKeysAndValues[FILM_LENGTH_KEY] , mappedKeysAndValues[FILM_PRICE_KEY] );
+	name = mappedKeysAndValues[FILM_NAME_KEY];
+	director = mappedKeysAndValues[FILM_DIRECTOR_KEY];
+	summary = mappedKeysAndValues[FILM_SUMMARY_KEY];
+	price = stoi(mappedKeysAndValues[FILM_PRICE_KEY] );
+	length = stoi(mappedKeysAndValues[FILM_LENGTH_KEY] );
+	year = stoi(mappedKeysAndValues[FILM_YEAR_KEY] );
+
+	miniNetAccess->addFilmOnNet(name , year , director , summary , price , length);
 }
 
 void CommandHandler::manageFilmEdit(string editedFilmInfo){

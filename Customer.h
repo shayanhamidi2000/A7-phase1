@@ -17,6 +17,8 @@ public:
 	virtual unsigned int getId() const { return id; }
 	virtual unsigned int getAge() const { return age; }
 	virtual unsigned int getCredit() const { return credit; }
+	virtual bool getPublishingState() const { return isPublisher; }
+	//
 protected:
 	bool isPublisher;
 	string username;
