@@ -406,7 +406,25 @@ void CommandHandler::manageFilmEdit(string editedFilmInfo){
 	miniNetAccess->editAFilm(id , modifiedName , modifiedYear , modifiedLength , modifiedSummary , modifiedDirector);
 }
 
+void CommandHandler::checkFilmDeleteKeys(vector<string> keys){
+	int numberOfIds = count(keys.begin() , keys.end() , FILM_ID_KEY);
+
+	if(numberOfIds != 1)
+		throw BadRequestException();
+}
+
 void CommandHandler::manageFilmDelete(string deletedFilmInfo){
+	unsigned int id;
+
+	vector<string> keywordsAndValues = splitString(deletedFilmInfo);
+	vector<string> keys = getKeys(keywordsAndValues , MIN_KEYS_AND_VALUES_FOR_FILM_DELETE , MAX_KEYS_AND_VALUES_FOR_FILM_DELETE);
+	checkFilmDeleteKeys(keys);
+	map<string , string> mappedKeysAndValues = getMappedKeysAndValues(keywordsAndValues);
+	checkIdString( mappedKeysAndValues[FILM_ID_KEY] );
+
+	id = stoi(mappedKeysAndValues[FILM_ID_KEY]);
+
+	miniNetAccess->deleteAFilm(id);
 
 }
 

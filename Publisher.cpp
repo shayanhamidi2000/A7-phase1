@@ -1,4 +1,5 @@
 #include "Publisher.h"
+#include <algorithm>
 
 using namespace std;
 
@@ -13,10 +14,15 @@ void Publisher::notifyFollowersOnNewUpload(){
 
 void Publisher::addToUploadedFilms(Film* newFilm) { 
 	uploadedFilms.push_back(newFilm);
+	notifyFollowersOnNewUpload();
 }
 
 void Publisher::addToFollowers(Customer* newFollower) { 
 	followers.push_back(newFollower); 
+}
+
+void Publisher::deleteMyFilm(unsigned int elementPosition){
+	uploadedFilms.erase(uploadedFilms.begin() + elementPosition);
 }
 
 vector<Film*> Publisher::getUploadedFilms() const { 

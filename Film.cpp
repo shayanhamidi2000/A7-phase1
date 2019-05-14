@@ -18,6 +18,10 @@ Film::Film(unsigned int id , string name , unsigned manufacturedYear , unsigned 
 	this->isAvailable = true;
 }
 
+void Film::beUnavailable() {
+	this->isAvailable = false;
+}
+
 bool Film::getAvailability() const {
 	 return isAvailable; 
 }

@@ -63,6 +63,7 @@ private:
 	void checkFilmEditKeys(std::vector<std::string> keys);
 	std::map<std::string , std::string> initializeEmptyFilmEditKeys(std::map<std::string , std::string> givenMap);
 	//
+	void checkFilmDeleteKeys(std::vector<std::string> keys);
 };
 
 

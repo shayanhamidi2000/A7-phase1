@@ -12,12 +12,19 @@ void FilmRepository::goToNextId(){
 	theIdsAssigned++;
 }
 
-Film* FilmRepository::addNewFilm(string name , unsigned int year , string director , string summary , unsigned int price , unsigned int length){
+unsigned int FilmRepository::findPositionById(unsigned int id , vector<Film*> listOfFilms){
+	for(unsigned int i = 0 ; i < listOfFilms.size() ; i++)
+		if(listOfFilms[i]->getId() == id)
+			return i;
+
+	return 0;		
+}
+
+void FilmRepository::addNewFilm(Publisher* filmOwner , string name , unsigned int year , string director , string summary , unsigned int price , unsigned int length){
 	Film* newFilm = new Film(theIdsAssigned , name , year , length , price , summary , director);
 	allFilms.push_back(newFilm);
+	filmOwner->addToUploadedFilms(newFilm);
 	this->goToNextId();
-
-	return newFilm;
 }
 
 Film* FilmRepository::findFilmById(unsigned int id , vector<Film*> listOfFilms){
@@ -34,8 +41,16 @@ void FilmRepository::checkFilmExistence(unsigned int id){
 }
 
 void FilmRepository::checkFilmOwnership(Publisher* assertedOwner , unsigned int id){
-	if(findFilmById(id , assertedOwner->getUploadedFilms() ) )
+	if(findFilmById(id , assertedOwner->getUploadedFilms() ) == nullptr)
 		throw PermissionDenialException();
+}
+
+void FilmRepository::deleteFilm(Publisher* filmOwner , unsigned int id){
+	checkFilmExistence(id);
+	checkFilmOwnership(filmOwner , id);
+	Film* deletedFilm = findFilmById(id , allFilms);
+	deletedFilm->beUnavailable();
+	filmOwner->deleteMyFilm(findPositionById(id , filmOwner->getUploadedFilms() ) );
 }
 
 void FilmRepository::editFilm(Publisher* assertedOwner , unsigned int id , string newName , unsigned int newYear , unsigned int newLength , string newSummary , string newDirector){

@@ -11,6 +11,7 @@ public:
 		unsigned int price , std::string summary , std::string directorName);
 
 	bool getAvailability() const;
+	void beUnavailable();
 	unsigned int getId() const;
 	double getPoint() const;
 	void setName(std::string name);

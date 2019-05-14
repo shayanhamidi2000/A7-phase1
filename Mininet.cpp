@@ -90,9 +90,7 @@ void MiniNet::addFilmOnNet(string name , unsigned int year , string director , s
 	if(!isAnyOneOnline() || !isOnlineUserPublisher())
 		throw PermissionDenialException();
 
-	Film* newFilm = films->addNewFilm(name , year , director , summary , price , length);
-	( (Publisher*) onlineUser)->addToUploadedFilms(newFilm);
-	( (Publisher*) onlineUser)->notifyFollowersOnNewUpload();
+	films->addNewFilm((Publisher*) this->onlineUser , name , year , director , summary , price , length);
 	cout << SUCCESS_MESSAGE << endl;
 }
 
@@ -101,5 +99,13 @@ void MiniNet::editAFilm(unsigned int id , string newName , unsigned int newYear 
 		throw PermissionDenialException();
 
 	films->editFilm((Publisher*) this->onlineUser , id , newName , newYear , newLength , newSummary , newDirector);
+	cout << SUCCESS_MESSAGE << endl;
+}
+
+void MiniNet::deleteAFilm(unsigned int id){
+	if(!isAnyOneOnline() || !isOnlineUserPublisher())
+		throw PermissionDenialException();
+
+	films->deleteFilm((Publisher*) this->onlineUser , id );
 	cout << SUCCESS_MESSAGE << endl;
 }

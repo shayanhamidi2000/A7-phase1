@@ -15,6 +15,7 @@ public:
 	virtual void addToUploadedFilms(Film* newFilm);
 	virtual void addToFollowers(Customer* newFollower);
 	virtual std::vector<Film*> getUploadedFilms() const;
+	virtual void deleteMyFilm(unsigned int elementPosition);
 	virtual void notifyFollowersOnNewUpload();
 };
 
