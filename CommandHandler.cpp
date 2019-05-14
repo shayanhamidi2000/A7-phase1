@@ -12,6 +12,11 @@ CommandHandler::CommandHandler(MiniNet* theMiniNet){
 	miniNetAccess = theMiniNet;
 }
 
+void CommandHandler::checkIdString(string idString){
+	if(!isConstantNumber(idString) )
+		throw BadRequestException();
+}
+
 string CommandHandler::deleteSpacesOfAString(string aString){
 	string modifiedString = aString;
 	modifiedString.erase(remove(modifiedString.begin(), modifiedString.end(), ' ') , modifiedString.end());
@@ -52,7 +57,7 @@ vector<string> CommandHandler::getKeys(vector<string> keysAndValues , unsigned i
 		if(isEven(i))
 			keys.push_back(keysAndValues[i]);
 
-	return keysAndValues;	
+	return keys;	
 }
 
 map<string , string> CommandHandler::getMappedKeysAndValues(vector<string> keysAndValues) {
@@ -259,13 +264,13 @@ void CommandHandler::checkSignupKeys(vector<string> keys){
 	int numberOfUsernames = count(keys.begin() , keys.end() , USERNAME_KEY);
 	int numberOfPasswords = count(keys.begin() , keys.end() , PASSWORD_KEY);
 	int numberOfAges = count(keys.begin() , keys.end() , AGE_KEY);
+	int numberOfPublishers = count(keys.begin() , keys.end() , PUBLISHER_KEY);
+
 	if((numberOfEmails != 1) || (numberOfUsernames != 1) || (numberOfPasswords != 1) || (numberOfAges != 1) )
 		throw BadRequestException(); 
 
-	if(keys.size() == MAX_KEYS_FOR_SIGNUP){
-		if(count(keys.begin() , keys.end() , PUBLISHER_KEY) != 1)
-			throw BadRequestException();
-	}
+	if( (numberOfAges + numberOfPublishers + numberOfUsernames + numberOfPasswords + numberOfEmails) != keys.size() )
+		throw BadRequestException();
 }
 
 void CommandHandler::manageSignUp(string signUpInfo){
@@ -274,7 +279,7 @@ void CommandHandler::manageSignUp(string signUpInfo){
 	bool isPublisher = false;
 
 	vector<string> keywordsAndValues  = splitString(signUpInfo);
-	vector<string> keys = getKeys(keywordsAndValues , MIN_KEYS_FOR_SIGNUP , MAX_KEYS_FOR_SIGNUP);
+	vector<string> keys = getKeys(keywordsAndValues , MIN_KEYS_AND_VALUES_FOR_SIGNUP , MAX_KEYS_AND_VALUES_FOR_SIGNUP);
 	checkSignupKeys(keys);
 	map<string , string> mappedKeysAndValues = getMappedKeysAndValues(keywordsAndValues);
 	mappedKeysAndValues.insert(pair<string , string> (PUBLISHER_KEY , IS_NOT_PUBLISHER) );
@@ -301,7 +306,7 @@ void CommandHandler::manageLogin(string loginInfo){
 	string password;
 
 	vector<string> keywordsAndValues = splitString(loginInfo);
-	vector<string> keys = getKeys(keywordsAndValues , MIN_KEYS_FOR_LOGIN , MAX_KEYS_FOR_LOGIN);
+	vector<string> keys = getKeys(keywordsAndValues , MIN_KEYS_AND_VALUES_FOR_LOGIN , MAX_KEYS_AND_VALUES_FOR_LOGIN);
 	checkLoginKeys(keys);
 	map<string , string> mappedKeysAndValues = getMappedKeysAndValues(keywordsAndValues);
 	username = mappedKeysAndValues[USERNAME_KEY];
@@ -322,9 +327,20 @@ void CommandHandler::checkFilmUploadKeys(vector<string> keys){
 		throw BadRequestException();
 }
 
-void CommandHandler::checkFilmUploadValues(string year , string lenght , string price){
+void CommandHandler::checkFilmValues(string year , string lenght , string price){
 	if(!isConstantNumber(year) || !isConstantNumber(lenght) || !isConstantNumber(price) )
 		throw BadRequestException();
+}
+
+map<string , string> CommandHandler::initializeEmptyFilmEditKeys(map<string , string> givenMap){
+	map<string , string> modifiedMap = givenMap;
+
+	modifiedMap.insert(pair<string , string> (FILM_YEAR_KEY , "") );
+	modifiedMap.insert(pair<string , string> (FILM_NAME_KEY , "") );
+	modifiedMap.insert(pair<string , string> (FILM_LENGTH_KEY , "") );
+	modifiedMap.insert(pair<string , string> (FILM_SUMMARY_KEY , "") );
+
+	return modifiedMap;
 }
 
 void CommandHandler::manageFilmUpload(string newFilmInfo){
@@ -332,10 +348,10 @@ void CommandHandler::manageFilmUpload(string newFilmInfo){
 	unsigned int price , length , year;
 
 	vector<string> keywordsAndValues = splitString(newFilmInfo);
-	vector<string> keys = getKeys(keywordsAndValues , MIN_KEYS_FOR_FILM_UPLOAD , MAX_KEYS_FOR_FILM_UPLOAD);
+	vector<string> keys = getKeys(keywordsAndValues , MIN_KEYS_AND_VALUES_FOR_FILM_UPLOAD , MAX_KEYS_AND_VALUES_FOR_FILM_UPLOAD);
 	checkFilmUploadKeys(keys);
 	map<string , string> mappedKeysAndValues = getMappedKeysAndValues(keywordsAndValues);
-	checkFilmUploadValues( mappedKeysAndValues[FILM_YEAR_KEY] , mappedKeysAndValues[FILM_LENGTH_KEY] , mappedKeysAndValues[FILM_PRICE_KEY] );
+	checkFilmValues( mappedKeysAndValues[FILM_YEAR_KEY] , mappedKeysAndValues[FILM_LENGTH_KEY] , mappedKeysAndValues[FILM_PRICE_KEY] );
 	name = mappedKeysAndValues[FILM_NAME_KEY];
 	director = mappedKeysAndValues[FILM_DIRECTOR_KEY];
 	summary = mappedKeysAndValues[FILM_SUMMARY_KEY];
@@ -346,8 +362,48 @@ void CommandHandler::manageFilmUpload(string newFilmInfo){
 	miniNetAccess->addFilmOnNet(name , year , director , summary , price , length);
 }
 
-void CommandHandler::manageFilmEdit(string editedFilmInfo){
+void CommandHandler::checkFilmEditKeys(vector<string> keys){
+	int numberOfYears = count(keys.begin() , keys.end() , FILM_YEAR_KEY);
+	int numberOfDirectors = count(keys.begin() , keys.end() , FILM_DIRECTOR_KEY);
+	int numberOfIds = count(keys.begin() , keys.end() , FILM_ID_KEY);
+	int numberOfLengths = count(keys.begin() , keys.end() , FILM_LENGTH_KEY);
+	int numberOfSummaries = count(keys.begin() , keys.end() , FILM_SUMMARY_KEY);
+	int numberOfNames = count(keys.begin() , keys.end() , FILM_NAME_KEY);
 
+	if(numberOfIds != 1)
+		throw BadRequestException();
+
+	if( (numberOfYears > 1) || (numberOfNames > 1) || (numberOfSummaries > 1) || (numberOfLengths > 1) || (numberOfDirectors > 1) )
+		throw BadRequestException();
+
+	if( (numberOfDirectors + numberOfLengths + numberOfSummaries + numberOfYears + numberOfNames) != (keys.size() - 1) )
+		throw BadRequestException();
+
+}
+
+void CommandHandler::manageFilmEdit(string editedFilmInfo){
+	string modifiedName,modifiedSummary , modifiedDirector;
+	unsigned int modifiedYear , modifiedLength , id;
+	modifiedYear = 0; modifiedLength = 0;
+
+	vector<string> keywordsAndValues = splitString(editedFilmInfo);
+	vector<string> keys = getKeys(keywordsAndValues , MIN_KEYS_AND_VALUES_FOR_FILM_EDIT , MAX_KEYS_AND_VALUES_FOR_FILM_EDIT);
+	checkFilmEditKeys(keys);
+	map<string , string> mappedKeysAndValues = getMappedKeysAndValues(keywordsAndValues);
+	mappedKeysAndValues = initializeEmptyFilmEditKeys(mappedKeysAndValues);
+	checkFilmValues( mappedKeysAndValues[FILM_YEAR_KEY] , mappedKeysAndValues[FILM_LENGTH_KEY] , "" );
+	checkIdString(mappedKeysAndValues[FILM_ID_KEY]);
+
+	id = stoi(mappedKeysAndValues[FILM_ID_KEY]);
+	modifiedName = mappedKeysAndValues[FILM_NAME_KEY];
+	modifiedSummary = mappedKeysAndValues[FILM_SUMMARY_KEY];
+	modifiedDirector = mappedKeysAndValues[FILM_YEAR_KEY];
+	if( mappedKeysAndValues[FILM_LENGTH_KEY] != "" )
+		modifiedLength = stoi(mappedKeysAndValues[FILM_LENGTH_KEY]);
+	if( mappedKeysAndValues[FILM_YEAR_KEY] != "" )
+		modifiedYear = stoi(mappedKeysAndValues[FILM_YEAR_KEY]);
+	
+	miniNetAccess->editAFilm(id , modifiedName , modifiedYear , modifiedLength , modifiedSummary , modifiedDirector);
 }
 
 void CommandHandler::manageFilmDelete(string deletedFilmInfo){

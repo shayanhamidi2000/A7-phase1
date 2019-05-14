@@ -13,12 +13,12 @@ public:
 	bool getAvailability() const;
 	unsigned int getId() const;
 	double getPoint() const;
-	std::string getName() const;
-	unsigned int getYear() const;
-	unsigned int getDuration() const;
+	void setName(std::string name);
+	void setYear(unsigned int manufacturedYear);
+	void setDuration(unsigned int length);
 	unsigned int getPrice() const;
-	std::string getDirectorName() const;
-	std::string getSummary() const;
+	void setDirectorName(std::string directorName);
+	void setSummary(std::string summary);
 private:
 	int theIdsAssignedToComments;
 	unsigned int id;

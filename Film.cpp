@@ -30,26 +30,26 @@ double Film::getPoint() const {
 	return averagePoint; 
 }
 
-string Film::getName() const {
- 	return name;
+void Film::setName(string name){
+ 	this->name = name;
 }
 
-unsigned int Film::getYear() const {
- 	return manufacturedYear;
+void Film::setYear(unsigned int manufacturedYear) {
+ 	this->manufacturedYear = manufacturedYear;
 }
 
-unsigned int Film::getDuration() const {
- 	return length;
+void Film::setDuration(unsigned int length) {
+ 	this->length = length;
 }
 
-unsigned int Film::getPrice() const  {
+unsigned int Film::getPrice() const{
  	return price; 
 }
 
-string Film::getDirectorName() const {
- 	return directorName;
+void Film::setDirectorName(string directorName) {
+ 	this->directorName = directorName;
 }
 
-string Film::getSummary() const {
- 	return summary; 
+void Film::setSummary(string summary) {
+ 	this->summary = summary; 
 } 

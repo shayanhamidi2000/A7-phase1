@@ -95,3 +95,11 @@ void MiniNet::addFilmOnNet(string name , unsigned int year , string director , s
 	( (Publisher*) onlineUser)->notifyFollowersOnNewUpload();
 	cout << SUCCESS_MESSAGE << endl;
 }
+
+void MiniNet::editAFilm(unsigned int id , string newName , unsigned int newYear , unsigned int newLength , string newSummary , string newDirector){
+	if(!isAnyOneOnline() || !isOnlineUserPublisher())
+		throw PermissionDenialException();
+
+	films->editFilm((Publisher*) this->onlineUser , id , newName , newYear , newLength , newSummary , newDirector);
+	cout << SUCCESS_MESSAGE << endl;
+}

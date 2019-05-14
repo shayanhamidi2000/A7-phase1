@@ -46,6 +46,7 @@ private:
 	void checkFirstPartAndSecondPartOfCommand(std::string keyCommand , std::string restOfCommand);
 	bool checkSecondCommandPartValidation(std::string secondPart);
 	bool isEven(unsigned int aNumber);
+	void checkIdString(std::string idString);
 	//
 	std::vector<std::string> getKeys(std::vector<std::string> keysAndValues , unsigned int minNumberOfKeys , unsigned int maxNumberOfKeys);
 	std::map<std::string , std::string> getMappedKeysAndValues(std::vector<std::string> keysAndValues);
@@ -58,7 +59,9 @@ private:
 	void checkLoginKeys(std::vector<std::string> keys);
 	//
 	void checkFilmUploadKeys(std::vector<std::string> keys);
-	void checkFilmUploadValues(std::string year , std::string lenght , std::string price);
+	void checkFilmValues(std::string year , std::string lenght , std::string price);
+	void checkFilmEditKeys(std::vector<std::string> keys);
+	std::map<std::string , std::string> initializeEmptyFilmEditKeys(std::map<std::string , std::string> givenMap);
 	//
 };
 
