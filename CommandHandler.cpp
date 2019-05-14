@@ -1,6 +1,12 @@
 #include "CommandHandler.h"
 #include "Mininet.h"
 #include <iostream>
+#include <algorithm>
+#include <ctype.h>
+#include "Config.h"
+#include "Exceptions.h"
+
+using namespace std;
 
 CommandHandler::CommandHandler(MiniNet* theMiniNet){
 	miniNetAccess = theMiniNet;
@@ -322,9 +328,6 @@ void CommandHandler::checkFilmUploadValues(string year , string lenght , string 
 }
 
 void CommandHandler::manageFilmUpload(string newFilmInfo){
-	if(!miniNetAccess->isAnyOneOnline() || !miniNetAccess->isOnlineUserPublisher())
-		throw PermissionDenialException();
-
 	string name , director , summary;
 	unsigned int price , length , year;
 

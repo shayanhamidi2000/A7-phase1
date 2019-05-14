@@ -9,18 +9,16 @@
 #include "Publisher.h"
 #include "Purchase.h"
 
-using namespace std;
 
 class MiniNet{
 public:
 	MiniNet();
 	void startNet();
-	bool isOnlineUserPublisher() { return onlineUser->getPublishingState(); }
-	bool isAnyOneOnline() { return (onlineUser != nullptr); }
-	void addFilmOnNet(string name , unsigned int year , string director , string summary , unsigned int price , unsigned int length);
-	void registerUser(string email , string username , string password , unsigned int age , bool isPublisher);
-	void loginUser(string username , string password);
-	Customer* findUserByUsername(string username);
+	bool editAFilm(unsigned int id , std::string newName , unsigned int newYear , unsigned int newLength , std::string newSummary , std::string newDirector);
+	void addFilmOnNet(std::string name , unsigned int year , std::string director , std::string summary , unsigned int price , unsigned int length);
+	void registerUser(std::string email , std::string username , std::string password , unsigned int age , bool isPublisher);
+	void loginUser(std::string username , std::string password);
+	Customer* findUserByUsername(std::string username);
 	Customer* findUserById(unsigned int id);
 
 private:
@@ -29,13 +27,16 @@ private:
 	CommandHandler* manageCommand;
 	FilmRepository* films;
 	Customer* onlineUser;
-	vector<Customer*> users;
-	vector<Purchase*> purchases;
-	void goToNextId() { theIdsAssigned++; }
-	void checkUsernameRepetition(string username);
-	void isUsernameMatchingPassword(string username , string password);
-	void isUsernameExisted(string username);
+	std::vector<Customer*> users;
+	std::vector<Purchase*> purchases;
+	//
+	void goToNextId();
+	void checkUsernameRepetition(std::string username);
+	void isUsernameMatchingPassword(std::string username , std::string password);
+	void isUsernameExisted(std::string username);
 	void checkIdExistence(unsigned int id);
+	bool isOnlineUserPublisher() { return onlineUser->getPublishingState(); }
+	bool isAnyOneOnline() { return (onlineUser != nullptr); }
 };
 
 

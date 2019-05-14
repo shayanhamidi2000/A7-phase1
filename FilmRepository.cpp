@@ -1,8 +1,14 @@
 #include "FilmRepository.h"
 #include "Config.h"
 
+using namespace std;
+
 FilmRepository::FilmRepository(){
 	theIdsAssigned = BASIC_ID_VALUE;
+}
+
+void FilmRepository::goToNextId(){
+	theIdsAssigned++;
 }
 
 Film* FilmRepository::addNewFilm(string name , unsigned int year , string director , string summary , unsigned int price , unsigned int length){
@@ -11,4 +17,12 @@ Film* FilmRepository::addNewFilm(string name , unsigned int year , string direct
 	this->goToNextId();
 
 	return newFilm;
+}
+
+Film* findFilmById(unsigned int id , vector<Film*> listOfFilms){
+	for(unsigned int i = 0 ; i < listOfFilms.size() ; i++)
+		if(listOfFilms[i]->getId() == id && listOfFilms[i]->getAvailability() )
+			return listOfFilms[i];
+
+	return nullptr;		
 }

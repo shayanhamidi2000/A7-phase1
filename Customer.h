@@ -6,29 +6,28 @@
 #include "Message.h"
 #include "Film.h"
 
-using namespace std;
 
 class Customer{
 public:
-	Customer(string username , string password , string email , unsigned int id , unsigned int age);
-	virtual string getUsername() const { return username; }
-	virtual string getPassword() const { return password; }
-	virtual string getEmail() const { return email; }
-	virtual unsigned int getId() const { return id; }
-	virtual unsigned int getAge() const { return age; }
-	virtual unsigned int getCredit() const { return credit; }
-	virtual bool getPublishingState() const { return isPublisher; }
+	Customer(std::string username , std::string password , std::string email , unsigned int id , unsigned int age);
+	virtual std::string getUsername() const;
+	virtual std::string getPassword() const;
+	virtual std::string getEmail() const;
+	virtual unsigned int getId() const;
+	virtual unsigned int getAge() const;
+	virtual unsigned int getCredit() const;
+	virtual bool getPublishingState() const;
 	//
 protected:
 	bool isPublisher;
-	string username;
-	string password;
-	string email;
+	std::string username;
+	std::string password;
+	std::string email;
 	unsigned int id;
 	unsigned int age;
 	unsigned int credit;
-	vector<Message*> messages;
-	vector<Film*> purchases;
+	std::vector<Message*> messages;
+	std::vector<Film*> purchases;
 };
 
 #endif

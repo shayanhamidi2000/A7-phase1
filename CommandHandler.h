@@ -1,11 +1,7 @@
 #ifndef COMMANDHANDLER_H
 #define COMMANDHANDLER_H
 
-#include "Config.h"
-#include "Exceptions.h"
 #include <string>
-#include <algorithm>
-#include <ctype.h>
 #include <vector>
 #include <map>
 
@@ -15,53 +11,54 @@ class CommandHandler{
 public:
 	CommandHandler(MiniNet* theMiniNet);
 
-	void getRawCommand(string rawCommandLine);
-	void recognizeCommandType(string keyCommand , string restOfCommand);
+	void getRawCommand(std::string rawCommandLine);
+	void recognizeCommandType(std::string keyCommand , std::string restOfCommand);
 
-	void manageSignUp(string signUpInfo);
-	void manageLogin(string loginInfo);
-	void manageFilmUpload(string newFilmInfo);
-	void manageFilmEdit(string editedFilmInfo);
-	void manageFilmDelete(string deletedFilmInfo);
+	void manageSignUp(std::string signUpInfo);
+	void manageLogin(std::string loginInfo);
+	void manageFilmUpload(std::string newFilmInfo);
+	void manageFilmEdit(std::string editedFilmInfo);
+	void manageFilmDelete(std::string deletedFilmInfo);
 	void manageFollowerListRequest();
 	void manageGetMoney();
-	void managePublishedFilmsList(string searchInfo);
-	void manageReplyComment(string commentInfo);
-	void manageDeleteComment(string commentInfo);
-	void manageFollow(string followedInfo);
-	void manageAddMoney(string amountOfMoneyInfo);
-	void manageSearch(string searchInfo);
-	void manageFilmInfoRequest(string filmInfo);
-	void manageBuyFilm(string filmInfo);
-	void manageFilmRating(string ratingInfo);
-	void manageCommenting(string newCommentInfo);
-	void managePurchasesList(string searchInfo);
+	void managePublishedFilmsList(std::string searchInfo);
+	void manageReplyComment(std::string commentInfo);
+	void manageDeleteComment(std::string commentInfo);
+	void manageFollow(std::string followedInfo);
+	void manageAddMoney(std::string amountOfMoneyInfo);
+	void manageSearch(std::string searchInfo);
+	void manageFilmInfoRequest(std::string filmInfo);
+	void manageBuyFilm(std::string filmInfo);
+	void manageFilmRating(std::string ratingInfo);
+	void manageCommenting(std::string newCommentInfo);
+	void managePurchasesList(std::string searchInfo);
 	void manageUnreadNotifications();
-	void manageAllNotifications(string limitInfo);
+	void manageAllNotifications(std::string limitInfo);
 
 private:	
 	MiniNet* miniNetAccess; 
-	string deleteSpacesOfAString(string aString);
-	bool isConstantNumber(string aPieceOfString);
-	string concatenateTwoStrings(string firstString , string secondString);
-	vector<string> splitString(string aString);
-	bool checkCommandValidation(string keyCommand);
-	void checkFirstPartAndSecondPartOfCommand(string keyCommand , string restOfCommand);
-	bool checkSecondCommandPartValidation(string secondPart);
+	//
+	std::string deleteSpacesOfAString(std::string aString);
+	bool isConstantNumber(std::string aPieceOfString);
+	std::string concatenateTwoStrings(std::string firstString , std::string secondString);
+	std::vector<std::string> splitString(std::string aString);
+	bool checkCommandValidation(std::string keyCommand);
+	void checkFirstPartAndSecondPartOfCommand(std::string keyCommand , std::string restOfCommand);
+	bool checkSecondCommandPartValidation(std::string secondPart);
 	bool isEven(unsigned int aNumber);
 	//
-	vector<string> getKeys(vector<string> keysAndValues , unsigned int minNumberOfKeys , unsigned int maxNumberOfKeys);
-	map<string , string> getMappedKeysAndValues(vector<string> keysAndValues);
+	std::vector<std::string> getKeys(std::vector<std::string> keysAndValues , unsigned int minNumberOfKeys , unsigned int maxNumberOfKeys);
+	std::map<std::string , std::string> getMappedKeysAndValues(std::vector<std::string> keysAndValues);
 	// 
-	void checkSignupKeys(vector<string> keys);
-	void checkSignupValues(string age , string email , string isPublisher);
-	bool checkEmailValidation(string email);
-	bool isAcceptableSuffixForEmail(string aString);
+	void checkSignupKeys(std::vector<std::string> keys);
+	void checkSignupValues(std::string age , std::string email , std::string isPublisher);
+	bool checkEmailValidation(std::string email);
+	bool isAcceptableSuffixForEmail(std::string aString);
 	//
-	void checkLoginKeys(vector<string> keys);
+	void checkLoginKeys(std::vector<std::string> keys);
 	//
-	void checkFilmUploadKeys(vector<string> keys);
-	void checkFilmUploadValues(string year , string lenght , string price);
+	void checkFilmUploadKeys(std::vector<std::string> keys);
+	void checkFilmUploadValues(std::string year , std::string lenght , std::string price);
 	//
 };
 

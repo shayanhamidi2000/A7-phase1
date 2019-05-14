@@ -4,17 +4,15 @@
 #include <string>
 #include <map>
 
-using namespace std;
-
 class Comment{
 public: 
-	Comment(int id , string content);
+	Comment(int id , std::string content);
 	unsigned int getId() const { return id; }
-	string getContent() const { return content; }
+	std::string getContent() const { return content; }
 private:
 	unsigned int id;
-	string content;
-	map<string , int> replies; 
+	std::string content;
+	std::map<std::string , int> replies; 
 
 };
 

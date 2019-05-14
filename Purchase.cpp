@@ -1,6 +1,7 @@
 #include "Purchase.h"
 #include "Config.h"
 
+
 Purchase::Purchase(unsigned int filmPrice , unsigned int filmRating){
 	this->filmPrice = filmPrice;
 	this->filmRating = filmRating;

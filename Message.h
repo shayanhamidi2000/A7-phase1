@@ -1,16 +1,14 @@
 #ifndef MESSAGE_H
 #define MESSAGE_H
 #include <string>
-using namespace std;
-
 
 class Message{
 public:
-	Message(string content);
+	Message(std::string content);
 	bool getReadState() const { return isRead; }
-	string getContent() const { return content; }
+	std::string getContent() const { return content; }
 private:
-	string content;
+	std::string content;
 	bool isRead;
 };
 

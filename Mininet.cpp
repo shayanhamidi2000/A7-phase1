@@ -14,6 +14,10 @@ MiniNet::MiniNet(){
 	films = new FilmRepository();
 }
 
+void MiniNet::goToNextId() {
+ 	theIdsAssigned++; 
+}
+
 void MiniNet::startNet(){
 	string line = "";
 	while(getline(cin , line)){
@@ -83,6 +87,9 @@ void MiniNet::loginUser(string username , string password){
 }
 
 void MiniNet::addFilmOnNet(string name , unsigned int year , string director , string summary , unsigned int price , unsigned int length){
+	if(!isAnyOneOnline() || !isOnlineUserPublisher())
+		throw PermissionDenialException();
+
 	Film* newFilm = films->addNewFilm(name , year , director , summary , price , length);
 	( (Publisher*) onlineUser)->addToUploadedFilms(newFilm);
 	( (Publisher*) onlineUser)->notifyFollowersOnNewUpload();

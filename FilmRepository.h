@@ -4,16 +4,16 @@
 #include <vector>
 #include "Film.h"
 
-using namespace std;
-
 class FilmRepository{
 public: 
 	FilmRepository();
-	Film* addNewFilm(string name , unsigned int year , string director , string summary , unsigned int price , unsigned int length);
+	Film* addNewFilm(std::string name , unsigned int year , std::string director , std::string summary , unsigned int price , unsigned int length);
+	Film* editFilm(unsigned int id , std::string newName , unsigned int newYear , unsigned int newLength , std::string newSummary , std::string newDirector);
+	Film* findFilmById(unsigned int id , std::vector<Film*> listOfFilms);
 private:
 	unsigned int theIdsAssigned;
-	vector<Film*> allFilms;
-	void goToNextId() { theIdsAssigned++; }	
+	std::vector<Film*> allFilms;
+	void goToNextId();	
 };
 
 

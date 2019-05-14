@@ -4,35 +4,34 @@
 #include <string>
 #include <vector>
 #include "Comment.h"
-using namespace std;
 
 class Film{
 public:
-	Film(unsigned int id , string name , unsigned manufacturedYear , unsigned int length , 
-		unsigned int price , string summary , string directorName);
+	Film(unsigned int id , std::string name , unsigned manufacturedYear , unsigned int length , 
+		unsigned int price , std::string summary , std::string directorName);
 
-	unsigned int getAvailability() const { return isAvailable; }
-	unsigned int getId() const { return id; }
-	double getPoint() const { return averagePoint; }
-	string getName() const { return name; }
-	unsigned int getYear() const { return manufacturedYear; }
-	unsigned int getDuration() const { return length; }
-	unsigned int getPrice() const  { return price; }
-	string getDirectorName() const { return directorName; }
-	string getSummary() const { return summary; } 
+	bool getAvailability() const;
+	unsigned int getId() const;
+	double getPoint() const;
+	std::string getName() const;
+	unsigned int getYear() const;
+	unsigned int getDuration() const;
+	unsigned int getPrice() const;
+	std::string getDirectorName() const;
+	std::string getSummary() const;
 private:
 	int theIdsAssignedToComments;
 	unsigned int id;
 	bool isAvailable;
 	double averagePoint;
 	unsigned int peopleRatedThisFilm;
-	string name;
+	std::string name;
 	unsigned int manufacturedYear;
 	unsigned int length;
 	unsigned int price;
-	string summary;
-	string directorName;
-	vector<Comment*> comments;
+	std::string summary;
+	std::string directorName;
+	std::vector<Comment*> comments;
 };
 
 #endif
