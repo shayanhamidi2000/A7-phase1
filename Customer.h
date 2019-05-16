@@ -18,6 +18,7 @@ public:
 	virtual unsigned int getCredit() const;
 	virtual bool getPublishingState() const;
 	virtual void printYourself() const;
+	virtual void addToCredit(const unsigned int amount);
 	//
 protected:
 	bool isPublisher;

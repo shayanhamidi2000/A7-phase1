@@ -514,8 +514,30 @@ void CommandHandler::manageFollow(string followedInfo){
 	miniNetAccess->follow(id);
 }
 
-void CommandHandler::manageAddMoney(string amountOfMoneyInfo){
+void CommandHandler::checkAddMoneyKeys(vector<string> keys){
+	int numberOfAmounts = count(keys.begin() , keys.end() , MONEY_AMOUNT_KEY);
 
+	if(numberOfAmounts != 1)
+		throw BadRequestException();
+}
+
+void CommandHandler::checkAddMoneyValues(string amount){
+	if(!isConstantNumber(amount))
+		throw BadRequestException();
+
+}
+
+void CommandHandler::manageAddMoney(string amountOfMoneyInfo){
+	unsigned int amount;
+
+	vector<string> keywordsAndValues = splitString(amountOfMoneyInfo);
+	vector<string> keys = getKeys(keywordsAndValues , MIN_KEYS_AND_VALUES_FOR_ADD_CREDIT , MAX_KEYS_AND_VALUES_FOR_ADD_CREDIT);
+	checkAddMoneyKeys(keys);
+	map<string , string> mappedKeysAndValues = getMappedKeysAndValues(keywordsAndValues);
+	checkAddMoneyValues( mappedKeysAndValues[MONEY_AMOUNT_KEY] );
+	amount = stoi(mappedKeysAndValues[MONEY_AMOUNT_KEY]);
+
+	miniNetAccess->addMoney(amount);
 }
 
 void CommandHandler::manageSearch(string searchInfo){

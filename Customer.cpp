@@ -44,3 +44,7 @@ bool Customer::getPublishingState() const {
 void Customer::printYourself() const{
 	cout << id << " | " << username << " | " << email;
 }
+
+void Customer::addToCredit(const unsigned int amount){
+	credit += amount;
+}

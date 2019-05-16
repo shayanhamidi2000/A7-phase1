@@ -25,6 +25,8 @@
 #define MAX_KEYS_AND_VALUES_FOR_FILM_SEARCH 12
 #define MIN_KEYS_AND_VALUES_FOR_FOLLOW 2 
 #define MAX_KEYS_AND_VALUES_FOR_FOLLOW 2
+#define MIN_KEYS_AND_VALUES_FOR_ADD_CREDIT 2
+#define MAX_KEYS_AND_VALUES_FOR_ADD_CREDIT 2
 #define DL_KW "DELETE"
 #define GET_KW "GET"
 #define POST_KW "POST"
@@ -63,7 +65,7 @@
 #define COMMENT_ID_KEY "comment_id"
 #define COMMENT_CONTENT_KEY "content"
 #define USER_ID_KEY "user_id"
-#define MONEY_AMOUNT_ADDED_KEY "amount"
+#define MONEY_AMOUNT_KEY "amount"
 #define SCORE_GIVEN_KEY "score"
 #define LIMIT_COMMENTS_SHOWN_KEY "limit"
 #define SUCCESS_MESSAGE "OK"

@@ -69,6 +69,9 @@ private:
 	std::map<std::string , std::string> initializeEmptySearchFilmKeys(std::map<std::string , std::string> givenMap);
 	//
 	void checkFollowKeys(std::vector<std::string> keys);
+	//
+	void checkAddMoneyKeys(std::vector<std::string> keys);
+	void checkAddMoneyValues(std::string amount);
 };
 
 

@@ -146,3 +146,11 @@ void MiniNet::follow(unsigned int id){
 	followed->addToFollowers(onlineUser);
 	cout << SUCCESS_MESSAGE << endl;	
 }
+
+void MiniNet::addMoney(unsigned int amount){
+	if(!isAnyOneOnline() )
+		throw PermissionDenialException();
+	onlineUser->addToCredit(amount);
+	cout << SUCCESS_MESSAGE << endl;
+}
+

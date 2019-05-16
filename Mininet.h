@@ -22,6 +22,7 @@ public:
 	void getPublishedList(std::string name , unsigned int minPoint , unsigned int minYear , unsigned int price , unsigned maxYear , std::string directorName);
 	void getFollowersList();
 	void follow(unsigned int id);
+	void addMoney(unsigned int amount);
 	Customer* findUserByUsername(std::string username);
 	Customer* findUserById(unsigned int id);
 
