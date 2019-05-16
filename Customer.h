@@ -17,6 +17,7 @@ public:
 	virtual unsigned int getAge() const;
 	virtual unsigned int getCredit() const;
 	virtual bool getPublishingState() const;
+	virtual void printYourself() const;
 	//
 protected:
 	bool isPublisher;

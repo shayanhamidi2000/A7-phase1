@@ -126,3 +126,23 @@ void MiniNet::getPublishedList(string name , unsigned int minPoint , unsigned in
 
 	films->searchFilmWithFactorsInAList( ((Publisher*) onlineUser)->getUploadedFilms() , name , minPoint , minYear , price , maxYear , directorName);
 }
+
+void MiniNet::getFollowersList(){
+	if(!isAnyOneOnline() || !isOnlineUserPublisher())
+		throw PermissionDenialException();
+
+	((Publisher*) onlineUser)->printYourFollowers();
+}
+
+void MiniNet::follow(unsigned int id){
+	if(!isAnyOneOnline())
+		throw PermissionDenialException();
+
+	checkIdExistence(id);
+	if(!findUserById(id)->getPublishingState() )
+		throw BadRequestException();
+
+	Publisher* followed = (Publisher*) findUserById(id);
+	followed->addToFollowers(onlineUser);
+	cout << SUCCESS_MESSAGE << endl;	
+}

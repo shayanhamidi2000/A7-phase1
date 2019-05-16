@@ -20,7 +20,7 @@ FilmRepository.o: FilmRepository.cpp FilmRepository.h Film.h Publisher.h Excepti
 Customer.o: Customer.cpp Customer.h Message.h Film.h
 	${CC} -c Customer.cpp -o Customer.o
 
-Publisher.o: Publisher.cpp Publisher.h Customer.h Film.h
+Publisher.o: Publisher.cpp Publisher.h Customer.h Film.h Exceptions.h
 	${CC} -c Publisher.cpp -o Publisher.o
 
 Film.o: Film.cpp Film.h Comment.h

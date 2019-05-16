@@ -20,6 +20,8 @@ public:
 	void editAFilm(unsigned int id , std::string newName , unsigned int newYear , unsigned int newLength , std::string newSummary , std::string newDirector);
 	void deleteAFilm(unsigned int id);
 	void getPublishedList(std::string name , unsigned int minPoint , unsigned int minYear , unsigned int price , unsigned maxYear , std::string directorName);
+	void getFollowersList();
+	void follow(unsigned int id);
 	Customer* findUserByUsername(std::string username);
 	Customer* findUserById(unsigned int id);
 

@@ -1,4 +1,5 @@
 #include "Customer.h"
+#include <iostream>
 
 using namespace std;
 
@@ -24,7 +25,7 @@ string Customer::getEmail() const {
  	return email;
  }
 
-unsigned int Customer::getId() const { 
+unsigned int Customer::getId() const{ 
 	return id;
 }
 
@@ -38,4 +39,8 @@ unsigned int Customer::getCredit() const {
 
 bool Customer::getPublishingState() const { 
 	return isPublisher; 
+}
+
+void Customer::printYourself() const{
+	cout << id << " | " << username << " | " << email;
 }

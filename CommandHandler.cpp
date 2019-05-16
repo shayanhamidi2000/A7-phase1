@@ -274,7 +274,7 @@ void CommandHandler::manageSignUp(string signUpInfo){
 	age = stoi(mappedKeysAndValues[AGE_KEY] );
 	username = mappedKeysAndValues[USERNAME_KEY];
 	password = mappedKeysAndValues[PASSWORD_KEY];
-	email = mappedKeysAndValues[PASSWORD_KEY];
+	email = mappedKeysAndValues[EMAIL_KEY];
 	if(mappedKeysAndValues[PUBLISHER_KEY] == IS_PUBLISHER)
 		isPublisher = true;
 
@@ -455,7 +455,7 @@ void CommandHandler::managePublishedFilmsList(string searchInfo){
 	minPoint = 0; maxYear = 0; minYear = 0; price = 0;
 
 	vector<string> keywordsAndValues = splitString(searchInfo);
-	vector<string> keys = getKeys(keywordsAndValues , MIN_KEYS_AND_VALUES_FOR_PUBLISHED_LIST , MAX_KEYS_AND_VALUES_FOR_PUBLISHED_LIST);
+	vector<string> keys = getKeys(keywordsAndValues , MIN_KEYS_AND_VALUES_FOR_FILM_SEARCH , MAX_KEYS_AND_VALUES_FOR_FILM_SEARCH);
 	checkFilmSearchKeys(keys);
 	map<string , string> mappedKeysAndValues = getMappedKeysAndValues(keywordsAndValues);
 	mappedKeysAndValues = initializeEmptySearchFilmKeys(mappedKeysAndValues);
@@ -479,7 +479,7 @@ void CommandHandler::managePublishedFilmsList(string searchInfo){
 }
 
 void CommandHandler::manageFollowerListRequest(){
-
+	miniNetAccess->getFollowersList();
 }
 
 void CommandHandler::manageGetMoney(){
@@ -494,8 +494,24 @@ void CommandHandler::manageDeleteComment(string commentInfo){
 
 }
 
-void CommandHandler::manageFollow(string followedInfo){
+void CommandHandler::checkFollowKeys(vector<string> keys){
+	int numberOfIds = count(keys.begin() , keys.end() , USER_ID_KEY);
 
+	if(numberOfIds != 1)
+		throw BadRequestException();
+}
+
+void CommandHandler::manageFollow(string followedInfo){
+	unsigned int id;
+
+	vector<string> keywordsAndValues = splitString(followedInfo);
+	vector<string> keys = getKeys(keywordsAndValues , MIN_KEYS_AND_VALUES_FOR_FOLLOW , MAX_KEYS_AND_VALUES_FOR_FOLLOW);
+	checkFollowKeys(keys);
+	map<string , string> mappedKeysAndValues = getMappedKeysAndValues(keywordsAndValues);
+	checkIdString( mappedKeysAndValues[USER_ID_KEY] );
+	id = stoi(mappedKeysAndValues[USER_ID_KEY]);
+
+	miniNetAccess->follow(id);
 }
 
 void CommandHandler::manageAddMoney(string amountOfMoneyInfo){
