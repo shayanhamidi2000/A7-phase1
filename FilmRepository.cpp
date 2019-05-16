@@ -1,6 +1,7 @@
 #include "FilmRepository.h"
 #include "Config.h"
 #include "Exceptions.h"
+#include <iostream>
 
 using namespace std;
 
@@ -68,4 +69,101 @@ void FilmRepository::editFilm(Publisher* assertedOwner , unsigned int id , strin
 	if(newDirector != "")
 		modifiedFilm->setDirectorName(newDirector);
 
+}
+
+void FilmRepository::searchFilmWithFactorsInDatabase(string name  , unsigned int minPoint , unsigned int minYear , unsigned int price , unsigned maxYear , string directorName){
+	searchFilmWithFactorsInAList(this->allFilms , name , minPoint , minYear , price , maxYear , directorName);
+}
+
+void FilmRepository::searchFilmWithFactorsInAList(vector<Film*> givenList , string name  , unsigned int minPoint , unsigned int minYear , unsigned int price , unsigned maxYear , string directorName){
+	vector<Film*> filteredList = givenList;
+	filteredList = filterFilmsByName(filteredList , name);
+	filteredList = filterFilmsByDirector(filteredList , directorName);
+	filteredList = filterFilmsByPrice(filteredList , price);
+	filteredList = filterFilmsByMinPoint(filteredList , minPoint);
+	filteredList = filterFilmsMaxYear(filteredList , maxYear);
+	filteredList = filterFilmsByMinYear(filteredList , minYear);
+	
+	printFilmList(filteredList);
+}
+
+vector<Film*> FilmRepository::filterFilmsByMinPoint(vector<Film*> givenFilmList , unsigned int minPoint){
+	if(minPoint == 0)
+		return givenFilmList;
+
+	vector<Film*> filteredListByMinPoint;
+	for(unsigned int i = 0 ; i < givenFilmList.size() ; i++)
+		if(givenFilmList[i]->getPoint() >= minPoint && givenFilmList[i]->getAvailability() )
+			filteredListByMinPoint.push_back(givenFilmList[i]);
+
+	return filteredListByMinPoint;	
+}
+
+vector<Film*> FilmRepository::filterFilmsByName(vector<Film*> givenFilmList , string name){
+	if(name == "")
+		return givenFilmList;
+
+	vector<Film*> filteredListByName;
+	for(unsigned int i = 0 ; i < givenFilmList.size() ; i++)
+		if(givenFilmList[i]->getName() == name && givenFilmList[i]->getAvailability() )
+			filteredListByName.push_back(givenFilmList[i]);
+
+	return filteredListByName;
+}
+
+vector<Film*> FilmRepository::filterFilmsByDirector(vector<Film*> givenFilmList , string directorName){
+	if(directorName == "")
+		return givenFilmList;
+
+	vector<Film*> filteredListByDirectorName;
+	for(unsigned int i = 0 ; i < givenFilmList.size() ; i++)
+		if(givenFilmList[i]->getDirectorName() == directorName && givenFilmList[i]->getAvailability() )
+			filteredListByDirectorName.push_back(givenFilmList[i]);
+
+	return filteredListByDirectorName;
+}
+
+vector<Film*> FilmRepository::filterFilmsByMinYear(vector<Film*> givenFilmList , unsigned int minYear){
+	if(minYear == 0)
+		return givenFilmList;
+
+	vector<Film*> filteredListByMinYear;
+	for(unsigned int i = 0 ; i < givenFilmList.size() ; i++)
+		if(givenFilmList[i]->getYear() >= minYear && givenFilmList[i]->getAvailability() )
+			filteredListByMinYear.push_back(givenFilmList[i]);
+
+	return filteredListByMinYear;
+}
+
+vector<Film*> FilmRepository::filterFilmsByPrice(vector<Film*> givenFilmList , unsigned int price){
+	if(price == 0)
+		return givenFilmList;
+
+	vector<Film*> filteredListByPrice;
+	for(unsigned int i = 0 ; i < givenFilmList.size() ; i++)
+		if(givenFilmList[i]->getPrice() == price && givenFilmList[i]->getAvailability() )
+			filteredListByPrice.push_back(givenFilmList[i]);
+
+	return filteredListByPrice;
+}
+
+vector<Film*> FilmRepository::filterFilmsMaxYear(vector<Film*> givenFilmList , unsigned int maxYear){
+	if(maxYear == 0)
+		return givenFilmList;
+
+	vector<Film*> filteredListByMaxYear;
+	for(unsigned int i = 0 ; i < givenFilmList.size() ; i++)
+		if(givenFilmList[i]->getYear() <= maxYear && givenFilmList[i]->getAvailability() )
+			filteredListByMaxYear.push_back(givenFilmList[i]);
+
+	return filteredListByMaxYear;
+}
+
+void FilmRepository::printFilmList(vector<Film*> desiredList){
+	cout << "#. Film Id | Film Name | Film Length | Film price | Rate | Production Year | Film Director" << endl;
+	for(unsigned int i = 0 ; i < desiredList.size() ; i++){
+		cout << i+1 << ". ";
+		desiredList[i]->printYourself();
+		cout << endl;
+	}
 }

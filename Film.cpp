@@ -1,5 +1,6 @@
 #include "Film.h"
 #include "Config.h"
+#include <iostream>
 
 using namespace std;
 
@@ -57,3 +58,21 @@ void Film::setDirectorName(string directorName) {
 void Film::setSummary(string summary) {
  	this->summary = summary; 
 } 
+
+void Film::printYourself() const{
+	cout.precision(2);
+	cout << id << " | " << name << " | " << length << " | " << price << " | " << fixed << averagePoint <<  " | "
+	 << manufacturedYear << " | " << directorName;
+}
+
+string Film::getName() const{
+	return name;
+}
+
+string Film::getDirectorName() const{
+	return directorName;
+}
+
+unsigned int Film::getYear() const{
+	return manufacturedYear;
+}

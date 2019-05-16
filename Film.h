@@ -15,11 +15,16 @@ public:
 	unsigned int getId() const;
 	double getPoint() const;
 	void setName(std::string name);
+	std::string getName() const;
+	std::string getDirectorName() const;
+	unsigned int getYear() const;
 	void setYear(unsigned int manufacturedYear);
 	void setDuration(unsigned int length);
 	unsigned int getPrice() const;
 	void setDirectorName(std::string directorName);
 	void setSummary(std::string summary);
+
+	void printYourself() const;
 private:
 	int theIdsAssignedToComments;
 	unsigned int id;

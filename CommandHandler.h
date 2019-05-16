@@ -54,7 +54,6 @@ private:
 	void checkSignupKeys(std::vector<std::string> keys);
 	void checkSignupValues(std::string age , std::string email , std::string isPublisher);
 	bool checkEmailValidation(std::string email);
-	bool isAcceptableSuffixForEmail(std::string aString);
 	//
 	void checkLoginKeys(std::vector<std::string> keys);
 	//
@@ -64,6 +63,10 @@ private:
 	std::map<std::string , std::string> initializeEmptyFilmEditKeys(std::map<std::string , std::string> givenMap);
 	//
 	void checkFilmDeleteKeys(std::vector<std::string> keys);
+	//
+	void checkFilmSearchKeys(std::vector<std::string> keys);
+	void checkSearchValues(std::string minPoint , std::string minYear , std::string maxYear , std::string price);
+	std::map<std::string , std::string> initializeEmptySearchFilmKeys(std::map<std::string , std::string> givenMap);
 };
 
 

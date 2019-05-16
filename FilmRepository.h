@@ -14,13 +14,23 @@ public:
 	void editFilm(Publisher* filmOwner , unsigned int id , std::string newName , unsigned int newYear , unsigned int newLength , std::string newSummary , std::string newDirector);
 	void deleteFilm(Publisher* filmOwner , unsigned int id);
 	Film* findFilmById(unsigned int id , std::vector<Film*> listOfFilms);
+	void searchFilmWithFactorsInAList(std::vector<Film*> givenList , std::string name  , unsigned int minPoint , unsigned int minYear , unsigned int price , unsigned maxYear , std::string directorName);
+	void searchFilmWithFactorsInDatabase(std::string name  , unsigned int minPoint , unsigned int minYear , unsigned int price , unsigned maxYear , std::string directorName);	
 private:
 	unsigned int theIdsAssigned;
 	std::vector<Film*> allFilms;
+	//
 	void goToNextId();	
 	void checkFilmOwnership(Publisher* assertedOwner , unsigned int id);
 	void checkFilmExistence(unsigned int id);
 	unsigned int findPositionById(unsigned int id , std::vector<Film*> listOfFilms);
+	void printFilmList(std::vector<Film*> desiredList);
+	std::vector<Film*> filterFilmsByMinPoint(std::vector<Film*> givenFilmList , unsigned int minPoint);
+	std::vector<Film*> filterFilmsByName(std::vector<Film*> givenFilmList , std::string name);
+	std::vector<Film*> filterFilmsByDirector(std::vector<Film*> givenFilmList , std::string directorName);
+	std::vector<Film*> filterFilmsByMinYear(std::vector<Film*> givenFilmList , unsigned int minYear);
+	std::vector<Film*> filterFilmsByPrice(std::vector<Film*> givenFilmList , unsigned int price);
+	std::vector<Film*> filterFilmsMaxYear(std::vector<Film*> givenFilmList , unsigned int maxYear);
 };
 
 

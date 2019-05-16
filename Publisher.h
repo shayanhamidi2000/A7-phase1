@@ -12,11 +12,12 @@ private:
 	std::vector<Customer*> followers;
 public:
 	Publisher(std::string username , std::string password , std::string email , unsigned int id , unsigned int age);
-	virtual void addToUploadedFilms(Film* newFilm);
-	virtual void addToFollowers(Customer* newFollower);
-	virtual std::vector<Film*> getUploadedFilms() const;
-	virtual void deleteMyFilm(unsigned int elementPosition);
-	virtual void notifyFollowersOnNewUpload();
+	std::vector<Film*> getUploadedFilms() const;
+	void addToUploadedFilms(Film* newFilm);
+	void addToFollowers(Customer* newFollower);
+	void deleteMyFilm(unsigned int elementPosition);
+	void notifyFollowersOnNewUpload();
+	void printYourUploadedFilms();
 };
 
 #endif

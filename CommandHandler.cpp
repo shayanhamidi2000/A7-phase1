@@ -23,14 +23,6 @@ string CommandHandler::deleteSpacesOfAString(string aString){
 	return modifiedString;
 }
 
-bool CommandHandler::isAcceptableSuffixForEmail(string aString){
-	for(unsigned int i = 0 ; i < aString.length() ; i++)
-		if(!isalpha((char) aString[i]) || (aString[i] != '.') )
-			return false;
-
-	return true;	
-}
-
 bool CommandHandler::isConstantNumber(string aPieceOfString)
 {
 	for(unsigned int i = 0 ; i < aPieceOfString.length() ; i++)
@@ -109,9 +101,6 @@ void CommandHandler::getRawCommand(string rawCommandLine){
 		restOfCommand = "";
 	}else{
 		keyCommand = rawCommandLine.substr(0 , rawCommandLine.find_first_of(COMMAND_END_SIGN) - 1);
-		if( (rawCommandLine.find_first_of(COMMAND_END_SIGN) + 1) == rawCommandLine.length() )
-			throw BadRequestException();
-
 		restOfCommand = rawCommandLine.substr(rawCommandLine.find_first_of(COMMAND_END_SIGN) + 1);
 	}
 
@@ -123,7 +112,7 @@ bool CommandHandler::checkCommandValidation(string keyCommand) {
 	vector<string> splitedCommand = splitString(keyCommand);
 	if(splitedCommand.size() != 2)
 		return false;
-
+	//bug notification read
 	string commandSecondPart = deleteSpacesOfAString( splitedCommand[1] );
 	if(commandSecondPart == REGISTER_C0MMAND)
 		return true;
@@ -165,6 +154,7 @@ void CommandHandler::checkFirstPartAndSecondPartOfCommand(string keyCommand , st
 
 void CommandHandler::recognizeCommandType(string keyCommand , string restOfCommand){
 	keyCommand = deleteSpacesOfAString(keyCommand);
+
 
 	if(concatenateTwoStrings(POST_KW , REGISTER_C0MMAND) == keyCommand){
 		manageSignUp(restOfCommand);
@@ -239,9 +229,6 @@ bool CommandHandler::checkEmailValidation(string email){
 		return false;
 
 	if(isConstantNumber(email.substr(0 , email.find_first_of('@') - 1) ) )
-		return false;
-
-	if(isAcceptableSuffixForEmail(email.substr(email.find_first_of('@') + 1)) )
 		return false;
 
 	return true;
@@ -428,15 +415,74 @@ void CommandHandler::manageFilmDelete(string deletedFilmInfo){
 
 }
 
+void CommandHandler::checkFilmSearchKeys(vector<string> keys){
+	int numberOfMaxYears = count(keys.begin() , keys.end() , FILM_MAXIMUM_YEAR_KEY);
+	int numberOfMinYears = count(keys.begin() , keys.end() , FILM_MINIMUM_YEAR_KEY);
+	int numberOfNames = count(keys.begin() , keys.end() , FILM_NAME_KEY);
+	int numberOfPrices = count(keys.begin() , keys.end() , FILM_PRICE_KEY);
+	int numberOfDirectors = count(keys.begin() , keys.end() , FILM_DIRECTOR_KEY);
+	int numberOfMinRates = count(keys.begin() , keys.end() , FILM_MINIMUM_RATE_KEY);
+
+	if( (numberOfMaxYears + numberOfDirectors + numberOfNames + numberOfPrices + numberOfMinRates + numberOfMinYears) != keys.size() )
+		throw BadRequestException();
+}
+
+void CommandHandler::checkSearchValues(string minPoint , string minYear , string maxYear , string price){
+	if(!isConstantNumber(minYear) || !isConstantNumber(minPoint) || !isConstantNumber(maxYear) || !isConstantNumber(price) )
+		throw BadRequestException();
+
+	if(minPoint != ""){
+		if(stoi(minPoint) > MAX_POINT)
+			throw BadRequestException();
+	}
+}
+
+map<string , string> CommandHandler::initializeEmptySearchFilmKeys(map<string , string> givenMap){
+	map<string , string> modifiedMap = givenMap;
+
+	modifiedMap.insert(pair<string , string> (FILM_MINIMUM_RATE_KEY , "") );
+	modifiedMap.insert(pair<string , string> (FILM_MINIMUM_YEAR_KEY , "") );
+	modifiedMap.insert(pair<string , string> (FILM_MAXIMUM_YEAR_KEY , "") );
+	modifiedMap.insert(pair<string , string> (FILM_DIRECTOR_KEY , "") );
+	modifiedMap.insert(pair<string , string> (FILM_PRICE_KEY , "") );
+	modifiedMap.insert(pair<string , string> (FILM_NAME_KEY , "") );
+	return modifiedMap;
+}
+
+void CommandHandler::managePublishedFilmsList(string searchInfo){
+	unsigned int minPoint , maxYear , minYear , price;
+	string name , directorName;
+	minPoint = 0; maxYear = 0; minYear = 0; price = 0;
+
+	vector<string> keywordsAndValues = splitString(searchInfo);
+	vector<string> keys = getKeys(keywordsAndValues , MIN_KEYS_AND_VALUES_FOR_PUBLISHED_LIST , MAX_KEYS_AND_VALUES_FOR_PUBLISHED_LIST);
+	checkFilmSearchKeys(keys);
+	map<string , string> mappedKeysAndValues = getMappedKeysAndValues(keywordsAndValues);
+	mappedKeysAndValues = initializeEmptySearchFilmKeys(mappedKeysAndValues);
+	checkSearchValues(mappedKeysAndValues[FILM_MINIMUM_RATE_KEY] , mappedKeysAndValues[FILM_MINIMUM_YEAR_KEY]
+	 , mappedKeysAndValues[FILM_MAXIMUM_YEAR_KEY] , mappedKeysAndValues[FILM_PRICE_KEY]);
+
+	if(mappedKeysAndValues[FILM_MINIMUM_RATE_KEY] != "")
+		minPoint = stoi(mappedKeysAndValues[FILM_MINIMUM_RATE_KEY]);
+	if(mappedKeysAndValues[FILM_MAXIMUM_YEAR_KEY] != "")
+		maxYear = stoi(mappedKeysAndValues[FILM_MAXIMUM_YEAR_KEY]);
+	if(mappedKeysAndValues[FILM_MINIMUM_YEAR_KEY] != "")
+		minYear = stoi(mappedKeysAndValues[FILM_MINIMUM_YEAR_KEY]);
+	if(mappedKeysAndValues[FILM_PRICE_KEY] != "")
+		price = stoi(mappedKeysAndValues[FILM_PRICE_KEY]);
+
+	name = mappedKeysAndValues[FILM_NAME_KEY];
+	directorName = mappedKeysAndValues[FILM_DIRECTOR_KEY];
+
+	miniNetAccess->getPublishedList(name , minPoint , minYear , price , maxYear , directorName);
+	
+}
+
 void CommandHandler::manageFollowerListRequest(){
 
 }
 
 void CommandHandler::manageGetMoney(){
-
-}
-
-void CommandHandler::managePublishedFilmsList(string searchInfo){
 
 }
 

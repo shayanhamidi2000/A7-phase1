@@ -19,6 +19,7 @@ public:
 	void addFilmOnNet(std::string name , unsigned int year , std::string director , std::string summary , unsigned int price , unsigned int length);
 	void editAFilm(unsigned int id , std::string newName , unsigned int newYear , unsigned int newLength , std::string newSummary , std::string newDirector);
 	void deleteAFilm(unsigned int id);
+	void getPublishedList(std::string name , unsigned int minPoint , unsigned int minYear , unsigned int price , unsigned maxYear , std::string directorName);
 	Customer* findUserByUsername(std::string username);
 	Customer* findUserById(unsigned int id);
 
@@ -36,8 +37,8 @@ private:
 	void isUsernameMatchingPassword(std::string username , std::string password);
 	void isUsernameExisted(std::string username);
 	void checkIdExistence(unsigned int id);
-	bool isOnlineUserPublisher() { return onlineUser->getPublishingState(); }
-	bool isAnyOneOnline() { return (onlineUser != nullptr); }
+	bool isOnlineUserPublisher();
+	bool isAnyOneOnline();
 };
 
 

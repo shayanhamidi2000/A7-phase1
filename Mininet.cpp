@@ -14,6 +14,16 @@ MiniNet::MiniNet(){
 	films = new FilmRepository();
 }
 
+bool MiniNet::isOnlineUserPublisher() { 
+	return onlineUser->getPublishingState();
+}
+
+bool MiniNet::isAnyOneOnline() {
+	if(onlineUser != nullptr)
+		return true;
+	return false;
+}
+
 void MiniNet::goToNextId() {
  	theIdsAssigned++; 
 }
@@ -108,4 +118,11 @@ void MiniNet::deleteAFilm(unsigned int id){
 
 	films->deleteFilm((Publisher*) this->onlineUser , id );
 	cout << SUCCESS_MESSAGE << endl;
+}
+
+void MiniNet::getPublishedList(string name , unsigned int minPoint , unsigned int minYear , unsigned int price , unsigned maxYear , string directorName){
+	if(!isAnyOneOnline() || !isOnlineUserPublisher())
+		throw PermissionDenialException();
+
+	films->searchFilmWithFactorsInAList( ((Publisher*) onlineUser)->getUploadedFilms() , name , minPoint , minYear , price , maxYear , directorName);
 }
