@@ -10,6 +10,7 @@ class Publisher : public Customer {
 private:
 	std::vector<Film*> uploadedFilms;
 	std::vector<Customer*> followers;
+	//
 	bool checkFollowerRepitition(unsigned int newFollowerId);
 	void sortFollowersById();
 public:

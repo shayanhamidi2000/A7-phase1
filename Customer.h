@@ -21,10 +21,9 @@ public:
 	virtual void printYourself() const;
 	virtual void addToCredit(const unsigned int amount);
 	virtual void getMessage(Message* newMessage);
-	virtual void sendMessageTo(Customer* messageReciever , std::string content);
-	virtual void sendMessageToFollowedPublisher(Customer* followedPublisher);
-	virtual void sendMessageToBoughtFromPublisher(Customer* boughtFromPublisher , const Film* boughtFilm);
-
+	virtual void sendMessageToFollowedPublisher(Publisher* followedPublisher);
+	virtual void buyNewFilm(Film* newFilm);
+	virtual bool hasFilm(Film* newFilm);
 	//
 protected:
 	bool isPublisher;
@@ -33,10 +32,14 @@ protected:
 	std::string email;
 	unsigned int id;
 	unsigned int age;
-	unsigned int credit;
+	int credit;
 	std::stack<Message*> unreadMessages;
 	std::vector<Message*> allMessages;
 	std::vector<Film*> purchases;
+	//
+	virtual void sendMessageToBoughtFromPublisher(Publisher* boughtFromPublisher , const Film* boughtFilm);
+	virtual void sendMessageTo(Customer* messageReciever , std::string content);
+	virtual void withdrawCredit(const int amount);
 };
 
 #endif

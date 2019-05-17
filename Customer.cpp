@@ -1,5 +1,8 @@
 #include "Customer.h"
+#include "Exceptions.h"
 #include <iostream>
+#include <algorithm>
+#include "Publisher.h"
 
 using namespace std;
 
@@ -49,6 +52,13 @@ void Customer::addToCredit(const unsigned int amount){
 	credit += amount;
 }
 
+void Customer::withdrawCredit(const int amount){
+	if( (credit -  amount) < 0 )
+		throw PermissionDenialException();
+
+	credit -= amount;
+}
+
 void Customer::getMessage(Message* newMessage){
 	this->unreadMessages.push(newMessage);
 }
@@ -58,12 +68,24 @@ void Customer::sendMessageTo(Customer* messageReciever , string content){
 	messageReciever->getMessage(newMessage);
 }
 
-void Customer::sendMessageToFollowedPublisher(Customer* followedPublisher){
+void Customer::sendMessageToFollowedPublisher(Publisher* followedPublisher){
 	string newFollowMessage = "User " + username + " with id " + to_string(id) + " follow you.";
 	sendMessageTo(followedPublisher , newFollowMessage);
 }
 
-void Customer::sendMessageToBoughtFromPublisher(Customer* boughtFromPublisher , const Film* boughtFilm){
+void Customer::sendMessageToBoughtFromPublisher(Publisher* boughtFromPublisher , const Film* boughtFilm){
 	string newBuyMessage = "User " + username + " with id " + to_string(id) + " buy your film " + boughtFilm->getName() + " with id " + to_string(boughtFilm->getId() ) + ".";
 	sendMessageTo(boughtFromPublisher , newBuyMessage);
+}
+
+void Customer::buyNewFilm(Film* newFilm){
+	purchases.push_back(newFilm);
+	withdrawCredit(newFilm->getPrice() );
+	sendMessageToBoughtFromPublisher(newFilm->getOwner() , newFilm);
+}
+
+bool Customer::hasFilm(Film* newFilm){
+	if(find(purchases.begin() , purchases.end() , newFilm) == purchases.end() )
+		return false;
+	return true;
 }

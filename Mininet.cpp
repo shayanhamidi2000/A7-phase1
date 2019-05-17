@@ -14,6 +14,14 @@ MiniNet::MiniNet(){
 	films = new FilmRepository();
 }
 
+void MiniNet::addToNetCredit(unsigned int amount){
+	totalNetCredit += amount;
+}
+
+void MiniNet::withdrawNetCredit(unsigned int amount){
+	totalNetCredit -= amount;
+}
+
 bool MiniNet::isOnlineUserPublisher() { 
 	if(onlineUser == nullptr)
 		return true;
@@ -159,6 +167,16 @@ void MiniNet::addMoney(unsigned int amount){
 
 void MiniNet::buyFilm(unsigned int filmId){
 	if(!isAnyOneOnline() )
+		throw PermissionDenialException();
+
+	Film* desiredFilm = films->findFilmByIdInDatabase(filmId);
+
+	if(!onlineUser->hasFilm(desiredFilm) ){
+		onlineUser->buyNewFilm(desiredFilm);
+		addToNetCredit(desiredFilm->getPrice() );
+		purchases.push_back(new Purchase(desiredFilm->getPrice() , desiredFilm->getRatingQuality() , desiredFilm->getOwner() ) );
+	}
+	cout << SUCCESS_MESSAGE << endl;
 }
 
 

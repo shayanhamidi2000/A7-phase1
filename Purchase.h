@@ -1,15 +1,16 @@
 #ifndef PURCHASE_H
 #define PURCHASE_H
 
+#include "Publisher.h"
+
 class Purchase{
 private:
+	Publisher* filmOwner;
 	unsigned int filmPrice;
 	unsigned int filmRating;
-	unsigned int filmId;
 public:
-	Purchase(unsigned int filmPrice , unsigned int filmRating);
+	Purchase(unsigned int filmPrice , unsigned int filmRating , Publisher* filmOwner);
 	unsigned int calculateFilmOwnerShare();
-	unsigned int calculateNetShare();
 };
 
 #endif

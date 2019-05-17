@@ -36,6 +36,11 @@ Film* FilmRepository::findFilmById(unsigned int id , vector<Film*> listOfFilms){
 	return nullptr;		
 }
 
+Film* FilmRepository::findFilmByIdInDatabase(unsigned int id){
+	checkFilmExistence(id);
+	return findFilmById(id , this->allFilms);
+}
+
 void FilmRepository::checkFilmExistence(unsigned int id){
 	if(findFilmById(id , this->allFilms) == nullptr)
 		throw NotFoundException();

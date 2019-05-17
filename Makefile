@@ -17,7 +17,7 @@ CommandHandler.o: CommandHandler.cpp CommandHandler.h Exceptions.h Config.h
 FilmRepository.o: FilmRepository.cpp FilmRepository.h Film.h Publisher.h Exceptions.h Config.h
 	${CC} -c FilmRepository.cpp -o FilmRepository.o
 
-Customer.o: Customer.cpp Customer.h Message.h Film.h
+Customer.o: Customer.cpp Customer.h Publisher.h Message.h Film.h
 	${CC} -c Customer.cpp -o Customer.o
 
 Publisher.o: Publisher.cpp Publisher.h Customer.h Film.h Exceptions.h
@@ -32,7 +32,7 @@ Comment.o: Comment.cpp Comment.h
 Message.o: Message.cpp Message.h
 	${CC} -c Message.cpp -o Message.o
 
-Purchase.o: Purchase.cpp Purchase.h Config.h
+Purchase.o: Purchase.cpp Purchase.h Publisher.h Config.h
 	${CC} -c Purchase.cpp -o Purchase.o
 
 .PHONY:clean

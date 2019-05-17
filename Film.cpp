@@ -81,3 +81,12 @@ unsigned int Film::getYear() const{
 Publisher* Film::getOwner() const{
 	return filmOwner;
 }
+
+unsigned int Film::getRatingQuality(){
+	if(averagePoint < 5)
+		return LOW_RATED;
+	else if(averagePoint >= 5 && averagePoint < 8)
+		return AVERAGE_RATED;
+	else
+		return HIGH_RATED;
+}

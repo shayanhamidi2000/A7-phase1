@@ -2,9 +2,10 @@
 #include "Config.h"
 
 
-Purchase::Purchase(unsigned int filmPrice , unsigned int filmRating){
+Purchase::Purchase(unsigned int filmPrice , unsigned int filmRating , Publisher* filmOwner){
 	this->filmPrice = filmPrice;
 	this->filmRating = filmRating;
+	this->filmOwner = filmOwner;
 }
 
 unsigned int Purchase::calculateFilmOwnerShare(){
@@ -21,8 +22,4 @@ unsigned int Purchase::calculateFilmOwnerShare(){
 			break;
 	}
 	return (int) filmOwnerShare; 
-}
-
-unsigned int Purchase::calculateNetShare(){
-	return (filmPrice - calculateFilmOwnerShare());
 }

@@ -38,6 +38,8 @@ private:
 	std::vector<Purchase*> purchases;
 	//
 	void goToNextId();
+	void addToNetCredit(unsigned int amount);
+	void withdrawNetCredit(unsigned int amount);
 	void checkUsernameRepetition(std::string username);
 	void isUsernameMatchingPassword(std::string username , std::string password);
 	void isUsernameExisted(std::string username);
