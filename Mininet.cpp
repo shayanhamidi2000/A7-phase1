@@ -224,6 +224,17 @@ void MiniNet::getPurchasedList(string name , unsigned int minYear , unsigned int
 	films->searchFilmWithFactorsInAList( onlineUser->getPurchasedFilms() , name , NOT_A_FACTOR , minYear , price , maxYear , directorName);
 }
 
+void MiniNet::rateFilm(unsigned int id , unsigned int score){
+	if(!isAnyOneOnline() )
+		throw PermissionDenialException();
+
+	films->checkFilmPurchased(onlineUser , id);
+	Film* desiredFilm = films->findFilmByIdInDatabase(id);
+	desiredFilm->rate(onlineUser , score);
+	onlineUser->sendMessageToRatedPublisher(desiredFilm);
+	cout << SUCCESS_MESSAGE << endl;
+}
+
 
 
 

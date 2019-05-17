@@ -72,6 +72,11 @@ private:
 	//
 	void checkAddMoneyKeys(std::vector<std::string> keys);
 	void checkAddMoneyValues(std::string amount);
+	//
+	void checkFilmRateValues(std::string id , std::string score);
+	void checkFilmRateKeys(std::vector<std::string> keys);
+
+
 };
 
 

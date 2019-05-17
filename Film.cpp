@@ -1,5 +1,8 @@
 #include "Film.h"
 #include "Config.h"
+#include "Exceptions.h"
+#include "Customer.h"
+#include "Publisher.h"
 #include <iostream>
 
 using namespace std;
@@ -14,7 +17,6 @@ Film::Film(unsigned int id , string name , unsigned manufacturedYear , unsigned 
 	this->summary = summary;
 	this->directorName = directorName;
 	this->averagePoint = 0;
-	this->peopleRatedThisFilm = 0;
 	this->theIdsAssignedToComments = BASIC_ID_VALUE;
 	this->isAvailable = true;
 	this->filmOwner = filmOwner;
@@ -89,4 +91,32 @@ unsigned int Film::getRatingQuality(){
 		return AVERAGE_RATED;
 	else
 		return HIGH_RATED;
+}
+
+Point* Film::findPointByOwner(Customer* owner){
+	for(unsigned int i = 0 ; i < points.size() ; i++)
+		if(owner->getId() == points[i]->getScoreOwner()->getId() )
+			return points[i];
+
+	return nullptr;		
+}
+
+void Film::rate(Customer* rater , unsigned int rate){
+	if(rater->getId() == filmOwner->getId() )
+		throw PermissionDenialException();
+
+	if(findPointByOwner(rater) == nullptr)
+		points.push_back(new Point(rate , rater) );
+	else
+		findPointByOwner(rater)->editScore(rate);
+
+	this->updateAveragePoint();
+}
+
+void Film::updateAveragePoint(){
+	averagePoint = 0;
+	for(unsigned int i = 0 ; i < points.size() ; i++)
+		averagePoint += points[i]->getScore();
+
+	averagePoint /= points.size();
 }

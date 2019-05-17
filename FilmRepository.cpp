@@ -48,12 +48,19 @@ void FilmRepository::checkFilmExistence(unsigned int id){
 }
 
 void FilmRepository::checkFilmOwnership(Publisher* assertedOwner , unsigned int id){
+	checkFilmExistence(id);
 	if(findFilmById(id , assertedOwner->getUploadedFilms() ) == nullptr)
 		throw PermissionDenialException();
 }
 
-void FilmRepository::deleteFilm(Publisher* filmOwner , unsigned int id){
+void FilmRepository::checkFilmPurchased(Customer* assertedPurchaser , unsigned int id){
 	checkFilmExistence(id);
+	if(findFilmById(id , assertedPurchaser->getPurchasedFilms()) == nullptr)
+		throw PermissionDenialException();
+}
+
+
+void FilmRepository::deleteFilm(Publisher* filmOwner , unsigned int id){
 	checkFilmOwnership(filmOwner , id);
 	Film* deletedFilm = findFilmById(id , allFilms);
 	deletedFilm->beUnavailable();
@@ -61,7 +68,6 @@ void FilmRepository::deleteFilm(Publisher* filmOwner , unsigned int id){
 }
 
 void FilmRepository::editFilm(Publisher* assertedOwner , unsigned int id , string newName , unsigned int newYear , unsigned int newLength , string newSummary , string newDirector){
-	checkFilmExistence(id);
 	checkFilmOwnership(assertedOwner , id);
 	Film* modifiedFilm = findFilmById(id , allFilms);
 	if(newName != "")

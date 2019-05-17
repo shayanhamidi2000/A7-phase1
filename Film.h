@@ -4,8 +4,10 @@
 #include <string>
 #include <vector>
 #include "Comment.h"
+#include "Point.h"
 
 class Publisher;
+class Customer;
 
 class Film{
 public:
@@ -28,20 +30,24 @@ public:
 	void setSummary(std::string summary);
 	Publisher* getOwner() const;
 	void printYourself() const;
+	void rate(Customer* rater , unsigned int rate);
+	void updateAveragePoint();
 private:
 	Publisher* filmOwner;
 	int theIdsAssignedToComments;
 	unsigned int id;
 	bool isAvailable;
 	double averagePoint;
-	unsigned int peopleRatedThisFilm;
 	std::string name;
 	unsigned int manufacturedYear;
 	unsigned int length;
 	unsigned int price;
+	std::vector<Point*> points;
 	std::string summary;
 	std::string directorName;
 	std::vector<Comment*> comments;
+	//
+	Point* findPointByOwner(Customer* owner);
 };
 
 #endif

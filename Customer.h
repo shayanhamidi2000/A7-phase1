@@ -23,6 +23,7 @@ public:
 	virtual void addToCredit(const unsigned int amount);
 	virtual void getMessage(Message* newMessage);
 	virtual void sendMessageToFollowedPublisher(Publisher* followedPublisher);
+	virtual void sendMessageToRatedPublisher(const Film* ratedFilm);
 	virtual void buyNewFilm(Film* newFilm);
 	virtual bool hasFilm(Film* newFilm);
 	//
@@ -38,7 +39,7 @@ protected:
 	std::vector<Message*> allMessages;
 	std::vector<Film*> purchasedFilms;
 	//
-	virtual void sendMessageToBoughtFromPublisher(Publisher* boughtFromPublisher , const Film* boughtFilm);
+	virtual void sendMessageToBoughtFromPublisher(const Film* boughtFilm);
 	virtual void sendMessageTo(Customer* messageReciever , std::string content);
 	virtual void withdrawCredit(const int amount);
 };

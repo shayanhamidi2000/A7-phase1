@@ -73,15 +73,21 @@ void Customer::sendMessageToFollowedPublisher(Publisher* followedPublisher){
 	sendMessageTo(followedPublisher , newFollowMessage);
 }
 
-void Customer::sendMessageToBoughtFromPublisher(Publisher* boughtFromPublisher , const Film* boughtFilm){
+void Customer::sendMessageToBoughtFromPublisher(const Film* boughtFilm){
 	string newBuyMessage = "User " + username + " with id " + to_string(id) + " buy your film " + boughtFilm->getName() + " with id " + to_string(boughtFilm->getId() ) + ".";
-	sendMessageTo(boughtFromPublisher , newBuyMessage);
+	sendMessageTo(boughtFilm->getOwner() , newBuyMessage);
 }
+
+void Customer::sendMessageToRatedPublisher(const Film* ratedFilm){
+	string newRateMessage = "User " + username + " with id " + to_string(id) + " rate your film " + ratedFilm->getName() + " with id " + to_string(ratedFilm->getId() ) + ".";
+	sendMessageTo(ratedFilm->getOwner() , newRateMessage);
+}
+
 
 void Customer::buyNewFilm(Film* newFilm){
 	withdrawCredit(newFilm->getPrice() );
 	purchasedFilms.push_back(newFilm);
-	sendMessageToBoughtFromPublisher(newFilm->getOwner() , newFilm);
+	sendMessageToBoughtFromPublisher(newFilm);
 }
 
 bool Customer::hasFilm(Film* newFilm){

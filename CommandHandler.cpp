@@ -566,7 +566,34 @@ void CommandHandler::manageBuyFilm(string filmInfo){
 	miniNetAccess->buyFilm(id);
 }
 
+void CommandHandler::checkFilmRateKeys(vector<string> keys){
+	int numberOfIds = count(keys.begin() , keys.end() , FILM_ID_KEY);
+	int numberOfScores = count(keys.begin() , keys.end() , SCORE_GIVEN_KEY);
+
+	if( (numberOfIds != 1) || (numberOfScores != 1) )
+		throw BadRequestException();
+
+}
+
+void CommandHandler::checkFilmRateValues(string id , string score){
+	if(!isConstantNumber(id) || !isConstantNumber(score) )
+		throw BadRequestException();
+	if(stoi(score) < MIN_POINT || stoi(score) > MAX_POINT)
+		throw BadRequestException();
+}
+
 void CommandHandler::manageFilmRating(string ratingInfo){
+	unsigned int score , id;
+	vector<string> keywordsAndValues = splitString(ratingInfo);
+	vector<string> keys = getKeys(keywordsAndValues , MIN_KEYS_AND_VALUES_FOR_RATE , MAX_KEYS_AND_VALUES_FOR_RATE);
+	checkFilmRateKeys(keys);
+	map<string , string> mappedKeysAndValues = getMappedKeysAndValues(keywordsAndValues);
+	checkFilmRateValues(mappedKeysAndValues[FILM_ID_KEY] , mappedKeysAndValues[SCORE_GIVEN_KEY] );
+	
+	score = stoi(mappedKeysAndValues[SCORE_GIVEN_KEY] );
+	id = stoi(mappedKeysAndValues[FILM_ID_KEY] );
+
+	miniNetAccess->rateFilm(id , score);
 
 }
 

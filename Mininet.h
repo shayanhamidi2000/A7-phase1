@@ -27,8 +27,7 @@ public:
 	void buyFilm(unsigned int filmId);
 	void getMoneyFromNet();
 	void getPurchasedList(std::string name , unsigned int minYear , unsigned int price , unsigned maxYear , std::string directorName);
-	Customer* findUserByUsername(std::string username);
-	Customer* findUserById(unsigned int id);
+	void rateFilm(unsigned int id , unsigned int score);
 private:
 	unsigned int totalNetCredit;
 	unsigned int theIdsAssigned;
@@ -39,6 +38,8 @@ private:
 	std::vector<Purchase*> purchases;
 	//
 	void goToNextId();
+	Customer* findUserByUsername(std::string username);
+	Customer* findUserById(unsigned int id);
 	void addToNetCredit(unsigned int amount);
 	void withdrawNetCredit(unsigned int amount);
 	void checkUsernameRepetition(std::string username);
