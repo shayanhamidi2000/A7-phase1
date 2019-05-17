@@ -575,7 +575,30 @@ void CommandHandler::manageCommenting(string newCommentInfo){
 }
 
 void CommandHandler::managePurchasesList(string searchInfo){
+	unsigned int maxYear , minYear , price;
+	string name , directorName;
+	maxYear = 0; minYear = 0; price = 0;
 
+	vector<string> keywordsAndValues = splitString(searchInfo);
+	vector<string> keys = getKeys(keywordsAndValues , MIN_KEYS_AND_VALUES_FOR_PURCHASED_LIST , MAX_KEYS_AND_VALUES_FOR_PURCHASED_LIST);
+	checkFilmSearchKeys(keys);
+	map<string , string> mappedKeysAndValues = getMappedKeysAndValues(keywordsAndValues);
+	mappedKeysAndValues = initializeEmptySearchFilmKeys(mappedKeysAndValues);
+	checkSearchValues("" , mappedKeysAndValues[FILM_MINIMUM_YEAR_KEY] , mappedKeysAndValues[FILM_MAXIMUM_YEAR_KEY] , mappedKeysAndValues[FILM_PRICE_KEY]);
+
+	if(mappedKeysAndValues[FILM_MINIMUM_RATE_KEY] != "")
+		throw BadRequestException();
+	if(mappedKeysAndValues[FILM_MAXIMUM_YEAR_KEY] != "")
+		maxYear = stoi(mappedKeysAndValues[FILM_MAXIMUM_YEAR_KEY]);
+	if(mappedKeysAndValues[FILM_MINIMUM_YEAR_KEY] != "")
+		minYear = stoi(mappedKeysAndValues[FILM_MINIMUM_YEAR_KEY]);
+	if(mappedKeysAndValues[FILM_PRICE_KEY] != "")
+		price = stoi(mappedKeysAndValues[FILM_PRICE_KEY]);
+
+	name = mappedKeysAndValues[FILM_NAME_KEY];
+	directorName = mappedKeysAndValues[FILM_DIRECTOR_KEY];
+
+	miniNetAccess->getPurchasedList(name , minYear , price , maxYear , directorName);
 }
 
 void CommandHandler::manageUnreadNotifications(){

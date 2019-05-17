@@ -79,13 +79,17 @@ void Customer::sendMessageToBoughtFromPublisher(Publisher* boughtFromPublisher ,
 }
 
 void Customer::buyNewFilm(Film* newFilm){
-	purchases.push_back(newFilm);
 	withdrawCredit(newFilm->getPrice() );
+	purchasedFilms.push_back(newFilm);
 	sendMessageToBoughtFromPublisher(newFilm->getOwner() , newFilm);
 }
 
 bool Customer::hasFilm(Film* newFilm){
-	if(find(purchases.begin() , purchases.end() , newFilm) == purchases.end() )
+	if(find(purchasedFilms.begin() , purchasedFilms.end() , newFilm) == purchasedFilms.end() )
 		return false;
 	return true;
 }
+
+vector<Film*> Customer::getPurchasedFilms() const{
+	return purchasedFilms;
+} 

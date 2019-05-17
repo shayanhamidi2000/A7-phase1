@@ -217,5 +217,13 @@ void MiniNet::getMoneyFromNet(){
 	cout << SUCCESS_MESSAGE << endl;
 }
 
+void MiniNet::getPurchasedList(string name , unsigned int minYear , unsigned int price , unsigned maxYear , string directorName){
+	if(!isAnyOneOnline() )
+		throw PermissionDenialException();
+
+	films->searchFilmWithFactorsInAList( onlineUser->getPurchasedFilms() , name , NOT_A_FACTOR , minYear , price , maxYear , directorName);
+}
+
+
 
 

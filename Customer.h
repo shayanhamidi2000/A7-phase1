@@ -14,6 +14,7 @@ public:
 	virtual std::string getUsername() const;
 	virtual std::string getPassword() const;
 	virtual std::string getEmail() const;
+	virtual std::vector<Film*> getPurchasedFilms() const; 
 	virtual unsigned int getId() const;
 	virtual unsigned int getAge() const;
 	virtual unsigned int getCredit() const;
@@ -35,7 +36,7 @@ protected:
 	int credit;
 	std::stack<Message*> unreadMessages;
 	std::vector<Message*> allMessages;
-	std::vector<Film*> purchases;
+	std::vector<Film*> purchasedFilms;
 	//
 	virtual void sendMessageToBoughtFromPublisher(Publisher* boughtFromPublisher , const Film* boughtFilm);
 	virtual void sendMessageTo(Customer* messageReciever , std::string content);

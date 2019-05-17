@@ -1,6 +1,7 @@
 #include "FilmRepository.h"
 #include "Config.h"
 #include "Exceptions.h"
+#include <algorithm>
 #include <iostream>
 
 using namespace std;
@@ -88,7 +89,8 @@ void FilmRepository::searchFilmWithFactorsInAList(vector<Film*> givenList , stri
 	filteredList = filterFilmsByMinPoint(filteredList , minPoint);
 	filteredList = filterFilmsMaxYear(filteredList , maxYear);
 	filteredList = filterFilmsByMinYear(filteredList , minYear);
-	
+	filteredList =	sortFilmsById(filteredList);
+
 	printFilmList(filteredList);
 }
 
@@ -171,4 +173,14 @@ void FilmRepository::printFilmList(vector<Film*> desiredList){
 		desiredList[i]->printYourself();
 		cout << endl;
 	}
+}
+
+bool filmIdComparator(const Film* film1 , const Film* film2){
+	return (film1->getId() <  film2->getId() );
+}
+
+vector<Film*> FilmRepository::sortFilmsById(vector<Film*> unsortedList){
+	vector<Film*> sortedList = unsortedList;
+	sort(sortedList.begin() , sortedList.end() , filmIdComparator);
+	return sortedList;
 }

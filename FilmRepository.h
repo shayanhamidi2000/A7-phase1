@@ -32,6 +32,7 @@ private:
 	std::vector<Film*> filterFilmsByPrice(std::vector<Film*> givenFilmList , unsigned int price);
 	std::vector<Film*> filterFilmsMaxYear(std::vector<Film*> givenFilmList , unsigned int maxYear);
 	Film* findFilmById(unsigned int id , std::vector<Film*> listOfFilms);
+	std::vector<Film*> sortFilmsById(std::vector<Film*> unsortedList);
 };
 
 

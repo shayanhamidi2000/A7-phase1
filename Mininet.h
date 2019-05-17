@@ -26,6 +26,7 @@ public:
 	void addMoney(unsigned int amount);
 	void buyFilm(unsigned int filmId);
 	void getMoneyFromNet();
+	void getPurchasedList(std::string name , unsigned int minYear , unsigned int price , unsigned maxYear , std::string directorName);
 	Customer* findUserByUsername(std::string username);
 	Customer* findUserById(unsigned int id);
 private:
