@@ -11,6 +11,7 @@ private:
 public:
 	Purchase(unsigned int filmPrice , unsigned int filmRating , Publisher* filmOwner);
 	unsigned int calculateFilmOwnerShare();
+	Publisher* getFilmOwner() const;
 };
 
 #endif

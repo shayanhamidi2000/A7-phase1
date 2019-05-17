@@ -23,3 +23,7 @@ unsigned int Purchase::calculateFilmOwnerShare(){
 	}
 	return (int) filmOwnerShare; 
 }
+
+Publisher* Purchase::getFilmOwner() const{
+	return filmOwner;
+}

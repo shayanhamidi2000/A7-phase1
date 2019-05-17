@@ -12,7 +12,7 @@ public:
 	CommandHandler(MiniNet* theMiniNet);
 
 	void getRawCommand(std::string rawCommandLine);
-	void recognizeCommandType(std::string keyCommand , std::string restOfCommand);
+	void recognizeCommandType(std::string keyCommand , std::string restOfCommand , bool hasCommandEndSign);
 
 	void manageSignUp(std::string signUpInfo);
 	void manageLogin(std::string loginInfo);

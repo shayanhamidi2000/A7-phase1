@@ -179,4 +179,43 @@ void MiniNet::buyFilm(unsigned int filmId){
 	cout << SUCCESS_MESSAGE << endl;
 }
 
+unsigned int MiniNet::getPublisherSoldFilmsMoney(){
+	unsigned int earnedMoney = 0;
+	vector<unsigned int> publisherPurchases;
+	for(unsigned int i = 0 ; i < purchases.size() ; i++){
+		if(purchases[i]->getFilmOwner() == this->onlineUser){
+			withdrawNetCredit(purchases[i]->calculateFilmOwnerShare() );
+			earnedMoney += purchases[i]->calculateFilmOwnerShare();
+			publisherPurchases.push_back(i);
+		}
+	}
+	deleteOverduedPurchases(publisherPurchases);
+	return earnedMoney;
+}
+
+void MiniNet::deleteOverduedPurchases(vector<unsigned int> overduedPurchases){
+	for(unsigned int i = 0 ; i < overduedPurchases.size() ; i++){
+		delete purchases[overduedPurchases[i] ];
+		purchases.erase(purchases.begin() + overduedPurchases[i] );
+		overduedPurchases = decreaseEachIndexByOne(overduedPurchases);
+	}
+}
+
+vector<unsigned int> MiniNet::decreaseEachIndexByOne(vector<unsigned int> anIndexVector){
+	vector<unsigned int> modifiedVector = anIndexVector;
+	for(unsigned int i = 0 ; i < modifiedVector.size() ; i++)
+		modifiedVector[i]--;
+
+	return modifiedVector;
+}
+
+void MiniNet::getMoneyFromNet(){
+	if(!isAnyOneOnline() || !isOnlineUserPublisher())
+		throw PermissionDenialException();
+
+	onlineUser->addToCredit(getPublisherSoldFilmsMoney() );
+	cout << SUCCESS_MESSAGE << endl;
+}
+
+
 

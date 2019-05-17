@@ -25,9 +25,9 @@ public:
 	void follow(unsigned int id);
 	void addMoney(unsigned int amount);
 	void buyFilm(unsigned int filmId);
+	void getMoneyFromNet();
 	Customer* findUserByUsername(std::string username);
 	Customer* findUserById(unsigned int id);
-
 private:
 	unsigned int totalNetCredit;
 	unsigned int theIdsAssigned;
@@ -45,6 +45,9 @@ private:
 	void isUsernameExisted(std::string username);
 	void checkIdExistence(unsigned int id);
 	bool isAnyOneOnline();
+	unsigned int getPublisherSoldFilmsMoney();
+	void deleteOverduedPurchases(std::vector<unsigned int> overduedPurchases);
+	std::vector<unsigned int> decreaseEachIndexByOne(std::vector<unsigned int> anIndexVector);
 };
 
 

@@ -95,6 +95,7 @@ vector<string> CommandHandler::splitString(string aString){
 void CommandHandler::getRawCommand(string rawCommandLine){
 	string keyCommand;
 	string restOfCommand;
+	bool hasCommandEndSign = false;
 
 	if(rawCommandLine.find_first_of(COMMAND_END_SIGN) == string::npos){
 		keyCommand = rawCommandLine;
@@ -102,10 +103,11 @@ void CommandHandler::getRawCommand(string rawCommandLine){
 	}else{
 		keyCommand = rawCommandLine.substr(0 , rawCommandLine.find_first_of(COMMAND_END_SIGN) - 1);
 		restOfCommand = rawCommandLine.substr(rawCommandLine.find_first_of(COMMAND_END_SIGN) + 1);
+		hasCommandEndSign = true;
 	}
 
 	checkFirstPartAndSecondPartOfCommand(keyCommand , restOfCommand);
-	recognizeCommandType(keyCommand , restOfCommand);
+	recognizeCommandType(keyCommand , restOfCommand , hasCommandEndSign);
 }
 
 bool CommandHandler::checkCommandValidation(string keyCommand) {
@@ -152,7 +154,7 @@ void CommandHandler::checkFirstPartAndSecondPartOfCommand(string keyCommand , st
 		throw BadRequestException();
 }
 
-void CommandHandler::recognizeCommandType(string keyCommand , string restOfCommand){
+void CommandHandler::recognizeCommandType(string keyCommand , string restOfCommand , bool hasCommandEndSign){
 	keyCommand = deleteSpacesOfAString(keyCommand);
 
 
@@ -175,7 +177,7 @@ void CommandHandler::recognizeCommandType(string keyCommand , string restOfComma
 		manageFollowerListRequest();
 
 	}else if(concatenateTwoStrings(POST_KW , GET_MONEY_COMMAND) == keyCommand){
-		if(restOfCommand != ""){
+		if(hasCommandEndSign){
 			manageAddMoney(restOfCommand);
 		}else{
 			manageGetMoney();
@@ -387,7 +389,7 @@ void CommandHandler::manageFilmEdit(string editedFilmInfo){
 	id = stoi(mappedKeysAndValues[FILM_ID_KEY]);
 	modifiedName = mappedKeysAndValues[FILM_NAME_KEY];
 	modifiedSummary = mappedKeysAndValues[FILM_SUMMARY_KEY];
-	modifiedDirector = mappedKeysAndValues[FILM_YEAR_KEY];
+	modifiedDirector = mappedKeysAndValues[FILM_DIRECTOR_KEY];
 	if( mappedKeysAndValues[FILM_LENGTH_KEY] != "" )
 		modifiedLength = stoi(mappedKeysAndValues[FILM_LENGTH_KEY]);
 	if( mappedKeysAndValues[FILM_YEAR_KEY] != "" )
@@ -486,7 +488,7 @@ void CommandHandler::manageFollowerListRequest(){
 }
 
 void CommandHandler::manageGetMoney(){
-
+	miniNetAccess->getMoneyFromNet();
 }
 
 void CommandHandler::manageReplyComment(string commentInfo){
