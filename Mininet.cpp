@@ -235,6 +235,16 @@ void MiniNet::rateFilm(unsigned int id , unsigned int score){
 	cout << SUCCESS_MESSAGE << endl;
 }
 
+void MiniNet::comment(unsigned int id , string commentContent){
+	if(!isAnyOneOnline() )
+		throw PermissionDenialException();
+
+	films->checkFilmPurchased(onlineUser , id);
+	Film* desiredFilm = films->findFilmByIdInDatabase(id);
+	desiredFilm->newComment(onlineUser , commentContent);
+	onlineUser->sendMessageToCommentedPublisher(desiredFilm);
+	cout << SUCCESS_MESSAGE << endl;
+}
 
 
 

@@ -31,7 +31,7 @@ public:
 	Publisher* getOwner() const;
 	void printYourself() const;
 	void rate(Customer* rater , unsigned int rate);
-	void updateAveragePoint();
+	void newComment(Customer* commenter , std::string newCommentContent);
 private:
 	Publisher* filmOwner;
 	int theIdsAssignedToComments;
@@ -48,6 +48,9 @@ private:
 	std::vector<Comment*> comments;
 	//
 	Point* findPointByOwner(Customer* owner);
+	Comment* findCommentByOwner(Customer* owner);
+	void updateAveragePoint();
+	void goToNextId();
 };
 
 #endif

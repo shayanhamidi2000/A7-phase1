@@ -14,7 +14,6 @@ class MiniNet{
 public:
 	MiniNet();
 	void startNet();
-	bool isOnlineUserPublisher();
 	void registerUser(std::string email , std::string username , std::string password , unsigned int age , bool isPublisher);
 	void loginUser(std::string username , std::string password);
 	void addFilmOnNet(std::string name , unsigned int year , std::string director , std::string summary , unsigned int price , unsigned int length);
@@ -28,6 +27,7 @@ public:
 	void getMoneyFromNet();
 	void getPurchasedList(std::string name , unsigned int minYear , unsigned int price , unsigned maxYear , std::string directorName);
 	void rateFilm(unsigned int id , unsigned int score);
+	void comment(unsigned int id , std::string commentContent);
 private:
 	unsigned int totalNetCredit;
 	unsigned int theIdsAssigned;
@@ -40,6 +40,7 @@ private:
 	void goToNextId();
 	Customer* findUserByUsername(std::string username);
 	Customer* findUserById(unsigned int id);
+	bool isOnlineUserPublisher();
 	void addToNetCredit(unsigned int amount);
 	void withdrawNetCredit(unsigned int amount);
 	void checkUsernameRepetition(std::string username);

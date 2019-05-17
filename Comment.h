@@ -8,14 +8,17 @@ class Customer;
 
 class Comment{
 public: 
-	Comment(int id , std::string content);
+	Comment(unsigned int id , std::string content , Customer* commentOwner);
 	unsigned int getId() const;
 	std::string getContent() const;
+	Customer* getCommentOwner() const;
+	void editComment(std::string newContent);
+	void reply(const std::string newRepliedMessage);
 private:
 	Customer* commentOwner;
 	unsigned int id;
 	std::string content;
-	std::map<std::string , int> replies; 
+	std::string repliedMessage; 
 
 };
 

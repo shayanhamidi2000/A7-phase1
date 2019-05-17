@@ -24,6 +24,7 @@ public:
 	virtual void getMessage(Message* newMessage);
 	virtual void sendMessageToFollowedPublisher(Publisher* followedPublisher);
 	virtual void sendMessageToRatedPublisher(const Film* ratedFilm);
+	virtual void sendMessageToCommentedPublisher(const Film* commentedFilm);
 	virtual void buyNewFilm(Film* newFilm);
 	virtual bool hasFilm(Film* newFilm);
 	//

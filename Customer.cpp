@@ -68,6 +68,12 @@ void Customer::sendMessageTo(Customer* messageReciever , string content){
 	messageReciever->getMessage(newMessage);
 }
 
+void Customer::sendMessageToCommentedPublisher(const Film* commentedFilm){
+	string newCommentMessage = "User " + username + " with id " + to_string(id) + " comment on your film " + commentedFilm->getName() + " with id " + to_string(commentedFilm->getId() ) + ".";
+	sendMessageTo(commentedFilm->getOwner() , newCommentMessage);
+}
+
+
 void Customer::sendMessageToFollowedPublisher(Publisher* followedPublisher){
 	string newFollowMessage = "User " + username + " with id " + to_string(id) + " follow you.";
 	sendMessageTo(followedPublisher , newFollowMessage);

@@ -594,11 +594,30 @@ void CommandHandler::manageFilmRating(string ratingInfo){
 	id = stoi(mappedKeysAndValues[FILM_ID_KEY] );
 
 	miniNetAccess->rateFilm(id , score);
+}
 
+void CommandHandler::checkCommentingKeys(vector<string> keys){
+	int numberOfIds = count(keys.begin() , keys.end() , FILM_ID_KEY);
+	int numberOfContents = count(keys.begin() , keys.end() , COMMENT_CONTENT_KEY);
+
+	if( (numberOfIds != 1) || (numberOfContents != 1) )
+		throw BadRequestException();
 }
 
 void CommandHandler::manageCommenting(string newCommentInfo){
+	unsigned int filmId;
+	string content;
 
+	vector<string> keywordsAndValues = splitString(newCommentInfo);
+	vector<string> keys = getKeys(keywordsAndValues , MIN_KEYS_AND_VALUES_FOR_COMMENT , MAX_KEYS_AND_VALUES_FOR_COMMENT);
+	checkCommentingKeys(keys);
+	map<string , string> mappedKeysAndValues = getMappedKeysAndValues(keywordsAndValues);
+	checkIdString(mappedKeysAndValues[FILM_ID_KEY]);
+
+	content = mappedKeysAndValues[COMMENT_CONTENT_KEY];
+	filmId = stoi(mappedKeysAndValues[FILM_ID_KEY] );
+
+	miniNetAccess->comment(filmId , content);
 }
 
 void CommandHandler::managePurchasesList(string searchInfo){
