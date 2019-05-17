@@ -5,7 +5,7 @@ class Purchase{
 private:
 	unsigned int filmPrice;
 	unsigned int filmRating;
-	unsigned int customerId;
+	unsigned int filmId;
 public:
 	Purchase(unsigned int filmPrice , unsigned int filmRating);
 	unsigned int calculateFilmOwnerShare();

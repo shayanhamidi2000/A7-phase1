@@ -62,7 +62,7 @@ private:
 	void checkFilmEditKeys(std::vector<std::string> keys);
 	std::map<std::string , std::string> initializeEmptyFilmEditKeys(std::map<std::string , std::string> givenMap);
 	//
-	void checkFilmDeleteKeys(std::vector<std::string> keys);
+	void checkFilmKeys(std::vector<std::string> keys);
 	//
 	void checkFilmSearchKeys(std::vector<std::string> keys);
 	void checkSearchValues(std::string minPoint , std::string minYear , std::string maxYear , std::string price);

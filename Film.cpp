@@ -5,7 +5,7 @@
 using namespace std;
 
 Film::Film(unsigned int id , string name , unsigned manufacturedYear , unsigned int length , 
-		unsigned int price , string summary , string directorName) {
+		unsigned int price , string summary , string directorName , Publisher* filmOwner) {
 	this->id = id;
 	this->name = name;
 	this->manufacturedYear = manufacturedYear;
@@ -17,6 +17,7 @@ Film::Film(unsigned int id , string name , unsigned manufacturedYear , unsigned 
 	this->peopleRatedThisFilm = 0;
 	this->theIdsAssignedToComments = BASIC_ID_VALUE;
 	this->isAvailable = true;
+	this->filmOwner = filmOwner;
 }
 
 void Film::beUnavailable() {
@@ -75,4 +76,8 @@ string Film::getDirectorName() const{
 
 unsigned int Film::getYear() const{
 	return manufacturedYear;
+}
+
+Publisher* Film::getOwner() const{
+	return filmOwner;
 }

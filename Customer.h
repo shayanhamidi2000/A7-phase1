@@ -3,6 +3,7 @@
 
 #include <string>
 #include <vector>
+#include <stack>
 #include "Message.h"
 #include "Film.h"
 
@@ -19,6 +20,11 @@ public:
 	virtual bool getPublishingState() const;
 	virtual void printYourself() const;
 	virtual void addToCredit(const unsigned int amount);
+	virtual void getMessage(Message* newMessage);
+	virtual void sendMessageTo(Customer* messageReciever , std::string content);
+	virtual void sendMessageToFollowedPublisher(Customer* followedPublisher);
+	virtual void sendMessageToBoughtFromPublisher(Customer* boughtFromPublisher , const Film* boughtFilm);
+
 	//
 protected:
 	bool isPublisher;
@@ -28,7 +34,8 @@ protected:
 	unsigned int id;
 	unsigned int age;
 	unsigned int credit;
-	std::vector<Message*> messages;
+	std::stack<Message*> unreadMessages;
+	std::vector<Message*> allMessages;
 	std::vector<Film*> purchases;
 };
 

@@ -15,6 +15,8 @@ MiniNet::MiniNet(){
 }
 
 bool MiniNet::isOnlineUserPublisher() { 
+	if(onlineUser == nullptr)
+		return true;
 	return onlineUser->getPublishingState();
 }
 
@@ -144,6 +146,7 @@ void MiniNet::follow(unsigned int id){
 
 	Publisher* followed = (Publisher*) findUserById(id);
 	followed->addToFollowers(onlineUser);
+	onlineUser->sendMessageToFollowedPublisher(followed);
 	cout << SUCCESS_MESSAGE << endl;	
 }
 
@@ -153,4 +156,9 @@ void MiniNet::addMoney(unsigned int amount){
 	onlineUser->addToCredit(amount);
 	cout << SUCCESS_MESSAGE << endl;
 }
+
+void MiniNet::buyFilm(unsigned int filmId){
+	if(!isAnyOneOnline() )
+}
+
 

@@ -22,7 +22,7 @@ unsigned int FilmRepository::findPositionById(unsigned int id , vector<Film*> li
 }
 
 void FilmRepository::addNewFilm(Publisher* filmOwner , string name , unsigned int year , string director , string summary , unsigned int price , unsigned int length){
-	Film* newFilm = new Film(theIdsAssigned , name , year , length , price , summary , director);
+	Film* newFilm = new Film(theIdsAssigned , name , year , length , price , summary , director , filmOwner);
 	allFilms.push_back(newFilm);
 	filmOwner->addToUploadedFilms(newFilm);
 	this->goToNextId();
@@ -162,7 +162,7 @@ vector<Film*> FilmRepository::filterFilmsMaxYear(vector<Film*> givenFilmList , u
 void FilmRepository::printFilmList(vector<Film*> desiredList){
 	cout << "#. Film Id | Film Name | Film Length | Film price | Rate | Production Year | Film Director" << endl;
 	for(unsigned int i = 0 ; i < desiredList.size() ; i++){
-		cout << i+1 << ". ";
+		cout << i + 1 << ". ";
 		desiredList[i]->printYourself();
 		cout << endl;
 	}

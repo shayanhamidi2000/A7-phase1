@@ -10,8 +10,11 @@ Publisher::Publisher(string username , string password , string email , unsigned
 		isPublisher = true;
 }
 
-void Publisher::notifyFollowersOnNewUpload() const{
+void Publisher::notifyFollowersOnNewUpload() {
+	string newUploadMessage = "Publisher " + username + " with id " + to_string(id) + " register new film.";
 
+	for(unsigned int i = 0 ; i < followers.size() ; i++)
+		sendMessageTo(followers[i] , newUploadMessage);
 }
 
 void Publisher::addToUploadedFilms(Film* newFilm) { 

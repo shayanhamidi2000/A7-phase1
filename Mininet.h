@@ -14,6 +14,7 @@ class MiniNet{
 public:
 	MiniNet();
 	void startNet();
+	bool isOnlineUserPublisher();
 	void registerUser(std::string email , std::string username , std::string password , unsigned int age , bool isPublisher);
 	void loginUser(std::string username , std::string password);
 	void addFilmOnNet(std::string name , unsigned int year , std::string director , std::string summary , unsigned int price , unsigned int length);
@@ -23,6 +24,7 @@ public:
 	void getFollowersList();
 	void follow(unsigned int id);
 	void addMoney(unsigned int amount);
+	void buyFilm(unsigned int filmId);
 	Customer* findUserByUsername(std::string username);
 	Customer* findUserById(unsigned int id);
 
@@ -40,7 +42,6 @@ private:
 	void isUsernameMatchingPassword(std::string username , std::string password);
 	void isUsernameExisted(std::string username);
 	void checkIdExistence(unsigned int id);
-	bool isOnlineUserPublisher();
 	bool isAnyOneOnline();
 };
 

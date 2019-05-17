@@ -175,8 +175,11 @@ void CommandHandler::recognizeCommandType(string keyCommand , string restOfComma
 		manageFollowerListRequest();
 
 	}else if(concatenateTwoStrings(POST_KW , GET_MONEY_COMMAND) == keyCommand){
-		//
-
+		if(restOfCommand != ""){
+			manageAddMoney(restOfCommand);
+		}else{
+			manageGetMoney();
+		}	
 	}else if(concatenateTwoStrings(GET_KW , GET_PUBLISHED_FILMS_COMMAND) == keyCommand){
 		managePublishedFilmsList(restOfCommand);
 
@@ -393,7 +396,7 @@ void CommandHandler::manageFilmEdit(string editedFilmInfo){
 	miniNetAccess->editAFilm(id , modifiedName , modifiedYear , modifiedLength , modifiedSummary , modifiedDirector);
 }
 
-void CommandHandler::checkFilmDeleteKeys(vector<string> keys){
+void CommandHandler::checkFilmKeys(vector<string> keys){
 	int numberOfIds = count(keys.begin() , keys.end() , FILM_ID_KEY);
 
 	if(numberOfIds != 1)
@@ -405,7 +408,7 @@ void CommandHandler::manageFilmDelete(string deletedFilmInfo){
 
 	vector<string> keywordsAndValues = splitString(deletedFilmInfo);
 	vector<string> keys = getKeys(keywordsAndValues , MIN_KEYS_AND_VALUES_FOR_FILM_DELETE , MAX_KEYS_AND_VALUES_FOR_FILM_DELETE);
-	checkFilmDeleteKeys(keys);
+	checkFilmKeys(keys);
 	map<string , string> mappedKeysAndValues = getMappedKeysAndValues(keywordsAndValues);
 	checkIdString( mappedKeysAndValues[FILM_ID_KEY] );
 
@@ -549,7 +552,16 @@ void CommandHandler::manageFilmInfoRequest(string filmInfo){
 }
 
 void CommandHandler::manageBuyFilm(string filmInfo){
+	unsigned int id;
 
+	vector<string> keywordsAndValues = splitString(filmInfo);
+	vector<string> keys = getKeys(keywordsAndValues , MIN_KEYS_AND_VALUES_FOR_BUY_FILM , MAX_KEYS_AND_VALUES_FOR_BUY_FILM);
+	checkFilmKeys(keys);
+	map<string , string> mappedKeysAndValues = getMappedKeysAndValues(keywordsAndValues);
+	checkIdString(mappedKeysAndValues[FILM_ID_KEY]);
+	id = stoi(mappedKeysAndValues[FILM_ID_KEY]);
+
+	miniNetAccess->buyFilm(id);
 }
 
 void CommandHandler::manageFilmRating(string ratingInfo){

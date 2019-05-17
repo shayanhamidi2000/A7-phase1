@@ -18,7 +18,7 @@ public:
 	void addToUploadedFilms(Film* newFilm);
 	void addToFollowers(Customer* newFollower);
 	void deleteMyFilm(unsigned int elementPosition);
-	void notifyFollowersOnNewUpload() const;
+	void notifyFollowersOnNewUpload();
 	void printYourFollowers() const;
 };
 
