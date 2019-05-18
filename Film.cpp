@@ -125,22 +125,7 @@ void Film::updateAveragePoint(){
 	averagePoint /= points.size();
 }
 
-Comment* Film::findCommentByOwner(Customer* owner){
-	for(unsigned int i = 0 ; i < comments.size() ; i++)
-		if(owner->getId() == comments[i]->getCommentOwner()->getId() )
-			return comments[i];
-
-	return nullptr;		
-}
-
 void Film::newComment(Customer* commenter , string newCommentContent){
-	if(commenter->getId() == filmOwner->getId() )
-		throw PermissionDenialException();
-
-	if(findCommentByOwner(commenter) == nullptr){
 		comments.push_back(new Comment(theIdsAssignedToComments , newCommentContent , commenter) );
 		this->goToNextId();
-	}else{
-		findCommentByOwner(commenter)->editComment(newCommentContent);
-	}
 }

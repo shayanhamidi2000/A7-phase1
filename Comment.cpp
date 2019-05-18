@@ -23,8 +23,3 @@ string Comment::getContent() const {
 void Comment::reply(const string newRepliedMessage){
 	this->repliedMessage = newRepliedMessage;
 }
-
-void Comment::editComment(string newContent){
-	this->content = newContent;
-}
-

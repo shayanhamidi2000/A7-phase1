@@ -48,7 +48,6 @@ private:
 	std::vector<Comment*> comments;
 	//
 	Point* findPointByOwner(Customer* owner);
-	Comment* findCommentByOwner(Customer* owner);
 	void updateAveragePoint();
 	void goToNextId();
 };

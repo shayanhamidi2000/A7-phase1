@@ -180,17 +180,17 @@ void MiniNet::buyFilm(unsigned int filmId){
 }
 
 unsigned int MiniNet::getPublisherSoldFilmsMoney(){
-	unsigned int earnedMoney = 0;
+	double earnedMoney = 0;
 	vector<unsigned int> publisherPurchases;
 	for(unsigned int i = 0 ; i < purchases.size() ; i++){
 		if(purchases[i]->getFilmOwner() == this->onlineUser){
-			withdrawNetCredit(purchases[i]->calculateFilmOwnerShare() );
 			earnedMoney += purchases[i]->calculateFilmOwnerShare();
 			publisherPurchases.push_back(i);
 		}
 	}
+	withdrawNetCredit((int) earnedMoney);
 	deleteOverduedPurchases(publisherPurchases);
-	return earnedMoney;
+	return (int) earnedMoney;
 }
 
 void MiniNet::deleteOverduedPurchases(vector<unsigned int> overduedPurchases){

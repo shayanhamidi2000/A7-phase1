@@ -12,7 +12,6 @@ public:
 	unsigned int getId() const;
 	std::string getContent() const;
 	Customer* getCommentOwner() const;
-	void editComment(std::string newContent);
 	void reply(const std::string newRepliedMessage);
 private:
 	Customer* commentOwner;
