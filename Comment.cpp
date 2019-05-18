@@ -1,4 +1,6 @@
 #include "Comment.h"
+#include "Customer.h"
+
 using namespace std;
 
 Comment::Comment(unsigned int id , std::string content , Customer* commentOwner){

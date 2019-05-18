@@ -150,7 +150,7 @@ void MiniNet::follow(unsigned int id){
 
 	checkIdExistence(id);
 	if(!findUserById(id)->getPublishingState() )
-		throw BadRequestException();
+		throw PermissionDenialException();
 
 	Publisher* followed = (Publisher*) findUserById(id);
 	followed->addToFollowers(onlineUser);

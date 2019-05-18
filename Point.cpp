@@ -1,4 +1,5 @@
 #include "Point.h"
+#include "Customer.h"
 
 Point::Point(unsigned int score , Customer* scoreOwner){
 	this->score = score;

@@ -113,11 +113,9 @@ void CommandHandler::getRawCommand(string rawCommandLine){
 }
 
 bool CommandHandler::checkCommandValidation(string keyCommand) {
-	vector<string> splitedCommand = splitString(keyCommand);
-	if(splitedCommand.size() != 2)
-		return false;
-	//bug notification read
-	string commandSecondPart = deleteSpacesOfAString( splitedCommand[1] );
+	string commandSecondPart = keyCommand.substr(keyCommand.find_first_of(COMMAND_DELIMITER) + 1);
+	commandSecondPart = deleteSpacesOfAString(commandSecondPart);
+	
 	if(commandSecondPart == REGISTER_C0MMAND)
 		return true;
 	if(commandSecondPart == LOGIN_COMMAND)
@@ -158,7 +156,6 @@ void CommandHandler::checkFirstPartAndSecondPartOfCommand(string keyCommand , st
 
 void CommandHandler::recognizeCommandType(string keyCommand , string restOfCommand , bool hasCommandEndSign){
 	keyCommand = deleteSpacesOfAString(keyCommand);
-
 
 	if(concatenateTwoStrings(POST_KW , REGISTER_C0MMAND) == keyCommand){
 		manageSignUp(restOfCommand);
