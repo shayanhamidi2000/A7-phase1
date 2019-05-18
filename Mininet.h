@@ -26,8 +26,9 @@ public:
 	void buyFilm(unsigned int filmId);
 	void getMoneyFromNet();
 	void getPurchasedList(std::string name , unsigned int minYear , unsigned int price , unsigned maxYear , std::string directorName);
-	void rateFilm(unsigned int id , unsigned int score);
-	void comment(unsigned int id , std::string commentContent);
+	void rateFilm(unsigned int filmId , unsigned int score);
+	void comment(unsigned int filmId , std::string commentContent);
+	void replyComment(unsigned int filmId , unsigned int commentId , std::string content);
 private:
 	unsigned int totalNetCredit;
 	unsigned int theIdsAssigned;

@@ -77,6 +77,9 @@ private:
 	void checkFilmRateKeys(std::vector<std::string> keys);
 	//
 	void checkCommentingKeys(std::vector<std::string> keys);
+	//
+	void checkCommentReplyKeys(std::vector<std::string> keys);
+
 };
 
 

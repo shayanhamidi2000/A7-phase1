@@ -64,3 +64,8 @@ void Publisher::printYourFollowers() const{
 		cout << endl;
 	}
 }
+
+void Publisher::notifyCommenterOnReply(Customer* repliedCommenter){
+	string newReplyMessage = "Publisher " + username + " with id " + to_string(id) + " reply to your comment.";
+	sendMessageTo(repliedCommenter , newReplyMessage);
+}

@@ -224,27 +224,39 @@ void MiniNet::getPurchasedList(string name , unsigned int minYear , unsigned int
 	films->searchFilmWithFactorsInAList( onlineUser->getPurchasedFilms() , name , NOT_A_FACTOR , minYear , price , maxYear , directorName);
 }
 
-void MiniNet::rateFilm(unsigned int id , unsigned int score){
+void MiniNet::rateFilm(unsigned int filmId , unsigned int score){
 	if(!isAnyOneOnline() )
 		throw PermissionDenialException();
 
-	films->checkFilmPurchased(onlineUser , id);
-	Film* desiredFilm = films->findFilmByIdInDatabase(id);
+	films->checkFilmPurchased(onlineUser , filmId);
+	Film* desiredFilm = films->findFilmByIdInDatabase(filmId);
 	desiredFilm->rate(onlineUser , score);
 	onlineUser->sendMessageToRatedPublisher(desiredFilm);
 	cout << SUCCESS_MESSAGE << endl;
 }
 
-void MiniNet::comment(unsigned int id , string commentContent){
+void MiniNet::comment(unsigned int filmId , string commentContent){
 	if(!isAnyOneOnline() )
 		throw PermissionDenialException();
 
-	films->checkFilmPurchased(onlineUser , id);
-	Film* desiredFilm = films->findFilmByIdInDatabase(id);
+	films->checkFilmPurchased(onlineUser , filmId);
+	Film* desiredFilm = films->findFilmByIdInDatabase(filmId);
 	desiredFilm->newComment(onlineUser , commentContent);
 	onlineUser->sendMessageToCommentedPublisher(desiredFilm);
 	cout << SUCCESS_MESSAGE << endl;
 }
+
+void MiniNet::replyComment(unsigned int filmId , unsigned int commentId , string content){
+	if(!isAnyOneOnline() || !isOnlineUserPublisher())
+		throw PermissionDenialException();
+
+	films->checkFilmOwnership( (Publisher*)onlineUser , filmId);
+	Film* desiredFilm = films->findFilmByIdInDatabase(filmId);
+	desiredFilm->replyOneComment(commentId , content);
+	((Publisher*) onlineUser)->notifyCommenterOnReply(desiredFilm->findCommentById(commentId)->getCommentOwner() );
+	cout << SUCCESS_MESSAGE << endl;
+}
+
 
 
 

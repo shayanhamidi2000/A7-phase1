@@ -20,6 +20,7 @@ public:
 	void addToFollowers(Customer* newFollower);
 	void deleteMyFilm(unsigned int elementPosition);
 	void notifyFollowersOnNewUpload();
+	void notifyCommenterOnReply(Customer* repliedCommenter);
 	void printYourFollowers() const;
 };
 

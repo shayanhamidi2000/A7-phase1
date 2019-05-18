@@ -32,6 +32,8 @@ public:
 	void printYourself() const;
 	void rate(Customer* rater , unsigned int rate);
 	void newComment(Customer* commenter , std::string newCommentContent);
+	void replyOneComment(unsigned int commentId , std::string replyContent);
+	Comment* findCommentById(unsigned int commentId);
 private:
 	Publisher* filmOwner;
 	int theIdsAssignedToComments;
@@ -50,6 +52,7 @@ private:
 	Point* findPointByOwner(Customer* owner);
 	void updateAveragePoint();
 	void goToNextId();
+	void checkCommentExistence(unsigned int commentId);
 };
 
 #endif

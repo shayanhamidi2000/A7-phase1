@@ -17,12 +17,12 @@ public:
 	void searchFilmWithFactorsInAList(std::vector<Film*> givenList , std::string name  , unsigned int minPoint , unsigned int minYear , unsigned int price , unsigned maxYear , std::string directorName);
 	void searchFilmWithFactorsInDatabase(std::string name  , unsigned int minPoint , unsigned int minYear , unsigned int price , unsigned maxYear , std::string directorName);	
 	void checkFilmPurchased(Customer* assertedPurchaser , unsigned int id);
+	void checkFilmOwnership(Publisher* assertedOwner , unsigned int id);
 private:
 	unsigned int theIdsAssigned;
 	std::vector<Film*> allFilms;
 	//
 	void goToNextId();	
-	void checkFilmOwnership(Publisher* assertedOwner , unsigned int id);
 	unsigned int findPositionById(unsigned int id , std::vector<Film*> listOfFilms);
 	void printFilmList(std::vector<Film*> desiredList);
 	std::vector<Film*> filterFilmsByMinPoint(std::vector<Film*> givenFilmList , unsigned int minPoint);

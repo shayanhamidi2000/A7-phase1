@@ -106,9 +106,6 @@ Point* Film::findPointByOwner(Customer* owner){
 }
 
 void Film::rate(Customer* rater , unsigned int rate){
-	if(rater->getId() == filmOwner->getId() )
-		throw PermissionDenialException();
-
 	if(findPointByOwner(rater) == nullptr)
 		points.push_back(new Point(rate , rater) );
 	else
@@ -128,4 +125,23 @@ void Film::updateAveragePoint(){
 void Film::newComment(Customer* commenter , string newCommentContent){
 		comments.push_back(new Comment(theIdsAssignedToComments , newCommentContent , commenter) );
 		this->goToNextId();
+}
+
+void Film::checkCommentExistence(unsigned int commentId){
+	if(findCommentById(commentId) == nullptr )
+		throw NotFoundException();
+}
+
+Comment* Film::findCommentById(unsigned int commentId){
+	for(unsigned int i = 0 ; i < comments.size() ; i++)
+		if(comments[i]->getId() == commentId)
+			return comments[i];
+
+	return nullptr;	
+}
+
+void Film::replyOneComment(unsigned int commentId , std::string replyContent){
+	checkCommentExistence(commentId);
+	Comment* repliedComment = findCommentById(commentId);
+	repliedComment->reply(replyContent);
 }

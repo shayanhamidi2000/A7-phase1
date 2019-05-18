@@ -93,6 +93,8 @@ vector<string> CommandHandler::splitString(string aString){
 }
 //
 void CommandHandler::getRawCommand(string rawCommandLine){
+	if(rawCommandLine.empty() )
+		return;
 	string keyCommand;
 	string restOfCommand;
 	bool hasCommandEndSign = false;
@@ -491,8 +493,31 @@ void CommandHandler::manageGetMoney(){
 	miniNetAccess->getMoneyFromNet();
 }
 
-void CommandHandler::manageReplyComment(string commentInfo){
+void CommandHandler::checkCommentReplyKeys(vector<string> keys){
+	int numberOfContents = count(keys.begin() , keys.end() , COMMENT_OR_REPLY_CONTENT_KEY);
+	int numberOfCommentIds = count(keys.begin() , keys.end() , COMMENT_ID_KEY);
+	int numberOfFilmIds = count(keys.begin() , keys.end() , FILM_ID_KEY);
 
+	if( (numberOfContents != 1) || (numberOfCommentIds != 1) || (numberOfFilmIds != 1) )
+		throw BadRequestException();
+}
+
+void CommandHandler::manageReplyComment(string commentInfo){
+	unsigned int filmId , commentId;
+	string content;
+
+	vector<string> keywordsAndValues = splitString(commentInfo);
+	vector<string> keys = getKeys(keywordsAndValues , MIN_KEYS_AND_VALUES_FOR_COMMENT_REPLY , MAX_KEYS_AND_VALUES_FOR_COMMENT_REPLY);
+	checkCommentReplyKeys(keys);
+	map<string , string> mappedKeysAndValues = getMappedKeysAndValues(keywordsAndValues);
+	checkIdString(mappedKeysAndValues[FILM_ID_KEY]);
+	checkIdString(mappedKeysAndValues[COMMENT_ID_KEY] );
+
+	content = mappedKeysAndValues[COMMENT_OR_REPLY_CONTENT_KEY];
+	filmId = stoi(mappedKeysAndValues[FILM_ID_KEY] );
+	commentId = stoi(mappedKeysAndValues[COMMENT_ID_KEY] );
+
+	miniNetAccess->replyComment(filmId , commentId , content);
 }
 
 void CommandHandler::manageDeleteComment(string commentInfo){
@@ -598,7 +623,7 @@ void CommandHandler::manageFilmRating(string ratingInfo){
 
 void CommandHandler::checkCommentingKeys(vector<string> keys){
 	int numberOfIds = count(keys.begin() , keys.end() , FILM_ID_KEY);
-	int numberOfContents = count(keys.begin() , keys.end() , COMMENT_CONTENT_KEY);
+	int numberOfContents = count(keys.begin() , keys.end() , COMMENT_OR_REPLY_CONTENT_KEY);
 
 	if( (numberOfIds != 1) || (numberOfContents != 1) )
 		throw BadRequestException();
@@ -614,7 +639,7 @@ void CommandHandler::manageCommenting(string newCommentInfo){
 	map<string , string> mappedKeysAndValues = getMappedKeysAndValues(keywordsAndValues);
 	checkIdString(mappedKeysAndValues[FILM_ID_KEY]);
 
-	content = mappedKeysAndValues[COMMENT_CONTENT_KEY];
+	content = mappedKeysAndValues[COMMENT_OR_REPLY_CONTENT_KEY];
 	filmId = stoi(mappedKeysAndValues[FILM_ID_KEY] );
 
 	miniNetAccess->comment(filmId , content);
