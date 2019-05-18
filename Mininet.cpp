@@ -267,6 +267,14 @@ void MiniNet::deleteComment(unsigned int filmId , unsigned int commentId){
 	cout << SUCCESS_MESSAGE << endl;
 }
 
+void MiniNet::getUnreadMessages(){
+	if(!isAnyOneOnline() )
+		throw PermissionDenialException();
+
+	onlineUser->showUnreadMessages();
+}
+
+
 
 
 

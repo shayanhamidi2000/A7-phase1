@@ -696,7 +696,7 @@ void CommandHandler::managePurchasesList(string searchInfo){
 }
 
 void CommandHandler::manageUnreadNotifications(){
-
+	miniNetAccess->getUnreadMessages();
 }
 
 void CommandHandler::manageAllNotifications(string limitInfo){

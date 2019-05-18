@@ -105,3 +105,15 @@ bool Customer::hasFilm(Film* newFilm){
 vector<Film*> Customer::getPurchasedFilms() const{
 	return purchasedFilms;
 } 
+
+void Customer::showUnreadMessages(){
+	cout << "#. Notification Message" << endl;
+	unsigned int messageCounter = 1;
+	while(!unreadMessages.empty()){
+		cout << messageCounter << ". ";
+		unreadMessages.top()->printYourself();
+		cout << endl;
+		unreadMessages.pop();
+		messageCounter++;
+	}
+}

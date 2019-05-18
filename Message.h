@@ -5,11 +5,11 @@
 class Message{
 public:
 	Message(std::string content);
-	bool getReadState() const { return isRead; }
-	std::string getContent() const { return content; }
+	void printYourself();
 private:
 	std::string content;
 	bool isRead;
+	void beRead();
 };
 
 

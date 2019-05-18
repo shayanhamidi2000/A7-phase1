@@ -30,6 +30,8 @@ public:
 	void comment(unsigned int filmId , std::string commentContent);
 	void replyComment(unsigned int filmId , unsigned int commentId , std::string content);
 	void deleteComment(unsigned int filmId , unsigned int commentId);
+	void getUnreadMessages();
+	void getAllMessages(unsigned int limit);
 private:
 	unsigned int totalNetCredit;
 	unsigned int theIdsAssigned;

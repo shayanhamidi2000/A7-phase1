@@ -27,6 +27,7 @@ public:
 	virtual void sendMessageToCommentedPublisher(const Film* commentedFilm);
 	virtual void buyNewFilm(Film* newFilm);
 	virtual bool hasFilm(Film* newFilm);
+	virtual void showUnreadMessages();
 	//
 protected:
 	bool isPublisher;
