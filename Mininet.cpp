@@ -274,6 +274,14 @@ void MiniNet::getUnreadMessages(){
 	onlineUser->showUnreadMessages();
 }
 
+void MiniNet::getAllMessages(unsigned int limit){
+	if(!isAnyOneOnline() )
+		throw PermissionDenialException();
+
+	onlineUser->showReadMessages(limit);
+}
+
+
 
 
 

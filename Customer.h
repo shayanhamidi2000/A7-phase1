@@ -28,7 +28,7 @@ public:
 	virtual void buyNewFilm(Film* newFilm);
 	virtual bool hasFilm(Film* newFilm);
 	virtual void showUnreadMessages();
-	//
+	virtual void showReadMessages(const unsigned int limit);
 protected:
 	bool isPublisher;
 	std::string username;
@@ -44,6 +44,8 @@ protected:
 	virtual void sendMessageToBoughtFromPublisher(const Film* boughtFilm);
 	virtual void sendMessageTo(Customer* messageReciever , std::string content);
 	virtual void withdrawCredit(const int amount);
+	virtual void transferNewlyReadMessagesToReadMessages(std::vector<Message*> newlyReadMessages);
+
 };
 
 #endif

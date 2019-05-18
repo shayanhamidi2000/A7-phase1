@@ -699,6 +699,24 @@ void CommandHandler::manageUnreadNotifications(){
 	miniNetAccess->getUnreadMessages();
 }
 
-void CommandHandler::manageAllNotifications(string limitInfo){
+void CommandHandler::checkAllNotificationsKeys(vector<string> keys){
+	int numberOfLimits = count(keys.begin() , keys.end() , LIMIT_MESSAGES_SHOWN_KEY);
 
+	if(numberOfLimits != 1)
+		throw BadRequestException();
+}
+
+void CommandHandler::manageAllNotifications(string limitInfo){
+	unsigned int limit;
+
+	vector<string> keywordsAndValues = splitString(limitInfo);
+	vector<string> keys = getKeys(keywordsAndValues , MIN_KEYS_AND_VALUES_FOR_ALL_NOTIFICATIONS , MAX_KEYS_AND_VALUES_FOR_ALL_NOTIFICATIONS);
+	checkAllNotificationsKeys(keys);
+	map<string , string> mappedKeysAndValues = getMappedKeysAndValues(keywordsAndValues);
+	if(!isConstantNumber(mappedKeysAndValues[LIMIT_MESSAGES_SHOWN_KEY] ) )
+		throw BadRequestException();
+
+	limit = stoi(mappedKeysAndValues[LIMIT_MESSAGES_SHOWN_KEY]);
+
+	miniNetAccess->getAllMessages(limit);
 }

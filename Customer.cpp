@@ -107,13 +107,36 @@ vector<Film*> Customer::getPurchasedFilms() const{
 } 
 
 void Customer::showUnreadMessages(){
-	cout << "#. Notification Message" << endl;
 	unsigned int messageCounter = 1;
+	vector<Message*> newlyReadMessages;
+
+	cout << "#. Notification Message" << endl;
 	while(!unreadMessages.empty()){
 		cout << messageCounter << ". ";
 		unreadMessages.top()->printYourself();
 		cout << endl;
+		newlyReadMessages.push_back(unreadMessages.top() );
 		unreadMessages.pop();
 		messageCounter++;
 	}
+
+	transferNewlyReadMessagesToReadMessages(newlyReadMessages);
 }
+
+void Customer::transferNewlyReadMessagesToReadMessages(vector<Message*> newlyReadMessages){
+	vector<Message*> modifiedAllMessages = newlyReadMessages;
+	modifiedAllMessages.insert(modifiedAllMessages.end() , allMessages.begin() , allMessages.end() );
+	allMessages = modifiedAllMessages;
+}
+
+void Customer::showReadMessages(const unsigned int limit){
+	cout << "#. Notification Message" << endl;
+	for(unsigned int i = 0 ; i < allMessages.size() ; i++){
+		if(i == (limit - 1) )
+			break;
+		cout << i + 1 << ". ";
+		allMessages[i]->printYourself();
+		cout << endl;
+	}
+}
+
