@@ -198,7 +198,7 @@ void CommandHandler::recognizeCommandType(string keyCommand , string restOfComma
 		manageFollow(restOfCommand);
 
 	}else if(concatenateTwoStrings(GET_KW , FILMS_COMMAND) == keyCommand){
-		//
+		checkFilmSearchOrFurtherInfo(restOfCommand);
 
 	}else if(concatenateTwoStrings(POST_KW , BUY_COMMAND) == keyCommand){
 		manageBuyFilm(restOfCommand);
@@ -480,7 +480,6 @@ void CommandHandler::managePublishedFilmsList(string searchInfo){
 		minYear = stoi(mappedKeysAndValues[FILM_MINIMUM_YEAR_KEY]);
 	if(mappedKeysAndValues[FILM_PRICE_KEY] != "")
 		price = stoi(mappedKeysAndValues[FILM_PRICE_KEY]);
-
 	name = mappedKeysAndValues[FILM_NAME_KEY];
 	directorName = mappedKeysAndValues[FILM_DIRECTOR_KEY];
 
@@ -593,12 +592,51 @@ void CommandHandler::manageAddMoney(string amountOfMoneyInfo){
 	miniNetAccess->addMoney(amount);
 }
 
-void CommandHandler::manageSearch(string searchInfo){
+void CommandHandler::checkFilmSearchOrFurtherInfo(string keysAndValues){
+	vector<string> keywordsAndValues = splitString(keysAndValues);
+	vector<string> keys = getKeys(keywordsAndValues , MIN_KEYS_AND_VALUES_FOR_FILM_SEARCH , MAX_KEYS_AND_VALUES_FOR_FILM_SEARCH);
 
+	int numberOfFilmIds = count(keys.begin() , keys.end() , FILM_ID_KEY);
+	
+	if(numberOfFilmIds == 0){
+		manageSearch(keysAndValues);
+	}else{
+		if(numberOfFilmIds > 1)
+			throw BadRequestException();
+		else
+			manageFilmInfoRequest(keysAndValues);
+	}
 }
 
-void CommandHandler::manageFilmInfoRequest(string filmInfo){
+void CommandHandler::manageSearch(string searchInfo){
+	unsigned int minPoint , maxYear , minYear , price;
+	string name , directorName;
+	minPoint = 0; maxYear = 0; minYear = 0; price = 0;
 
+	vector<string> keywordsAndValues = splitString(searchInfo);
+	vector<string> keys = getKeys(keywordsAndValues , MIN_KEYS_AND_VALUES_FOR_FILM_SEARCH , MAX_KEYS_AND_VALUES_FOR_FILM_SEARCH);
+	checkFilmSearchKeys(keys);
+	map<string , string> mappedKeysAndValues = getMappedKeysAndValues(keywordsAndValues);
+	mappedKeysAndValues = initializeEmptySearchFilmKeys(mappedKeysAndValues);
+	checkSearchValues(mappedKeysAndValues[FILM_MINIMUM_RATE_KEY] , mappedKeysAndValues[FILM_MINIMUM_YEAR_KEY]
+	 , mappedKeysAndValues[FILM_MAXIMUM_YEAR_KEY] , mappedKeysAndValues[FILM_PRICE_KEY]);
+
+	if(mappedKeysAndValues[FILM_MINIMUM_RATE_KEY] != "")
+		minPoint = stoi(mappedKeysAndValues[FILM_MINIMUM_RATE_KEY]);
+	if(mappedKeysAndValues[FILM_MAXIMUM_YEAR_KEY] != "")
+		maxYear = stoi(mappedKeysAndValues[FILM_MAXIMUM_YEAR_KEY]);
+	if(mappedKeysAndValues[FILM_MINIMUM_YEAR_KEY] != "")
+		minYear = stoi(mappedKeysAndValues[FILM_MINIMUM_YEAR_KEY]);
+	if(mappedKeysAndValues[FILM_PRICE_KEY] != "")
+		price = stoi(mappedKeysAndValues[FILM_PRICE_KEY]);
+	name = mappedKeysAndValues[FILM_NAME_KEY];
+	directorName = mappedKeysAndValues[FILM_DIRECTOR_KEY];
+
+	miniNetAccess->searchFilmsInDatabase(name , minPoint , minYear , price , maxYear , directorName);
+}
+
+void CommandHandler::manageFilmInfoRequest(string filmId){
+	
 }
 
 void CommandHandler::manageBuyFilm(string filmInfo){

@@ -281,6 +281,14 @@ void MiniNet::getAllMessages(unsigned int limit){
 	onlineUser->showReadMessages(limit);
 }
 
+void MiniNet::searchFilmsInDatabase(string name , unsigned int minPoint , unsigned int minYear , unsigned int price , unsigned maxYear , string directorName){
+	if(!isAnyOneOnline() )
+		throw PermissionDenialException();
+
+	films->searchFilmWithFactorsInDatabase(name , minPoint , minYear , price , maxYear , directorName);
+}
+
+
 
 
 

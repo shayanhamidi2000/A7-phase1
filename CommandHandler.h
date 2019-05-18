@@ -27,7 +27,7 @@ public:
 	void manageFollow(std::string followedInfo);
 	void manageAddMoney(std::string amountOfMoneyInfo);
 	void manageSearch(std::string searchInfo);
-	void manageFilmInfoRequest(std::string filmInfo);
+	void manageFilmInfoRequest(std::string filmId);
 	void manageBuyFilm(std::string filmInfo);
 	void manageFilmRating(std::string ratingInfo);
 	void manageCommenting(std::string newCommentInfo);
@@ -83,6 +83,8 @@ private:
 	void checkCommentDeleteKeys(std::vector<std::string> keys);
 	//
 	void checkAllNotificationsKeys(std::vector<std::string> keys);
+	//
+	void checkFilmSearchOrFurtherInfo(std::string keysAndValues);
 };
 
 

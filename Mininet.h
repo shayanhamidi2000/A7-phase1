@@ -32,6 +32,7 @@ public:
 	void deleteComment(unsigned int filmId , unsigned int commentId);
 	void getUnreadMessages();
 	void getAllMessages(unsigned int limit);
+	void searchFilmsInDatabase(std::string name , unsigned int minPoint , unsigned int minYear , unsigned int price , unsigned maxYear , std::string directorName);
 private:
 	unsigned int totalNetCredit;
 	unsigned int theIdsAssigned;
