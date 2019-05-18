@@ -176,12 +176,16 @@ void CommandHandler::recognizeCommandType(string keyCommand , string restOfComma
 		manageFilmDelete(restOfCommand);
 
 	}else if(concatenateTwoStrings(GET_KW , FOLLOWERS_COMMAND) == keyCommand){
+		if(hasCommandEndSign)
+			throw BadRequestException();
 		manageFollowerListRequest();
 
 	}else if(concatenateTwoStrings(POST_KW , GET_MONEY_COMMAND) == keyCommand){
 		if(hasCommandEndSign){
 			manageAddMoney(restOfCommand);
 		}else{
+			if(hasCommandEndSign)
+				throw BadRequestException();
 			manageGetMoney();
 		}	
 	}else if(concatenateTwoStrings(GET_KW , GET_PUBLISHED_FILMS_COMMAND) == keyCommand){
@@ -212,6 +216,8 @@ void CommandHandler::recognizeCommandType(string keyCommand , string restOfComma
 		managePurchasesList(restOfCommand);
 
 	}else if(concatenateTwoStrings(GET_KW , NOTIFICATIONS_COMMAND) == keyCommand){
+		if(hasCommandEndSign)
+			throw BadRequestException();
 		manageUnreadNotifications();
 
 	}else if(concatenateTwoStrings(GET_KW , READ_NOTIFICATIONS_COMMAND) == keyCommand){
@@ -508,7 +514,7 @@ void CommandHandler::manageReplyComment(string commentInfo){
 
 	vector<string> keywordsAndValues = splitString(commentInfo);
 	vector<string> keys = getKeys(keywordsAndValues , MIN_KEYS_AND_VALUES_FOR_COMMENT_REPLY , MAX_KEYS_AND_VALUES_FOR_COMMENT_REPLY);
-	checkCommentReplyKeys(keys);
+	checkCommentDeleteKeys(keys);
 	map<string , string> mappedKeysAndValues = getMappedKeysAndValues(keywordsAndValues);
 	checkIdString(mappedKeysAndValues[FILM_ID_KEY]);
 	checkIdString(mappedKeysAndValues[COMMENT_ID_KEY] );
@@ -520,8 +526,28 @@ void CommandHandler::manageReplyComment(string commentInfo){
 	miniNetAccess->replyComment(filmId , commentId , content);
 }
 
-void CommandHandler::manageDeleteComment(string commentInfo){
+void CommandHandler::checkCommentDeleteKeys(vector<string> keys){
+	int numberOfCommentIds = count(keys.begin() , keys.end() , COMMENT_ID_KEY);
+	int numberOfFilmIds = count(keys.begin() , keys.end() , FILM_ID_KEY);
 
+	if((numberOfCommentIds != 1) || (numberOfFilmIds != 1))
+		throw BadRequestException();
+}
+
+void CommandHandler::manageDeleteComment(string commentInfo){
+	unsigned int filmId , commentId;
+
+	vector<string> keywordsAndValues = splitString(commentInfo);
+	vector<string> keys = getKeys(keywordsAndValues , MIN_KEYS_AND_VALUES_FOR_COMMENT_DELETE , MAX_KEYS_AND_VALUES_FOR_COMMENT_DELETE);
+	checkCommentDeleteKeys(keys);
+	map<string , string> mappedKeysAndValues = getMappedKeysAndValues(keywordsAndValues);
+	checkIdString(mappedKeysAndValues[FILM_ID_KEY]);
+	checkIdString(mappedKeysAndValues[COMMENT_ID_KEY] );
+
+	filmId = stoi(mappedKeysAndValues[FILM_ID_KEY] );
+	commentId = stoi(mappedKeysAndValues[COMMENT_ID_KEY] );
+
+	miniNetAccess->deleteComment(filmId , commentId);
 }
 
 void CommandHandler::checkFollowKeys(vector<string> keys){

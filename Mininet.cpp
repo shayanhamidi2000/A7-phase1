@@ -257,6 +257,16 @@ void MiniNet::replyComment(unsigned int filmId , unsigned int commentId , string
 	cout << SUCCESS_MESSAGE << endl;
 }
 
+void MiniNet::deleteComment(unsigned int filmId , unsigned int commentId){
+	if(!isAnyOneOnline() || !isOnlineUserPublisher())
+		throw PermissionDenialException();
+
+	films->checkFilmOwnership( (Publisher*) onlineUser , filmId);
+	Film* desiredFilm = films->findFilmByIdInDatabase(filmId);
+	desiredFilm->deleteOneComment(commentId);
+	cout << SUCCESS_MESSAGE << endl;
+}
+
 
 
 

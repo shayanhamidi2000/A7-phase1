@@ -79,7 +79,8 @@ private:
 	void checkCommentingKeys(std::vector<std::string> keys);
 	//
 	void checkCommentReplyKeys(std::vector<std::string> keys);
-
+	//
+	void checkCommentDeleteKeys(std::vector<std::string> keys);
 };
 
 

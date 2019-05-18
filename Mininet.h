@@ -29,6 +29,7 @@ public:
 	void rateFilm(unsigned int filmId , unsigned int score);
 	void comment(unsigned int filmId , std::string commentContent);
 	void replyComment(unsigned int filmId , unsigned int commentId , std::string content);
+	void deleteComment(unsigned int filmId , unsigned int commentId);
 private:
 	unsigned int totalNetCredit;
 	unsigned int theIdsAssigned;

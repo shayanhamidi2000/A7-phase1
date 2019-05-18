@@ -33,6 +33,7 @@ public:
 	void rate(Customer* rater , unsigned int rate);
 	void newComment(Customer* commenter , std::string newCommentContent);
 	void replyOneComment(unsigned int commentId , std::string replyContent);
+	void deleteOneComment(unsigned int commentId);
 	Comment* findCommentById(unsigned int commentId);
 private:
 	Publisher* filmOwner;
