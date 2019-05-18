@@ -144,7 +144,7 @@ Comment* Film::findCommentById(unsigned int commentId){
 void Film::replyOneComment(unsigned int commentId , std::string replyContent){
 	checkCommentExistence(commentId);
 	Comment* repliedComment = findCommentById(commentId);
-	repliedComment->reply(replyContent);
+	repliedComment->addReply(replyContent);
 }
 
 void Film::deleteOneComment(unsigned int commentId){

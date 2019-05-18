@@ -2,7 +2,7 @@
 #define COMMENT_H
 
 #include <string>
-#include <map>
+#include <vector>
 
 class Customer;
 
@@ -12,12 +12,12 @@ public:
 	unsigned int getId() const;
 	std::string getContent() const;
 	Customer* getCommentOwner() const;
-	void reply(const std::string newRepliedMessage);
+	void addReply(const std::string newRepliedMessage);
 private:
 	Customer* commentOwner;
 	unsigned int id;
 	std::string content;
-	std::string repliedMessage; 
+	std::vector<std::string> replies; 
 
 };
 

@@ -22,6 +22,6 @@ string Comment::getContent() const {
 	return content; 
 }
 
-void Comment::reply(const string newRepliedMessage){
-	this->repliedMessage = newRepliedMessage;
+void Comment::addReply(const string newRepliedMessage){
+	replies.push_back(newRepliedMessage);
 }
