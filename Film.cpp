@@ -69,9 +69,13 @@ void Film::setSummary(string summary) {
 
 void Film::printYourself() const{
 	cout.precision(2);
-	cout << id << " | " << name << " | " << length << " | " << price << " | " << fixed << averagePoint <<  " | "
-	 << manufacturedYear << " | " << directorName;
+	cout << id << " | " << name << " | " << length << " | " << price << " | " << averagePoint <<  " | " << manufacturedYear << " | " << directorName;
 }
+
+void Film::printRecommendedEdition() const{
+	cout << id << " | " << name << " | " << length << " | " << directorName;
+ }
+
 
 string Film::getName() const{
 	return name;
@@ -151,4 +155,24 @@ void Film::deleteOneComment(unsigned int commentId){
 	checkCommentExistence(commentId);
 	Comment* deletedComment = findCommentById(commentId);
 	comments.erase(find(comments.begin() , comments.end() , deletedComment) );
+}
+
+void Film::printDetailedVersionOfYourself() const{
+	cout.precision(2);
+	cout << "Details of Film " << name << endl;
+	cout << "Id = " << id << endl;
+	cout << "Director = " << directorName << endl;
+	cout << "Length = " << length << endl;
+	cout << "Year = " << manufacturedYear << endl;
+	cout << "Summary = " << summary << endl;
+	cout << "Rate = " << averagePoint << endl;
+	cout << "Price = " << price << endl;
+	cout << endl;
+	printComments();
+}
+
+void Film::printComments() const {
+	cout << "Comments" << endl;
+	for(unsigned int i = 0 ; comments.size() ; i++)
+		comments[i]->printYourself();	
 }

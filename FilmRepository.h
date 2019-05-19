@@ -14,10 +14,11 @@ public:
 	void editFilm(Publisher* filmOwner , unsigned int id , std::string newName , unsigned int newYear , unsigned int newLength , std::string newSummary , std::string newDirector);
 	void deleteFilm(Publisher* filmOwner , unsigned int id);
 	Film* findFilmByIdInDatabase(unsigned int id);
-	void searchFilmWithFactorsInAList(std::vector<Film*> givenList , std::string name  , unsigned int minPoint , unsigned int minYear , unsigned int price , unsigned maxYear , std::string directorName);
-	void searchFilmWithFactorsInDatabase(std::string name  , unsigned int minPoint , unsigned int minYear , unsigned int price , unsigned maxYear , std::string directorName);	
+	void getSearchedDatabaseList(std::string name  , unsigned int minPoint , unsigned int minYear , unsigned int price , unsigned maxYear , std::string directorName);	
+	void getPublihsedOrPurchasedList(std::vector<Film*> givenList , std::string name  , unsigned int minPoint , unsigned int minYear , unsigned int price , unsigned maxYear , std::string directorName);
 	void checkFilmPurchased(Customer* assertedPurchaser , unsigned int id);
 	void checkFilmOwnership(Publisher* assertedOwner , unsigned int id);
+	void giveRecommendation(Customer* recommendedCustomer , Film* recommendedOnFilm);
 private:
 	unsigned int theIdsAssigned;
 	std::vector<Film*> allFilms;
@@ -25,6 +26,8 @@ private:
 	void goToNextId();	
 	unsigned int findPositionById(unsigned int id , std::vector<Film*> listOfFilms);
 	void printFilmList(std::vector<Film*> desiredList);
+	std::vector<Film*> searchFilmWithFactorsInAList(std::vector<Film*> givenList , std::string name  , unsigned int minPoint , unsigned int minYear , unsigned int price , unsigned maxYear , std::string directorName);
+	std::vector<Film*> filterFilmsByDatabaseAvailability(std::vector<Film*> givenFilmList);
 	std::vector<Film*> filterFilmsByMinPoint(std::vector<Film*> givenFilmList , unsigned int minPoint);
 	std::vector<Film*> filterFilmsByName(std::vector<Film*> givenFilmList , std::string name);
 	std::vector<Film*> filterFilmsByDirector(std::vector<Film*> givenFilmList , std::string directorName);
@@ -34,6 +37,8 @@ private:
 	Film* findFilmById(unsigned int id , std::vector<Film*> listOfFilms);
 	std::vector<Film*> sortFilmsById(std::vector<Film*> unsortedList);
 	void checkFilmExistence(unsigned int id);
+	std::vector<Film*> getFilmsWithoutRecommendedCustomerPurchases(std::vector<Film*> dislikedList);
+	void printRecommendedList(std::vector<Film*> recommendedList);
 };
 
 

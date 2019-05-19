@@ -30,6 +30,8 @@ public:
 	void setSummary(std::string summary);
 	Publisher* getOwner() const;
 	void printYourself() const;
+	void printDetailedVersionOfYourself() const;
+	void printRecommendedEdition() const;
 	void rate(Customer* rater , unsigned int rate);
 	void newComment(Customer* commenter , std::string newCommentContent);
 	void replyOneComment(unsigned int commentId , std::string replyContent);
@@ -54,6 +56,7 @@ private:
 	void updateAveragePoint();
 	void goToNextId();
 	void checkCommentExistence(unsigned int commentId);
+	void printComments() const;
 };
 
 #endif

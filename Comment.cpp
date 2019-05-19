@@ -1,5 +1,6 @@
 #include "Comment.h"
 #include "Customer.h"
+#include <iostream>
 
 using namespace std;
 
@@ -24,4 +25,14 @@ string Comment::getContent() const {
 
 void Comment::addReply(const string newRepliedMessage){
 	replies.push_back(newRepliedMessage);
+}
+
+void Comment::printYourself() const{
+	cout << id << ". " << content << endl;
+	printReplies();
+}
+
+void Comment::printReplies() const{
+	for(unsigned int i = 0 ; i < replies.size() ; i++)
+		cout << id << "." << i + 1 << ". " << replies[i] << endl;
 }

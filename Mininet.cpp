@@ -134,7 +134,7 @@ void MiniNet::getPublishedList(string name , unsigned int minPoint , unsigned in
 	if(!isAnyOneOnline() || !isOnlineUserPublisher())
 		throw PermissionDenialException();
 
-	films->searchFilmWithFactorsInAList( ((Publisher*) onlineUser)->getUploadedFilms() , name , minPoint , minYear , price , maxYear , directorName);
+	films->getPublihsedOrPurchasedList( ((Publisher*) onlineUser)->getUploadedFilms() , name , minPoint , minYear , price , maxYear , directorName);
 }
 
 void MiniNet::getFollowersList(){
@@ -221,7 +221,7 @@ void MiniNet::getPurchasedList(string name , unsigned int minYear , unsigned int
 	if(!isAnyOneOnline() )
 		throw PermissionDenialException();
 
-	films->searchFilmWithFactorsInAList( onlineUser->getPurchasedFilms() , name , NOT_A_FACTOR , minYear , price , maxYear , directorName);
+	films->getPublihsedOrPurchasedList( onlineUser->getPurchasedFilms() , name , NOT_A_FACTOR , minYear , price , maxYear , directorName);
 }
 
 void MiniNet::rateFilm(unsigned int filmId , unsigned int score){
@@ -285,12 +285,15 @@ void MiniNet::searchFilmsInDatabase(string name , unsigned int minPoint , unsign
 	if(!isAnyOneOnline() )
 		throw PermissionDenialException();
 
-	films->searchFilmWithFactorsInDatabase(name , minPoint , minYear , price , maxYear , directorName);
+	films->getSearchedDatabaseList(name , minPoint , minYear , price , maxYear , directorName);
 }
 
+void MiniNet::showFurtherInfo(unsigned int filmId){
+	if(!isAnyOneOnline() )
+		throw PermissionDenialException();
 
-
-
-
-
-
+	Film* desiredFilm = films->findFilmByIdInDatabase(filmId);
+	desiredFilm->printDetailedVersionOfYourself();
+	cout << endl;
+	films->giveRecommendation(onlineUser , desiredFilm);
+}

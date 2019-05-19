@@ -635,8 +635,16 @@ void CommandHandler::manageSearch(string searchInfo){
 	miniNetAccess->searchFilmsInDatabase(name , minPoint , minYear , price , maxYear , directorName);
 }
 
-void CommandHandler::manageFilmInfoRequest(string filmId){
-	
+void CommandHandler::manageFilmInfoRequest(string filmIdInfo){
+	unsigned int filmId;
+
+	vector<string> keywordsAndValues = splitString(filmIdInfo);
+	vector<string> keys = getKeys(keywordsAndValues , MIN_KEYS_AND_VALUES_FOR_FILM_FURTHER_INFO , MAX_KEYS_AND_VALUES_FOR_FILM_FURTHER_INFO);
+	map<string , string> mappedKeysAndValues = getMappedKeysAndValues(keywordsAndValues);
+	checkIdString(mappedKeysAndValues[FILM_ID_KEY] );
+	filmId = stoi(mappedKeysAndValues[FILM_ID_KEY] );
+
+	miniNetAccess->showFurtherInfo(filmId);
 }
 
 void CommandHandler::manageBuyFilm(string filmInfo){

@@ -132,7 +132,7 @@ void Customer::transferNewlyReadMessagesToReadMessages(vector<Message*> newlyRea
 void Customer::showReadMessages(const unsigned int limit){
 	cout << "#. Notification Message" << endl;
 	for(unsigned int i = 0 ; i < allMessages.size() ; i++){
-		if(i == (limit - 1) )
+		if(i == limit)
 			break;
 		cout << i + 1 << ". ";
 		allMessages[i]->printYourself();

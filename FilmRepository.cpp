@@ -83,11 +83,18 @@ void FilmRepository::editFilm(Publisher* assertedOwner , unsigned int id , strin
 
 }
 
-void FilmRepository::searchFilmWithFactorsInDatabase(string name  , unsigned int minPoint , unsigned int minYear , unsigned int price , unsigned maxYear , string directorName){
-	searchFilmWithFactorsInAList(this->allFilms , name , minPoint , minYear , price , maxYear , directorName);
+void FilmRepository::getSearchedDatabaseList(string name  , unsigned int minPoint , unsigned int minYear , unsigned int price , unsigned maxYear , string directorName){
+	vector<Film*> filteredList = searchFilmWithFactorsInAList(this->allFilms , name , minPoint , minYear , price , maxYear , directorName);
+	filteredList = filterFilmsByDatabaseAvailability(filteredList);
+	printFilmList(filteredList);
 }
 
-void FilmRepository::searchFilmWithFactorsInAList(vector<Film*> givenList , string name  , unsigned int minPoint , unsigned int minYear , unsigned int price , unsigned maxYear , string directorName){
+void FilmRepository::getPublihsedOrPurchasedList(vector<Film*> givenList , string name  , unsigned int minPoint , unsigned int minYear , unsigned int price , unsigned maxYear , string directorName){
+	vector<Film*> filteredList = searchFilmWithFactorsInAList(givenList , name , minPoint , minYear , price , maxYear , directorName);
+	printFilmList(filteredList);
+}
+
+vector<Film*> FilmRepository::searchFilmWithFactorsInAList(vector<Film*> givenList , string name  , unsigned int minPoint , unsigned int minYear , unsigned int price , unsigned maxYear , string directorName){
 	vector<Film*> filteredList = givenList;
 	filteredList = filterFilmsByName(filteredList , name);
 	filteredList = filterFilmsByDirector(filteredList , directorName);
@@ -97,7 +104,16 @@ void FilmRepository::searchFilmWithFactorsInAList(vector<Film*> givenList , stri
 	filteredList = filterFilmsByMinYear(filteredList , minYear);
 	filteredList =	sortFilmsById(filteredList);
 
-	printFilmList(filteredList);
+	return filteredList;
+}
+
+vector<Film*> FilmRepository::filterFilmsByDatabaseAvailability(vector<Film*> givenFilmList){
+	vector<Film*> filteredListByAvailability;
+	for(unsigned int i = 0 ; i < givenFilmList.size() ; i++)
+		if(givenFilmList[i]->getAvailability() )
+			filteredListByAvailability.push_back(givenFilmList[i]);
+
+	return filteredListByAvailability;	
 }
 
 vector<Film*> FilmRepository::filterFilmsByMinPoint(vector<Film*> givenFilmList , unsigned int minPoint){
@@ -106,7 +122,7 @@ vector<Film*> FilmRepository::filterFilmsByMinPoint(vector<Film*> givenFilmList 
 
 	vector<Film*> filteredListByMinPoint;
 	for(unsigned int i = 0 ; i < givenFilmList.size() ; i++)
-		if(givenFilmList[i]->getPoint() >= minPoint && givenFilmList[i]->getAvailability() )
+		if(givenFilmList[i]->getPoint() )
 			filteredListByMinPoint.push_back(givenFilmList[i]);
 
 	return filteredListByMinPoint;	
@@ -118,7 +134,7 @@ vector<Film*> FilmRepository::filterFilmsByName(vector<Film*> givenFilmList , st
 
 	vector<Film*> filteredListByName;
 	for(unsigned int i = 0 ; i < givenFilmList.size() ; i++)
-		if(givenFilmList[i]->getName() == name && givenFilmList[i]->getAvailability() )
+		if(givenFilmList[i]->getName() == name)
 			filteredListByName.push_back(givenFilmList[i]);
 
 	return filteredListByName;
@@ -130,7 +146,7 @@ vector<Film*> FilmRepository::filterFilmsByDirector(vector<Film*> givenFilmList 
 
 	vector<Film*> filteredListByDirectorName;
 	for(unsigned int i = 0 ; i < givenFilmList.size() ; i++)
-		if(givenFilmList[i]->getDirectorName() == directorName && givenFilmList[i]->getAvailability() )
+		if(givenFilmList[i]->getDirectorName() == directorName)
 			filteredListByDirectorName.push_back(givenFilmList[i]);
 
 	return filteredListByDirectorName;
@@ -142,7 +158,7 @@ vector<Film*> FilmRepository::filterFilmsByMinYear(vector<Film*> givenFilmList ,
 
 	vector<Film*> filteredListByMinYear;
 	for(unsigned int i = 0 ; i < givenFilmList.size() ; i++)
-		if(givenFilmList[i]->getYear() >= minYear && givenFilmList[i]->getAvailability() )
+		if(givenFilmList[i]->getYear() >= minYear)
 			filteredListByMinYear.push_back(givenFilmList[i]);
 
 	return filteredListByMinYear;
@@ -154,7 +170,7 @@ vector<Film*> FilmRepository::filterFilmsByPrice(vector<Film*> givenFilmList , u
 
 	vector<Film*> filteredListByPrice;
 	for(unsigned int i = 0 ; i < givenFilmList.size() ; i++)
-		if(givenFilmList[i]->getPrice() == price && givenFilmList[i]->getAvailability() )
+		if(givenFilmList[i]->getPrice() == price )
 			filteredListByPrice.push_back(givenFilmList[i]);
 
 	return filteredListByPrice;
@@ -166,7 +182,7 @@ vector<Film*> FilmRepository::filterFilmsMaxYear(vector<Film*> givenFilmList , u
 
 	vector<Film*> filteredListByMaxYear;
 	for(unsigned int i = 0 ; i < givenFilmList.size() ; i++)
-		if(givenFilmList[i]->getYear() <= maxYear && givenFilmList[i]->getAvailability() )
+		if(givenFilmList[i]->getYear() <= maxYear)
 			filteredListByMaxYear.push_back(givenFilmList[i]);
 
 	return filteredListByMaxYear;
@@ -189,4 +205,44 @@ vector<Film*> FilmRepository::sortFilmsById(vector<Film*> unsortedList){
 	vector<Film*> sortedList = unsortedList;
 	sort(sortedList.begin() , sortedList.end() , filmIdComparator);
 	return sortedList;
+}
+
+vector<Film*> FilmRepository::getFilmsWithoutRecommendedCustomerPurchases(vector<Film*> dislikedList){
+	vector<Film*> desiredList;
+	for(unsigned int i = 0 ; i < allFilms.size() ; i++)
+		if(find(dislikedList.begin() , dislikedList.end() , allFilms[i]) == dislikedList.end() && allFilms[i]->getAvailability() )
+			desiredList.push_back(allFilms[i]);
+
+	return desiredList;	
+}
+
+bool pointAndIdComparator(const Film* film1 , const Film* film2){
+	if(film1->getPoint() > film2->getPoint() ){
+		return true;
+	}else if(film1->getPoint() == film2->getPoint() ){
+		if(film1->getId() < film2->getId() )
+			return true;
+	}
+
+	return false;
+}
+
+void FilmRepository::giveRecommendation(Customer* recommendedCustomer , Film* recommendedOnFilm){
+	vector<Film*> dislikedList = recommendedCustomer->getPurchasedFilms();
+	dislikedList.push_back(recommendedOnFilm);
+	vector<Film*> filteredList = getFilmsWithoutRecommendedCustomerPurchases(dislikedList);
+	sort(filteredList.begin() , filteredList.end() , pointAndIdComparator);
+	printRecommendedList(filteredList);
+}
+
+void FilmRepository::printRecommendedList(vector<Film*> recommendedList){
+	cout << "Recommendation Film" << endl;
+	cout << "#. Film Id | Film Name | Film Length | Film Director" << endl;
+	for(unsigned int i = 0 ; i < recommendedList.size() ; i++){
+		if(i == NUMBER_OF_ELEMENTS_GIVEN_AS_RECOMMENDATION_LIST )
+			break;
+		cout << i + 1 << ". ";
+		recommendedList[i]->printRecommendedEdition();
+		cout << endl;
+	}
 }

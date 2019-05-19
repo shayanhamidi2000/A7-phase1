@@ -27,14 +27,13 @@ public:
 	void manageFollow(std::string followedInfo);
 	void manageAddMoney(std::string amountOfMoneyInfo);
 	void manageSearch(std::string searchInfo);
-	void manageFilmInfoRequest(std::string filmId);
+	void manageFilmInfoRequest(std::string filmIdInfo);
 	void manageBuyFilm(std::string filmInfo);
 	void manageFilmRating(std::string ratingInfo);
 	void manageCommenting(std::string newCommentInfo);
 	void managePurchasesList(std::string searchInfo);
 	void manageUnreadNotifications();
 	void manageAllNotifications(std::string limitInfo);
-
 private:	
 	MiniNet* miniNetAccess; 
 	//
