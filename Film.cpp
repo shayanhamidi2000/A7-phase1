@@ -43,15 +43,15 @@ double Film::getPoint() const {
 	return averagePoint; 
 }
 
-void Film::setName(string name){
+void Film::setName(const string& name){
  	this->name = name;
 }
 
-void Film::setYear(unsigned int manufacturedYear) {
+void Film::setYear(const unsigned int manufacturedYear) {
  	this->manufacturedYear = manufacturedYear;
 }
 
-void Film::setDuration(unsigned int length) {
+void Film::setDuration(const unsigned int length) {
  	this->length = length;
 }
 
@@ -59,11 +59,11 @@ unsigned int Film::getPrice() const{
  	return price; 
 }
 
-void Film::setDirectorName(string directorName) {
+void Film::setDirectorName(const string& directorName) {
  	this->directorName = directorName;
 }
 
-void Film::setSummary(string summary) {
+void Film::setSummary(const string& summary) {
  	this->summary = summary; 
 } 
 
@@ -93,7 +93,7 @@ Publisher* Film::getOwner() const{
 	return filmOwner;
 }
 
-unsigned int Film::getRatingQuality(){
+unsigned int Film::getRatingQuality() const{
 	if(averagePoint < 5)
 		return LOW_RATED;
 	else if(averagePoint >= 5 && averagePoint < 8)
@@ -102,7 +102,7 @@ unsigned int Film::getRatingQuality(){
 		return HIGH_RATED;
 }
 
-Point* Film::findPointByOwner(Customer* owner){
+Point* Film::findPointByOwner(const Customer* owner){
 	for(unsigned int i = 0 ; i < points.size() ; i++)
 		if(owner->getId() == points[i]->getScoreOwner()->getId() )
 			return points[i];
@@ -110,7 +110,7 @@ Point* Film::findPointByOwner(Customer* owner){
 	return nullptr;		
 }
 
-void Film::rate(Customer* rater , unsigned int rate){
+void Film::rate(Customer* rater , const unsigned int rate){
 	if(findPointByOwner(rater) == nullptr)
 		points.push_back(new Point(rate , rater) );
 	else
@@ -127,17 +127,17 @@ void Film::updateAveragePoint(){
 	averagePoint /= points.size();
 }
 
-void Film::newComment(Customer* commenter , string newCommentContent){
+void Film::newComment(Customer* commenter , const string& newCommentContent){
 		comments.push_back(new Comment(theIdsAssignedToComments , newCommentContent , commenter) );
 		this->goToNextId();
 }
 
-void Film::checkCommentExistence(unsigned int commentId){
+void Film::checkCommentExistence(const unsigned int commentId){
 	if(findCommentById(commentId) == nullptr )
 		throw NotFoundException();
 }
 
-Comment* Film::findCommentById(unsigned int commentId){
+Comment* Film::findCommentById(const unsigned int commentId){
 	for(unsigned int i = 0 ; i < comments.size() ; i++)
 		if(comments[i]->getId() == commentId)
 			return comments[i];
@@ -145,13 +145,13 @@ Comment* Film::findCommentById(unsigned int commentId){
 	return nullptr;	
 }
 
-void Film::replyOneComment(unsigned int commentId , std::string replyContent){
+void Film::replyOneComment(const unsigned int commentId , const string& replyContent){
 	checkCommentExistence(commentId);
 	Comment* repliedComment = findCommentById(commentId);
 	repliedComment->addReply(replyContent);
 }
 
-void Film::deleteOneComment(unsigned int commentId){
+void Film::deleteOneComment(const unsigned int commentId){
 	checkCommentExistence(commentId);
 	Comment* deletedComment = findCommentById(commentId);
 	comments.erase(find(comments.begin() , comments.end() , deletedComment) );

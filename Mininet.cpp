@@ -88,7 +88,7 @@ void MiniNet::registerUser(string email , string username , string password , un
 }
 
 void MiniNet::isUsernameMatchingPassword(string username , string password){
-	if(findUserByUsername(username)->getPassword() != password)
+	if(!findUserByUsername(username)->hasPassword(password) )
 		throw BadRequestException();
 
 }

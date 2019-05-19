@@ -10,9 +10,8 @@ class Comment{
 public: 
 	Comment(unsigned int id , std::string content , Customer* commentOwner);
 	unsigned int getId() const;
-	std::string getContent() const;
 	Customer* getCommentOwner() const;
-	void addReply(const std::string newRepliedMessage);
+	void addReply(const std::string& newRepliedMessage);
 	void printYourself() const;
 private:
 	Customer* commentOwner;

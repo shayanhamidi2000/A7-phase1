@@ -20,24 +20,15 @@ string Customer::getUsername() const {
  	return username;
 }
 
-string Customer::getPassword() const { 
-	return password; 
-}
+bool Customer::hasPassword(const string& assertedPassword) const{
+	if(this->password == assertedPassword)
+		return true;
 
-string Customer::getEmail() const {
- 	return email;
- }
+	return false;
+}
 
 unsigned int Customer::getId() const{ 
 	return id;
-}
-
-unsigned int Customer::getAge() const {
- 	return age;
-}
-
-unsigned int Customer::getCredit() const { 
-	return credit; 
 }
 
 bool Customer::getPublishingState() const { 
@@ -63,28 +54,28 @@ void Customer::getMessage(Message* newMessage){
 	this->unreadMessages.push(newMessage);
 }
 
-void Customer::sendMessageTo(Customer* messageReciever , string content){
+void Customer::sendMessageTo(Customer* messageReciever , string content) const{
 	Message* newMessage = new Message(content);
 	messageReciever->getMessage(newMessage);
 }
 
-void Customer::sendMessageToCommentedPublisher(const Film* commentedFilm){
+void Customer::sendMessageToCommentedPublisher(const Film* commentedFilm) const{
 	string newCommentMessage = "User " + username + " with id " + to_string(id) + " comment on your film " + commentedFilm->getName() + " with id " + to_string(commentedFilm->getId() ) + ".";
 	sendMessageTo(commentedFilm->getOwner() , newCommentMessage);
 }
 
 
-void Customer::sendMessageToFollowedPublisher(Publisher* followedPublisher){
+void Customer::sendMessageToFollowedPublisher(Publisher* followedPublisher) const{
 	string newFollowMessage = "User " + username + " with id " + to_string(id) + " follow you.";
 	sendMessageTo(followedPublisher , newFollowMessage);
 }
 
-void Customer::sendMessageToBoughtFromPublisher(const Film* boughtFilm){
+void Customer::sendMessageToBoughtFromPublisher(const Film* boughtFilm) const{
 	string newBuyMessage = "User " + username + " with id " + to_string(id) + " buy your film " + boughtFilm->getName() + " with id " + to_string(boughtFilm->getId() ) + ".";
 	sendMessageTo(boughtFilm->getOwner() , newBuyMessage);
 }
 
-void Customer::sendMessageToRatedPublisher(const Film* ratedFilm){
+void Customer::sendMessageToRatedPublisher(const Film* ratedFilm) const{
 	string newRateMessage = "User " + username + " with id " + to_string(id) + " rate your film " + ratedFilm->getName() + " with id " + to_string(ratedFilm->getId() ) + ".";
 	sendMessageTo(ratedFilm->getOwner() , newRateMessage);
 }

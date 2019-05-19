@@ -19,11 +19,7 @@ unsigned int Comment::getId() const {
 	return id; 
 }
 
-string Comment::getContent() const { 
-	return content; 
-}
-
-void Comment::addReply(const string newRepliedMessage){
+void Comment::addReply(const string& newRepliedMessage){
 	replies.push_back(newRepliedMessage);
 }
 

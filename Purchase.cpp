@@ -8,7 +8,7 @@ Purchase::Purchase(unsigned int filmPrice , unsigned int filmRating , Publisher*
 	this->filmOwner = filmOwner;
 }
 
-double Purchase::calculateFilmOwnerShare(){
+double Purchase::calculateFilmOwnerShare() const{
 	double filmOwnerShare = 0;
 	switch(filmRating){
 		case HIGH_RATED:

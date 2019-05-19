@@ -14,29 +14,29 @@ public:
 	Film(unsigned int id , std::string name , unsigned manufacturedYear , unsigned int length , 
 		unsigned int price , std::string summary , std::string directorName , Publisher* filmOwner);
 
-	unsigned int getRatingQuality();
+	unsigned int getRatingQuality() const;
 	bool getAvailability() const;
 	void beUnavailable();
 	unsigned int getId() const;
 	double getPoint() const;
-	void setName(std::string name);
+	void setName(const std::string& name);
 	std::string getName() const;
 	std::string getDirectorName() const;
 	unsigned int getYear() const;
-	void setYear(unsigned int manufacturedYear);
-	void setDuration(unsigned int length);
+	void setYear(const unsigned int manufacturedYear);
+	void setDuration(const unsigned int length);
 	unsigned int getPrice() const;
-	void setDirectorName(std::string directorName);
-	void setSummary(std::string summary);
+	void setDirectorName(const std::string& directorName);
+	void setSummary(const std::string& summary);
 	Publisher* getOwner() const;
 	void printYourself() const;
 	void printDetailedVersionOfYourself() const;
 	void printRecommendedEdition() const;
-	void rate(Customer* rater , unsigned int rate);
-	void newComment(Customer* commenter , std::string newCommentContent);
-	void replyOneComment(unsigned int commentId , std::string replyContent);
-	void deleteOneComment(unsigned int commentId);
-	Comment* findCommentById(unsigned int commentId);
+	void rate(Customer* rater , const unsigned int rate);
+	void newComment(Customer* commenter , const std::string& newCommentContent);
+	void replyOneComment(const unsigned int commentId , const std::string& replyContent);
+	void deleteOneComment(const unsigned int commentId);
+	Comment* findCommentById(const unsigned int commentId);
 private:
 	Publisher* filmOwner;
 	int theIdsAssignedToComments;
@@ -52,10 +52,10 @@ private:
 	std::string directorName;
 	std::vector<Comment*> comments;
 	//
-	Point* findPointByOwner(Customer* owner);
+	Point* findPointByOwner(const Customer* owner);
 	void updateAveragePoint();
 	void goToNextId();
-	void checkCommentExistence(unsigned int commentId);
+	void checkCommentExistence(const unsigned int commentId);
 	void printComments() const;
 };
 

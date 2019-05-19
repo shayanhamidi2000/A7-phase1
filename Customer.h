@@ -12,19 +12,16 @@ class Customer{
 public:
 	Customer(std::string username , std::string password , std::string email , unsigned int id , unsigned int age);
 	virtual std::string getUsername() const;
-	virtual std::string getPassword() const;
-	virtual std::string getEmail() const;
+	virtual bool hasPassword(const std::string& assertedPassword) const;
 	virtual std::vector<Film*> getPurchasedFilms() const; 
 	virtual unsigned int getId() const;
-	virtual unsigned int getAge() const;
-	virtual unsigned int getCredit() const;
 	virtual bool getPublishingState() const;
 	virtual void printYourself() const;
 	virtual void addToCredit(const unsigned int amount);
 	virtual void getMessage(Message* newMessage);
-	virtual void sendMessageToFollowedPublisher(Publisher* followedPublisher);
-	virtual void sendMessageToRatedPublisher(const Film* ratedFilm);
-	virtual void sendMessageToCommentedPublisher(const Film* commentedFilm);
+	virtual void sendMessageToFollowedPublisher(Publisher* followedPublisher) const;
+	virtual void sendMessageToRatedPublisher(const Film* ratedFilm) const;
+	virtual void sendMessageToCommentedPublisher(const Film* commentedFilm) const;
 	virtual void buyNewFilm(Film* newFilm);
 	virtual bool hasFilm(Film* newFilm);
 	virtual void showUnreadMessages();
@@ -41,8 +38,8 @@ protected:
 	std::vector<Message*> allMessages;
 	std::vector<Film*> purchasedFilms;
 	//
-	virtual void sendMessageToBoughtFromPublisher(const Film* boughtFilm);
-	virtual void sendMessageTo(Customer* messageReciever , std::string content);
+	virtual void sendMessageToBoughtFromPublisher(const Film* boughtFilm) const;
+	virtual void sendMessageTo(Customer* messageReciever , std::string content) const;
 	virtual void withdrawCredit(const int amount);
 	virtual void transferNewlyReadMessagesToReadMessages(std::vector<Message*> newlyReadMessages);
 
