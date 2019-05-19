@@ -13,7 +13,7 @@ class Film{
 public:
 	Film(unsigned int id , std::string name , unsigned manufacturedYear , unsigned int length , 
 		unsigned int price , std::string summary , std::string directorName , Publisher* filmOwner);
-
+	~Film();
 	unsigned int getRatingQuality() const;
 	bool getAvailability() const;
 	void beUnavailable();

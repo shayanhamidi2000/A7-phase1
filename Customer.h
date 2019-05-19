@@ -11,6 +11,7 @@
 class Customer{
 public:
 	Customer(std::string username , std::string password , std::string email , unsigned int id , unsigned int age);
+	~Customer();
 	virtual std::string getUsername() const;
 	virtual bool hasPassword(const std::string& assertedPassword) const;
 	virtual std::vector<Film*> getPurchasedFilms() const; 

@@ -16,6 +16,12 @@ Customer::Customer(string username , string password , string email , unsigned i
 	credit = 0;
 }
 
+Customer::~Customer(){
+	while(!allMessages.empty() )
+		unreadMessages.pop();
+	allMessages.clear();
+}
+
 string Customer::getUsername() const {
  	return username;
 }

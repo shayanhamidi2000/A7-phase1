@@ -23,6 +23,12 @@ Film::Film(unsigned int id , string name , unsigned manufacturedYear , unsigned 
 	this->filmOwner = filmOwner;
 }
 
+Film::~Film(){
+	comments.clear();
+	points.clear();
+}
+
+
 void Film::goToNextId(){
 	theIdsAssignedToComments++;
 }

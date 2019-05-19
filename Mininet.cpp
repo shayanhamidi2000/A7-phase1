@@ -14,6 +14,14 @@ MiniNet::MiniNet(){
 	films = new FilmRepository();
 }
 
+MiniNet::~MiniNet(){
+	delete manageCommand;
+	films->~FilmRepository();
+	purchases.clear();
+	users.clear();
+}
+
+
 void MiniNet::addToNetCredit(unsigned int amount){
 	totalNetCredit += amount;
 }

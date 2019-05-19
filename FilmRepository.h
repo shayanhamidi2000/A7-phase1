@@ -10,6 +10,7 @@ class Customer;
 class FilmRepository{
 public: 
 	FilmRepository();
+	~FilmRepository();
 	void addNewFilm(Publisher* filmOwner , std::string name , unsigned int year , std::string director , std::string summary , unsigned int price , unsigned int length);
 	void editFilm(Publisher* filmOwner , unsigned int id , std::string newName , unsigned int newYear , unsigned int newLength , std::string newSummary , std::string newDirector);
 	void deleteFilm(Publisher* filmOwner , unsigned int id);

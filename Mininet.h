@@ -13,6 +13,7 @@
 class MiniNet{
 public:
 	MiniNet();
+	~MiniNet();
 	void startNet();
 	void registerUser(std::string email , std::string username , std::string password , unsigned int age , bool isPublisher);
 	void loginUser(std::string username , std::string password);
@@ -47,13 +48,13 @@ private:
 	Customer* findUserByUsername(std::string username);
 	Customer* findUserById(unsigned int id);
 	bool isOnlineUserPublisher();
+	bool isAnyOneOnline();
 	void addToNetCredit(unsigned int amount);
 	void withdrawNetCredit(unsigned int amount);
 	void checkUsernameRepetition(std::string username);
 	void isUsernameMatchingPassword(std::string username , std::string password);
 	void isUsernameExisted(std::string username);
 	void checkIdExistence(unsigned int id);
-	bool isAnyOneOnline();
 	unsigned int getPublisherSoldFilmsMoney();
 	void deleteOverduedPurchases(std::vector<unsigned int> overduedPurchases);
 	std::vector<unsigned int> decreaseEachIndexByOne(std::vector<unsigned int> anIndexVector);

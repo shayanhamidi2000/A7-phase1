@@ -10,6 +10,11 @@ FilmRepository::FilmRepository(){
 	theIdsAssigned = BASIC_ID_VALUE;
 }
 
+FilmRepository::~FilmRepository(){
+	allFilms.clear();
+}
+
+
 void FilmRepository::goToNextId(){
 	theIdsAssigned++;
 }
