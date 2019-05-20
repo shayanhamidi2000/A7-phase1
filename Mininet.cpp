@@ -11,11 +11,13 @@ MiniNet::MiniNet(){
 	theIdsAssigned = BASIC_ID_VALUE; 
 	onlineUser = nullptr;
 	manageCommand = new CommandHandler(this);
+	systemSecurity = new Security();
 	films = new FilmRepository();
 }
 
 MiniNet::~MiniNet(){
 	delete manageCommand;
+	delete systemSecurity;
 	films->~FilmRepository();
 	purchases.clear();
 	users.clear();
@@ -57,59 +59,22 @@ void MiniNet::startNet(){
 	}
 }
 
-void MiniNet::checkIdExistence(unsigned int id){
-	if(findUserById(id) == nullptr)
-		throw NotFoundException();
-}
-
-Customer* MiniNet::findUserByUsername(string username){
-	for(unsigned int i = 0 ; i < users.size() ; i++)
-		if(users[i]->getUsername() == username)
-			return users[i];
-
-	return nullptr;
-}
-
-Customer* MiniNet::findUserById(unsigned int id){
-	for(unsigned int i = 0 ; i < users.size() ; i++)
-		if(users[i]->getId() == id)
-			return users[i];
-
-	return nullptr;
-}
-
-void MiniNet::checkUsernameRepetition(string username){
-	if(findUserByUsername(username) != nullptr)
-		throw BadRequestException();		
-}
-
 void MiniNet::registerUser(string email , string username , string password , unsigned int age , bool isPublisher){
-	checkUsernameRepetition(username);
+	systemSecurity->checkUsernameRepetition(users , username);
 	if(isPublisher)
-		onlineUser = new Publisher(username , password , email , theIdsAssigned , age);
+		onlineUser = new Publisher(username , systemSecurity->hashPassword(password , username) , email , theIdsAssigned , age);
 	else
-		onlineUser = new Customer(username , password , email , theIdsAssigned , age);
+		onlineUser = new Customer(username , systemSecurity->hashPassword(password , username) , email , theIdsAssigned , age);
 
 	users.push_back(onlineUser);
 	this->goToNextId();
 	cout << SUCCESS_MESSAGE << endl;
 }
 
-void MiniNet::isUsernameMatchingPassword(string username , string password){
-	if(!findUserByUsername(username)->hasPassword(password) )
-		throw BadRequestException();
-
-}
-void MiniNet::isUsernameExisted(string username){
-	if(findUserByUsername(username) == nullptr)
-		throw BadRequestException();
-
-}
-
 void MiniNet::loginUser(string username , string password){
-	isUsernameExisted(username);
-	isUsernameMatchingPassword(username , password);
-	this->onlineUser = findUserByUsername(username);
+	systemSecurity->isUsernameExisted(users , username);
+	systemSecurity->isUsernameMatchingPassword(users , username , password);
+	this->onlineUser = systemSecurity->findUserByUsername(users , username);
 
 	cout << SUCCESS_MESSAGE << endl;
 }
@@ -156,11 +121,11 @@ void MiniNet::follow(unsigned int id){
 	if(!isAnyOneOnline())
 		throw PermissionDenialException();
 
-	checkIdExistence(id);
-	if(!findUserById(id)->getPublishingState() )
+	systemSecurity->checkIdExistence(users , id);
+	if(!systemSecurity->findUserById(users , id)->getPublishingState() )
 		throw PermissionDenialException();
 
-	Publisher* followed = (Publisher*) findUserById(id);
+	Publisher* followed = (Publisher*) systemSecurity->findUserById(users , id);
 	followed->addToFollowers(onlineUser);
 	onlineUser->sendMessageToFollowedPublisher(followed);
 	cout << SUCCESS_MESSAGE << endl;	

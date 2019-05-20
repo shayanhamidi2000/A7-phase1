@@ -8,6 +8,7 @@
 #include "CommandHandler.h"
 #include "Publisher.h"
 #include "Purchase.h"
+#include "Security.h"
 
 
 class MiniNet{
@@ -41,20 +42,15 @@ private:
 	CommandHandler* manageCommand;
 	FilmRepository* films;
 	Customer* onlineUser;
+	Security* systemSecurity;
 	std::vector<Customer*> users;
 	std::vector<Purchase*> purchases;
 	//
 	void goToNextId();
-	Customer* findUserByUsername(std::string username);
-	Customer* findUserById(unsigned int id);
 	bool isOnlineUserPublisher();
 	bool isAnyOneOnline();
 	void addToNetCredit(unsigned int amount);
 	void withdrawNetCredit(unsigned int amount);
-	void checkUsernameRepetition(std::string username);
-	void isUsernameMatchingPassword(std::string username , std::string password);
-	void isUsernameExisted(std::string username);
-	void checkIdExistence(unsigned int id);
 	unsigned int getPublisherSoldFilmsMoney();
 	void deleteOverduedPurchases(std::vector<unsigned int> overduedPurchases);
 	std::vector<unsigned int> decreaseEachIndexByOne(std::vector<unsigned int> anIndexVector);
