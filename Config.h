@@ -9,6 +9,9 @@
 #define AVERAGE_RATED 2
 #define NOT_A_FACTOR 0
 
+#define ADMIN_DEFAULT_USERNAME "admin"
+#define ADMIN_DEFAULT_PASSWORD "admin"
+
 #define IS_PUBLISHER "true"
 #define IS_NOT_PUBLISHER "false"
 #define MAX_POINT 10

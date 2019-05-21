@@ -2,13 +2,13 @@ CC = g++ -std=c++11
 
 all:Mininet.out
 
-Mininet.out:main.o Mininet.o CommandHandler.o Point.o FilmRepository.o Customer.o Message.o Comment.o Publisher.o Film.o Purchase.o Security.o
-	${CC} main.o Mininet.o CommandHandler.o FilmRepository.o Customer.o Message.o Comment.o Publisher.o Film.o Purchase.o Point.o Security.o -o Mininet.out
+Mininet.out:main.o Mininet.o CommandHandler.o Point.o FilmRepository.o Customer.o Message.o Comment.o Publisher.o Film.o Purchase.o Security.o Admin.o
+	${CC} main.o Mininet.o CommandHandler.o FilmRepository.o Customer.o Admin.o Message.o Comment.o Publisher.o Film.o Purchase.o Point.o Security.o -o Mininet.out
 
 main.o:main.cpp Mininet.h
 	${CC} -c main.cpp -o main.o
 
-Mininet.o:Mininet.cpp Mininet.h FilmRepository.h Customer.h CommandHandler.h Publisher.h Purchase.h Film.h Security.h Exceptions.h Config.h
+Mininet.o:Mininet.cpp Mininet.h FilmRepository.h Customer.h Admin.h CommandHandler.h Publisher.h Purchase.h Film.h Security.h Exceptions.h Config.h
 	${CC} -c Mininet.cpp -o Mininet.o
 
 CommandHandler.o: CommandHandler.cpp CommandHandler.h Exceptions.h Config.h Mininet.h
@@ -40,6 +40,9 @@ Point.o: Point.cpp Point.h Customer.h
 
 Security.o:Security.cpp Security.h Exceptions.h
 	${CC} -c Security.cpp -o Security.o
+
+Admin.o:Admin.cpp Admin.h Customer.h Config.h
+	${CC} -c Admin.cpp -o Admin.o
 
 .PHONY:clean
 clean:

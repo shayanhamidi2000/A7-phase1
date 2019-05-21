@@ -2,6 +2,7 @@
 #include "Config.h"
 #include "Exceptions.h"
 #include "Film.h"
+#include "Admin.h"
 #include <iostream>
 #include <string>
 
@@ -13,6 +14,7 @@ MiniNet::MiniNet(){
 	manageCommand = new CommandHandler(this);
 	systemSecurity = new Security();
 	films = new FilmRepository();
+	users.push_back(new Admin(systemSecurity->hashPassword(ADMIN_DEFAULT_PASSWORD , ADMIN_DEFAULT_USERNAME) , this) );
 }
 
 MiniNet::~MiniNet(){
@@ -21,6 +23,10 @@ MiniNet::~MiniNet(){
 	films->~FilmRepository();
 	purchases.clear();
 	users.clear();
+}
+
+unsigned int MiniNet::getTotalNetCredit() const{
+	return totalNetCredit;
 }
 
 

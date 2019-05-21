@@ -15,6 +15,8 @@ class MiniNet{
 public:
 	MiniNet();
 	~MiniNet();
+	unsigned int getTotalNetCredit() const;
+	//
 	void startNet();
 	void registerUser(std::string email , std::string username , std::string password , unsigned int age , bool isPublisher);
 	void loginUser(std::string username , std::string password);
