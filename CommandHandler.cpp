@@ -148,7 +148,9 @@ bool CommandHandler::checkCommandValidation(string keyCommand) {
 		return true;
 	if(commandSecondPart == COMMENT_DELETE_COMMAND)
 		return true;
-	
+	if(commandSecondPart == LOGOUT_COMMAND)
+		return true;
+
 	return false;	
 }
 
@@ -225,6 +227,11 @@ void CommandHandler::recognizeCommandType(string keyCommand , string restOfComma
 
 	}else if(concatenateTwoStrings(GET_KW , READ_NOTIFICATIONS_COMMAND) == keyCommand){
 		manageAllNotifications(restOfCommand);
+
+	}else if(concatenateTwoStrings(POST_KW , LOGOUT_COMMAND) == keyCommand){
+		if(hasCommandEndSign)
+			throw BadRequestException();
+		manageLogout();
 
 	}else{
 		throw BadRequestException();
@@ -771,4 +778,8 @@ void CommandHandler::manageAllNotifications(string limitInfo){
 	limit = stoi(mappedKeysAndValues[LIMIT_MESSAGES_SHOWN_KEY]);
 
 	miniNetAccess->getAllMessages(limit);
+}
+
+void CommandHandler::manageLogout(){
+	miniNetAccess->logout();
 }

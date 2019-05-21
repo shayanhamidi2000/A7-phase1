@@ -60,6 +60,8 @@ void MiniNet::startNet(){
 }
 
 void MiniNet::registerUser(string email , string username , string password , unsigned int age , bool isPublisher){
+	if(isAnyOneOnline() )
+		throw BadRequestException();
 	systemSecurity->checkUsernameRepetition(users , username);
 	if(isPublisher)
 		onlineUser = new Publisher(username , systemSecurity->hashPassword(password , username) , email , theIdsAssigned , age);
@@ -72,12 +74,22 @@ void MiniNet::registerUser(string email , string username , string password , un
 }
 
 void MiniNet::loginUser(string username , string password){
+	if(isAnyOneOnline() )
+		throw BadRequestException();
 	systemSecurity->isUsernameExisted(users , username);
 	systemSecurity->isUsernameMatchingPassword(users , username , password);
 	this->onlineUser = systemSecurity->findUserByUsername(users , username);
 
 	cout << SUCCESS_MESSAGE << endl;
 }
+
+void MiniNet::logout(){
+	if(!isAnyOneOnline() )
+		throw BadRequestException();
+	onlineUser = nullptr;
+	cout << SUCCESS_MESSAGE << endl;
+}
+
 
 void MiniNet::addFilmOnNet(string name , unsigned int year , string director , string summary , unsigned int price , unsigned int length){
 	if(!isAnyOneOnline() || !isOnlineUserPublisher())

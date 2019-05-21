@@ -67,6 +67,7 @@
 #define PURCHASES_COMMAND "purchased"
 #define NOTIFICATIONS_COMMAND "notifications"
 #define READ_NOTIFICATIONS_COMMAND "notificationsread"
+#define LOGOUT_COMMAND "logout"
 #define EMAIL_KEY "email" 
 #define USERNAME_KEY "username"
 #define PASSWORD_KEY "password"

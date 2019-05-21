@@ -34,6 +34,7 @@ public:
 	void managePurchasesList(std::string searchInfo);
 	void manageUnreadNotifications();
 	void manageAllNotifications(std::string limitInfo);
+	void manageLogout();
 private:	
 	MiniNet* miniNetAccess; 
 	//
