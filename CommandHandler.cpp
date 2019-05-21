@@ -135,12 +135,18 @@ bool CommandHandler::checkCommandValidation(string keyCommand) {
 	if(commandSecondPart == BUY_COMMAND)
 		return true;
 	if(commandSecondPart == RATE_COMMAND)
-			return true;
+		return true;
 	if(commandSecondPart == PURCHASES_COMMAND)
 		return true;
 	if(commandSecondPart == NOTIFICATIONS_COMMAND)
 		return true;
 	if(commandSecondPart == READ_NOTIFICATIONS_COMMAND)
+		return true;
+	if(commandSecondPart == FILM_DELETE_COMMAND)
+		return true;
+	if(commandSecondPart == FILM_EDIT_COMMAND)
+		return true;
+	if(commandSecondPart == COMMENT_DELETE_COMMAND)
 		return true;
 	
 	return false;	
@@ -166,10 +172,10 @@ void CommandHandler::recognizeCommandType(string keyCommand , string restOfComma
 	}else if(concatenateTwoStrings(POST_KW , FILMS_COMMAND) == keyCommand){
 		manageFilmUpload(restOfCommand);
 
-	}else if(concatenateTwoStrings(PUT_KW , FILMS_COMMAND) == keyCommand){
+	}else if(concatenateTwoStrings(POST_KW , FILM_EDIT_COMMAND) == keyCommand){
 		manageFilmEdit(restOfCommand);
 
-	}else if(concatenateTwoStrings(DL_KW , FILMS_COMMAND) == keyCommand){
+	}else if(concatenateTwoStrings(POST_KW , FILM_DELETE_COMMAND) == keyCommand){
 		manageFilmDelete(restOfCommand);
 
 	}else if(concatenateTwoStrings(GET_KW , FOLLOWERS_COMMAND) == keyCommand){
@@ -191,7 +197,7 @@ void CommandHandler::recognizeCommandType(string keyCommand , string restOfComma
 	}else if(concatenateTwoStrings(POST_KW , REPLY_COMMAND) == keyCommand){
 		manageReplyComment(restOfCommand);
 
-	}else if(concatenateTwoStrings(DL_KW , COMMENTS_COMMAND) == keyCommand){
+	}else if(concatenateTwoStrings(POST_KW , COMMENT_DELETE_COMMAND) == keyCommand){
 		manageDeleteComment(restOfCommand);
 
 	}else if(concatenateTwoStrings(POST_KW , FOLLOWERS_COMMAND) == keyCommand){

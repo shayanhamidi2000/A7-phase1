@@ -46,16 +46,17 @@
 #define MAX_KEYS_AND_VALUES_FOR_FILM_FURTHER_INFO 2
 #define MIN_KEYS_AND_VALUES_FOR_FILM_FURTHER_INFO 2
 #define NUMBER_OF_ELEMENTS_GIVEN_AS_RECOMMENDATION_LIST 4
-#define DL_KW "DELETE"
+
 #define GET_KW "GET"
 #define POST_KW "POST"
-#define PUT_KW "PUT"
 #define COMMAND_END_SIGN "?"
 #define COMMAND_DELIMITER ' '
 #define BASIC_ID_VALUE 1
 #define REGISTER_C0MMAND "signup"
 #define LOGIN_COMMAND "login"
 #define FILMS_COMMAND "films"
+#define FILM_EDIT_COMMAND "put_films"
+#define FILM_DELETE_COMMAND "delete_films"
 #define FOLLOWERS_COMMAND "followers"
 #define GET_MONEY_COMMAND "money"
 #define GET_PUBLISHED_FILMS_COMMAND "published"
@@ -83,6 +84,7 @@
 #define FILM_MAXIMUM_YEAR_KEY "max_year"
 #define COMMENT_ID_KEY "comment_id"
 #define COMMENT_OR_REPLY_CONTENT_KEY "content"
+#define COMMENT_DELETE_COMMAND "delete_comments"
 #define USER_ID_KEY "user_id"
 #define MONEY_AMOUNT_KEY "amount"
 #define SCORE_GIVEN_KEY "score"
