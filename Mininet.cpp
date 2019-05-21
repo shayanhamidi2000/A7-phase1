@@ -59,6 +59,14 @@ void MiniNet::startNet(){
 	}
 }
 
+void MiniNet::showCredit(){
+	if(!isAnyOneOnline() )
+		throw PermissionDenialException();
+	onlineUser->showCredit();
+
+}
+
+
 void MiniNet::registerUser(string email , string username , string password , unsigned int age , bool isPublisher){
 	if(isAnyOneOnline() )
 		throw BadRequestException();

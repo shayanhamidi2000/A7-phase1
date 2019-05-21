@@ -35,6 +35,7 @@ public:
 	void manageUnreadNotifications();
 	void manageAllNotifications(std::string limitInfo);
 	void manageLogout();
+	void manageCreditShow();
 private:	
 	MiniNet* miniNetAccess; 
 	//

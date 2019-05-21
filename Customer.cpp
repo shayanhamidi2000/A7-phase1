@@ -56,6 +56,11 @@ void Customer::withdrawCredit(const int amount){
 	credit -= amount;
 }
 
+void Customer::showCredit() const {
+	cout << credit << endl;
+}
+
+
 void Customer::getMessage(Message* newMessage){
 	this->unreadMessages.push(newMessage);
 }

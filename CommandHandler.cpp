@@ -233,6 +233,11 @@ void CommandHandler::recognizeCommandType(string keyCommand , string restOfComma
 			throw BadRequestException();
 		manageLogout();
 
+	}else if(concatenateTwoStrings(GET_KW , GET_MONEY_COMMAND) == keyCommand){
+		if(hasCommandEndSign)
+			throw BadRequestException();
+		manageCreditShow();
+
 	}else{
 		throw BadRequestException();
 	}   
@@ -783,3 +788,8 @@ void CommandHandler::manageAllNotifications(string limitInfo){
 void CommandHandler::manageLogout(){
 	miniNetAccess->logout();
 }
+
+void CommandHandler::manageCreditShow(){
+	miniNetAccess->showCredit();
+}
+
