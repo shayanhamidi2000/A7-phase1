@@ -2,8 +2,8 @@ CC = g++ -std=c++11
 
 all:Mininet.out
 
-Mininet.out:main.o Mininet.o CommandHandler.o Point.o FilmRepository.o Customer.o Message.o Comment.o Publisher.o Film.o Purchase.o Security.o Admin.o
-	${CC} main.o Mininet.o CommandHandler.o FilmRepository.o Customer.o Admin.o Message.o Comment.o Publisher.o Film.o Purchase.o Point.o Security.o -o Mininet.out
+Mininet.out:main.o Mininet.o CommandHandler.o Point.o FilmRepository.o FilmGraph.o Customer.o Message.o Comment.o Publisher.o Film.o Purchase.o Security.o Admin.o
+	${CC} main.o Mininet.o CommandHandler.o FilmRepository.o Customer.o Admin.o Message.o Comment.o Publisher.o Film.o Purchase.o Point.o Security.o FilmGraph.o -o Mininet.out
 
 main.o:main.cpp Mininet.h
 	${CC} -c main.cpp -o main.o
@@ -14,7 +14,7 @@ Mininet.o:Mininet.cpp Mininet.h FilmRepository.h Customer.h Admin.h CommandHandl
 CommandHandler.o: CommandHandler.cpp CommandHandler.h Exceptions.h Config.h Mininet.h
 	${CC} -c CommandHandler.cpp -o CommandHandler.o
 
-FilmRepository.o: FilmRepository.cpp FilmRepository.h Film.h Publisher.h Exceptions.h Config.h
+FilmRepository.o: FilmRepository.cpp FilmRepository.h Film.h Publisher.h FilmGraph.h Exceptions.h Config.h
 	${CC} -c FilmRepository.cpp -o FilmRepository.o
 
 Customer.o: Customer.cpp Customer.h Publisher.h Message.h Film.h Exceptions.h
@@ -43,6 +43,9 @@ Security.o:Security.cpp Security.h Exceptions.h
 
 Admin.o:Admin.cpp Admin.h Customer.h Config.h
 	${CC} -c Admin.cpp -o Admin.o
+
+FilmGraph.o:FilmGraph.cpp FilmGraph.h Film.h
+	${CC} -c FilmGraph.cpp -o FilmGraph.o
 
 .PHONY:clean
 clean:

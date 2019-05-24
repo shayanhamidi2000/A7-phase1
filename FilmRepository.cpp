@@ -8,10 +8,12 @@ using namespace std;
 
 FilmRepository::FilmRepository(){
 	theIdsAssigned = BASIC_ID_VALUE;
+	graphOfFilms = new FilmGraph();
 }
 
 FilmRepository::~FilmRepository(){
 	allFilms.clear();
+	graphOfFilms->~FilmGraph();
 }
 
 
@@ -27,11 +29,16 @@ unsigned int FilmRepository::findPositionById(unsigned int id , vector<Film*> li
 	return 0;		
 }
 
+void FilmRepository::updateFilmsGraph(Film* boughtFilm , std::vector<Film*> commonlyBoughtFilms){
+	graphOfFilms->update(boughtFilm , commonlyBoughtFilms);
+}
+
 void FilmRepository::addNewFilm(Publisher* filmOwner , string name , unsigned int year , string director , string summary , unsigned int price , unsigned int length){
 	Film* newFilm = new Film(theIdsAssigned , name , year , length , price , summary , director , filmOwner);
 	allFilms.push_back(newFilm);
 	filmOwner->addToUploadedFilms(newFilm);
 	this->goToNextId();
+	graphOfFilms->addFilm(newFilm);
 }
 
 Film* FilmRepository::findFilmById(unsigned int id , vector<Film*> listOfFilms){
@@ -70,6 +77,7 @@ void FilmRepository::deleteFilm(Publisher* filmOwner , unsigned int id){
 	Film* deletedFilm = findFilmById(id , allFilms);
 	deletedFilm->beUnavailable();
 	filmOwner->deleteMyFilm(findPositionById(id , filmOwner->getUploadedFilms() ) );
+	graphOfFilms->deleteFilm(deletedFilm);
 }
 
 void FilmRepository::editFilm(Publisher* assertedOwner , unsigned int id , string newName , unsigned int newYear , unsigned int newLength , string newSummary , string newDirector){
@@ -212,31 +220,21 @@ vector<Film*> FilmRepository::sortFilmsById(vector<Film*> unsortedList){
 	return sortedList;
 }
 
-vector<Film*> FilmRepository::getFilmsWithoutRecommendedCustomerPurchases(vector<Film*> dislikedList){
+vector<Film*> FilmRepository::getFilmsWithoutRecommendedCustomerPurchases(vector<Film*> fullList , vector<Film*> dislikedList){
 	vector<Film*> desiredList;
-	for(unsigned int i = 0 ; i < allFilms.size() ; i++)
-		if(find(dislikedList.begin() , dislikedList.end() , allFilms[i]) == dislikedList.end() && allFilms[i]->getAvailability() )
-			desiredList.push_back(allFilms[i]);
+	for(unsigned int i = 0 ; i < fullList.size() ; i++)
+		if(find(dislikedList.begin() , dislikedList.end() , fullList[i]) == dislikedList.end() )
+			desiredList.push_back(fullList[i]);
 
 	return desiredList;	
 }
 
-bool pointAndIdComparator(const Film* film1 , const Film* film2){
-	if(film1->getPoint() > film2->getPoint() ){
-		return true;
-	}else if(film1->getPoint() == film2->getPoint() ){
-		if(film1->getId() < film2->getId() )
-			return true;
-	}
-
-	return false;
-}
-
 void FilmRepository::giveRecommendation(Customer* recommendedCustomer , Film* recommendedOnFilm){
+	vector<Film*> recommendedGraphFilms = graphOfFilms->getRecommendedFilms(recommendedOnFilm);
 	vector<Film*> dislikedList = recommendedCustomer->getPurchasedFilms();
 	dislikedList.push_back(recommendedOnFilm);
-	vector<Film*> filteredList = getFilmsWithoutRecommendedCustomerPurchases(dislikedList);
-	sort(filteredList.begin() , filteredList.end() , pointAndIdComparator);
+	vector<Film*> filteredList = getFilmsWithoutRecommendedCustomerPurchases(recommendedGraphFilms , dislikedList);
+
 	printRecommendedList(filteredList);
 }
 

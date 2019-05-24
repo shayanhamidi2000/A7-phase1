@@ -171,7 +171,9 @@ void MiniNet::buyFilm(unsigned int filmId){
 	Film* desiredFilm = films->findFilmByIdInDatabase(filmId);
 
 	if(!onlineUser->hasFilm(desiredFilm) ){
+		vector<Film*> purchasedFilmsTillNow = onlineUser->getPurchasedFilms();
 		onlineUser->buyNewFilm(desiredFilm);
+		films->updateFilmsGraph(desiredFilm ,  purchasedFilmsTillNow);
 		addToNetCredit(desiredFilm->getPrice() );
 		purchases.push_back(new Purchase(desiredFilm->getPrice() , desiredFilm->getRatingQuality() , desiredFilm->getOwner() ) );
 	}

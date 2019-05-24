@@ -4,6 +4,7 @@
 #include <vector>
 #include "Film.h"
 #include "Publisher.h"
+#include "FilmGraph.h"
 
 class Customer;
 
@@ -19,10 +20,12 @@ public:
 	void getPublihsedOrPurchasedList(std::vector<Film*> givenList , std::string name  , unsigned int minPoint , unsigned int minYear , unsigned int price , unsigned maxYear , std::string directorName);
 	void checkFilmPurchased(Customer* assertedPurchaser , unsigned int id);
 	void checkFilmOwnership(Publisher* assertedOwner , unsigned int id);
+	void updateFilmsGraph(Film* boughtFilm , std::vector<Film*> commonlyBoughtFilms);
 	void giveRecommendation(Customer* recommendedCustomer , Film* recommendedOnFilm);
 private:
 	unsigned int theIdsAssigned;
 	std::vector<Film*> allFilms;
+	FilmGraph* graphOfFilms;
 	//
 	void goToNextId();	
 	unsigned int findPositionById(unsigned int id , std::vector<Film*> listOfFilms);
@@ -38,7 +41,7 @@ private:
 	Film* findFilmById(unsigned int id , std::vector<Film*> listOfFilms);
 	std::vector<Film*> sortFilmsById(std::vector<Film*> unsortedList);
 	void checkFilmExistence(unsigned int id);
-	std::vector<Film*> getFilmsWithoutRecommendedCustomerPurchases(std::vector<Film*> dislikedList);
+	std::vector<Film*> getFilmsWithoutRecommendedCustomerPurchases(std::vector<Film*> fullList , std::vector<Film*> dislikedList);
 	void printRecommendedList(std::vector<Film*> recommendedList);
 };
 
