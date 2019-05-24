@@ -17,6 +17,7 @@ public:
 	virtual std::vector<Film*> getPurchasedFilms() const; 
 	virtual unsigned int getId() const;
 	virtual bool getPublishingState() const;
+	virtual bool getAdminState() const;
 	virtual void printYourself() const;
 	virtual void addToCredit(const unsigned int amount);
 	virtual void getMessage(Message* newMessage);
@@ -30,6 +31,7 @@ public:
 	virtual void showCredit() const;
 protected:
 	bool isPublisher;
+	bool isAdmin;
 	std::string username;
 	std::string password;
 	std::string email;

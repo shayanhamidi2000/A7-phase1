@@ -52,6 +52,7 @@ private:
 	//
 	void goToNextId();
 	bool isOnlineUserPublisher();
+	bool isOnlineUserAdmin();
 	bool isAnyOneOnline();
 	void addToNetCredit(unsigned int amount);
 	void withdrawNetCredit(unsigned int amount);

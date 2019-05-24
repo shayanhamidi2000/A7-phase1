@@ -13,6 +13,7 @@ Customer::Customer(string username , string password , string email , unsigned i
 	this->id = id;
 	this->age = age;
 	this->isPublisher = false;
+	this->isAdmin = false;
 	credit = 0;
 }
 
@@ -40,6 +41,11 @@ unsigned int Customer::getId() const{
 bool Customer::getPublishingState() const { 
 	return isPublisher; 
 }
+
+bool Customer::getAdminState() const{
+	return isAdmin;
+}
+
 
 void Customer::printYourself() const{
 	cout << id << " | " << username << " | " << email;

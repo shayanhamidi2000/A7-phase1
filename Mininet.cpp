@@ -39,10 +39,13 @@ void MiniNet::withdrawNetCredit(unsigned int amount){
 }
 
 bool MiniNet::isOnlineUserPublisher() { 
-	if(onlineUser == nullptr)
-		return true;
 	return onlineUser->getPublishingState();
 }
+
+bool MiniNet::isOnlineUserAdmin(){
+	return onlineUser->getAdminState();
+}
+
 
 bool MiniNet::isAnyOneOnline() {
 	if(onlineUser != nullptr)
@@ -106,7 +109,7 @@ void MiniNet::logout(){
 
 
 void MiniNet::addFilmOnNet(string name , unsigned int year , string director , string summary , unsigned int price , unsigned int length){
-	if(!isAnyOneOnline() || !isOnlineUserPublisher())
+	if(!isAnyOneOnline() || !isOnlineUserPublisher() || isOnlineUserAdmin())
 		throw PermissionDenialException();
 
 	films->addNewFilm((Publisher*) this->onlineUser , name , year , director , summary , price , length);
@@ -114,7 +117,7 @@ void MiniNet::addFilmOnNet(string name , unsigned int year , string director , s
 }
 
 void MiniNet::editAFilm(unsigned int id , string newName , unsigned int newYear , unsigned int newLength , string newSummary , string newDirector){
-	if(!isAnyOneOnline() || !isOnlineUserPublisher())
+	if(!isAnyOneOnline() || !isOnlineUserPublisher() || isOnlineUserAdmin())
 		throw PermissionDenialException();
 
 	films->editFilm((Publisher*) this->onlineUser , id , newName , newYear , newLength , newSummary , newDirector);
@@ -122,7 +125,7 @@ void MiniNet::editAFilm(unsigned int id , string newName , unsigned int newYear 
 }
 
 void MiniNet::deleteAFilm(unsigned int id){
-	if(!isAnyOneOnline() || !isOnlineUserPublisher())
+	if(!isAnyOneOnline() || !isOnlineUserPublisher() || isOnlineUserAdmin() )
 		throw PermissionDenialException();
 
 	films->deleteFilm((Publisher*) this->onlineUser , id );
@@ -130,21 +133,21 @@ void MiniNet::deleteAFilm(unsigned int id){
 }
 
 void MiniNet::getPublishedList(string name , unsigned int minPoint , unsigned int minYear , unsigned int price , unsigned maxYear , string directorName){
-	if(!isAnyOneOnline() || !isOnlineUserPublisher())
+	if(!isAnyOneOnline() || !isOnlineUserPublisher() || isOnlineUserAdmin() )
 		throw PermissionDenialException();
 
 	films->getPublihsedOrPurchasedList( ((Publisher*) onlineUser)->getUploadedFilms() , name , minPoint , minYear , price , maxYear , directorName);
 }
 
 void MiniNet::getFollowersList(){
-	if(!isAnyOneOnline() || !isOnlineUserPublisher())
+	if(!isAnyOneOnline() || !isOnlineUserPublisher() || isOnlineUserAdmin() )
 		throw PermissionDenialException();
 
 	((Publisher*) onlineUser)->printYourFollowers();
 }
 
 void MiniNet::follow(unsigned int id){
-	if(!isAnyOneOnline())
+	if(!isAnyOneOnline() || isOnlineUserAdmin() )
 		throw PermissionDenialException();
 
 	systemSecurity->checkIdExistence(users , id);
@@ -158,14 +161,14 @@ void MiniNet::follow(unsigned int id){
 }
 
 void MiniNet::addMoney(unsigned int amount){
-	if(!isAnyOneOnline() )
+	if(!isAnyOneOnline() || isOnlineUserAdmin() )
 		throw PermissionDenialException();
 	onlineUser->addToCredit(amount);
 	cout << SUCCESS_MESSAGE << endl;
 }
 
 void MiniNet::buyFilm(unsigned int filmId){
-	if(!isAnyOneOnline() )
+	if(!isAnyOneOnline() || isOnlineUserAdmin() )
 		throw PermissionDenialException();
 
 	Film* desiredFilm = films->findFilmByIdInDatabase(filmId);
@@ -211,7 +214,7 @@ vector<unsigned int> MiniNet::decreaseEachIndexByOne(vector<unsigned int> anInde
 }
 
 void MiniNet::getMoneyFromNet(){
-	if(!isAnyOneOnline() || !isOnlineUserPublisher())
+	if(!isAnyOneOnline() || !isOnlineUserPublisher() || isOnlineUserAdmin() )
 		throw PermissionDenialException();
 
 	onlineUser->addToCredit(getPublisherSoldFilmsMoney() );
@@ -219,14 +222,14 @@ void MiniNet::getMoneyFromNet(){
 }
 
 void MiniNet::getPurchasedList(string name , unsigned int minYear , unsigned int price , unsigned maxYear , string directorName){
-	if(!isAnyOneOnline() )
+	if(!isAnyOneOnline() || isOnlineUserAdmin() )
 		throw PermissionDenialException();
 
 	films->getPublihsedOrPurchasedList( onlineUser->getPurchasedFilms() , name , NOT_A_FACTOR , minYear , price , maxYear , directorName);
 }
 
 void MiniNet::rateFilm(unsigned int filmId , unsigned int score){
-	if(!isAnyOneOnline() )
+	if(!isAnyOneOnline() || isOnlineUserAdmin() )
 		throw PermissionDenialException();
 
 	films->checkFilmPurchased(onlineUser , filmId);
@@ -237,7 +240,7 @@ void MiniNet::rateFilm(unsigned int filmId , unsigned int score){
 }
 
 void MiniNet::comment(unsigned int filmId , string commentContent){
-	if(!isAnyOneOnline() )
+	if(!isAnyOneOnline() || isOnlineUserAdmin() )
 		throw PermissionDenialException();
 
 	films->checkFilmPurchased(onlineUser , filmId);
@@ -248,7 +251,7 @@ void MiniNet::comment(unsigned int filmId , string commentContent){
 }
 
 void MiniNet::replyComment(unsigned int filmId , unsigned int commentId , string content){
-	if(!isAnyOneOnline() || !isOnlineUserPublisher())
+	if(!isAnyOneOnline() || !isOnlineUserPublisher() || isOnlineUserAdmin() )
 		throw PermissionDenialException();
 
 	films->checkFilmOwnership( (Publisher*)onlineUser , filmId);
@@ -259,7 +262,7 @@ void MiniNet::replyComment(unsigned int filmId , unsigned int commentId , string
 }
 
 void MiniNet::deleteComment(unsigned int filmId , unsigned int commentId){
-	if(!isAnyOneOnline() || !isOnlineUserPublisher())
+	if(!isAnyOneOnline() || !isOnlineUserPublisher() || isOnlineUserAdmin() )
 		throw PermissionDenialException();
 
 	films->checkFilmOwnership( (Publisher*) onlineUser , filmId);
@@ -269,28 +272,28 @@ void MiniNet::deleteComment(unsigned int filmId , unsigned int commentId){
 }
 
 void MiniNet::getUnreadMessages(){
-	if(!isAnyOneOnline() )
+	if(!isAnyOneOnline() || isOnlineUserAdmin() )
 		throw PermissionDenialException();
 
 	onlineUser->showUnreadMessages();
 }
 
 void MiniNet::getAllMessages(unsigned int limit){
-	if(!isAnyOneOnline() )
+	if(!isAnyOneOnline() || isOnlineUserAdmin() )
 		throw PermissionDenialException();
 
 	onlineUser->showReadMessages(limit);
 }
 
 void MiniNet::searchFilmsInDatabase(string name , unsigned int minPoint , unsigned int minYear , unsigned int price , unsigned maxYear , string directorName){
-	if(!isAnyOneOnline() )
+	if(!isAnyOneOnline()|| isOnlineUserAdmin() )
 		throw PermissionDenialException();
 
 	films->getSearchedDatabaseList(name , minPoint , minYear , price , maxYear , directorName);
 }
 
 void MiniNet::showFurtherInfo(unsigned int filmId){
-	if(!isAnyOneOnline() )
+	if(!isAnyOneOnline()|| isOnlineUserAdmin() )
 		throw PermissionDenialException();
 
 	Film* desiredFilm = films->findFilmByIdInDatabase(filmId);
