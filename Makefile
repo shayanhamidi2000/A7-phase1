@@ -1,17 +1,17 @@
 CC = g++ -std=c++11
 
-all:Mininet.out
+all:Myserver.out
 
-Mininet.out:main.o Mininet.o CommandHandler.o Point.o FilmRepository.o FilmGraph.o Customer.o Message.o Comment.o Publisher.o Film.o Purchase.o Security.o Admin.o
-	${CC} main.o Mininet.o CommandHandler.o FilmRepository.o Customer.o Admin.o Message.o Comment.o Publisher.o Film.o Purchase.o Point.o Security.o FilmGraph.o -o Mininet.out
+Myserver.out:main.o Mininet.o CommandHandler.o Point.o FilmRepository.o FilmGraph.o Customer.o Message.o Comment.o Publisher.o Film.o Purchase.o Security.o Admin.o server.o response.o request.o utilities.o route.o
+	${CC} main.o Mininet.o CommandHandler.o FilmRepository.o Customer.o Admin.o Message.o Comment.o Publisher.o Film.o Purchase.o Point.o Security.o FilmGraph.o server.o response.o request.o utilities.o route.o -o Mininet.out
 
 main.o:main.cpp Mininet.h
 	${CC} -c main.cpp -o main.o
 
-Mininet.o:Mininet.cpp Mininet.h FilmRepository.h Customer.h Admin.h CommandHandler.h Publisher.h Purchase.h Film.h Security.h Exceptions.h Config.h
+Mininet.o:Mininet.cpp Mininet.h FilmRepository.h Customer.h Admin.h CommandHandler.h Publisher.h Purchase.h Film.h Security.h Exceptions.h Config.h server/server.hpp
 	${CC} -c Mininet.cpp -o Mininet.o
 
-CommandHandler.o: CommandHandler.cpp CommandHandler.h Exceptions.h Config.h Mininet.h
+CommandHandler.o: CommandHandler.cpp CommandHandler.h Exceptions.h Config.h Mininet.h server/server.hpp
 	${CC} -c CommandHandler.cpp -o CommandHandler.o
 
 FilmRepository.o: FilmRepository.cpp FilmRepository.h Film.h Publisher.h FilmGraph.h Exceptions.h Config.h
@@ -46,6 +46,21 @@ Admin.o:Admin.cpp Admin.h Customer.h Config.h
 
 FilmGraph.o:FilmGraph.cpp FilmGraph.h Film.h
 	${CC} -c FilmGraph.cpp -o FilmGraph.o
+
+response.o: utils/response.cpp utils/response.hpp utils/include.hpp
+	$(CC) -c utils/response.cpp -o response.o
+
+request.o: utils/request.cpp utils/request.hpp utils/include.hpp utils/utilities.hpp
+	$(CC) -c utils/request.cpp -o request.o
+
+utilities.o: utils/utilities.cpp utils/utilities.hpp
+	$(CC) -c utils/utilities.cpp -o utilities.o
+
+server.o: server/server.cpp server/server.hpp server/route.hpp utils/utilities.hpp utils/response.hpp utils/request.hpp utils/include.hpp
+	$(CC) -c server/server.cpp -o server.o
+
+route.o: server/route.cpp server/route.hpp utils/utilities.hpp utils/response.hpp utils/request.hpp utils/include.hpp
+	$(CC) -c server/route.cpp -o route.o
 
 .PHONY:clean
 clean:
