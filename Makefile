@@ -11,7 +11,7 @@ main.o:main.cpp Mininet.h
 Mininet.o:Mininet.cpp Mininet.h FilmRepository.h Customer.h Admin.h Handlers.h Publisher.h Purchase.h Film.h Security.h Exceptions.h Config.h server/server.hpp
 	${CC} -c Mininet.cpp -o Mininet.o
 
-Handlers.o: Handlers.cpp Handlers.h Exceptions.h Config.h Mininet.h server/server.hpp
+Handlers.o: Handlers.cpp Handlers.h Config.h Mininet.h server/server.hpp
 	${CC} -c Handlers.cpp -o Handlers.o
 
 FilmRepository.o: FilmRepository.cpp FilmRepository.h Film.h Publisher.h FilmGraph.h Exceptions.h Config.h

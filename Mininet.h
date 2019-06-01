@@ -2,10 +2,8 @@
 #define MININET_H
 
 #include <vector>
-#include <iostream>
 #include "Customer.h" 
 #include "FilmRepository.h"
-#include "Handlers.h"
 #include "Publisher.h"
 #include "Purchase.h"
 #include "Security.h"

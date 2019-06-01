@@ -9,9 +9,9 @@
     <div>
       <form action="/addFilm" method="post">
         Name: <input name="name" type="text" placeholder="Name" required="required" /> <br><br>
-        Duration: <input type="number" name="length" placeholder="Duration in minutes" required="required" /> <br><br>
-        Price: <input name="price" type="number" placeholder="Price" required="required" /> <br><br>
-        Manufactured Year: <input type="number" name="year" placeholder="Year" required="required" /> <br><br>
+        Duration: <input type="number" name="length" placeholder="Duration in minutes" required="required" min="1" /> <br><br>
+        Price: <input name="price" type="number" placeholder="Price" min="1" required="required" /> <br><br>
+        Manufactured Year: <input type="number" name="year" placeholder="Year" min="1" required="required" /> <br><br>
         Director Name: <input name="director" type="text" placeholder="DirectorX" required="required" /> <br><br>
         Summary: <textarea name="summary" placeholder="Once upon a time..." required="required" > </textarea> <br><br>
         <button type="submit" >Submit</button>

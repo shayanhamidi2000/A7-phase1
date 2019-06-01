@@ -3,6 +3,7 @@
 #include "Exceptions.h"
 #include "Film.h"
 #include "Admin.h"
+#include "Handlers.h"
 #include <iostream>
 #include <string>
 
@@ -56,7 +57,16 @@ void MiniNet::goToNextId() {
 }
 
 void MiniNet::startNet(){
-
+	try {
+    Server server(PORT_SERVER_RUNNING);
+    server.setNotFoundErrPage("static/404.html");
+    server.get("/" , new ShowPage("static/login.html") );
+    server.get("/register" , new ShowPage("static/register.html") );
+    server.post("/register" , new RegisterHandler(this));
+    server.run();
+  	} catch (Server::Exception e) {
+    	cerr << e.getMessage() << endl;
+  	}
 }
 
 void MiniNet::showCredit(){
@@ -71,12 +81,13 @@ void MiniNet::registerUser(string email , string username , string password , un
 	if(isAnyOneOnline() )
 		throw BadRequestException();
 	systemSecurity->checkUsernameRepetition(users , username);
+	Customer* newUser;
 	if(isPublisher)
-		onlineUser = new Publisher(username , systemSecurity->hashPassword(password , username) , email , theIdsAssigned , age);
+		newUser = new Publisher(username , systemSecurity->hashPassword(password , username) , email , theIdsAssigned , age);
 	else
-		onlineUser = new Customer(username , systemSecurity->hashPassword(password , username) , email , theIdsAssigned , age);
+		newUser = new Customer(username , systemSecurity->hashPassword(password , username) , email , theIdsAssigned , age);
 
-	users.push_back(onlineUser);
+	users.push_back(newUser);
 	this->goToNextId();
 }
 

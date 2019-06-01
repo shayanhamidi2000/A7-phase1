@@ -10,9 +10,18 @@ class MiniNet;
 
 class RegisterHandler : public RequestHandler{
 public:
-	Response* callback(Request* request);
+	RegisterHandler(MiniNet* theMiniNet);
+	virtual Response* callback(Request* request);
 private:
 	MiniNet* miniNetAccess; 
+};
+
+class LoginHandler : public RequestHandler{
+public:
+	LoginHandler(MiniNet* theMiniNet);
+	virtual Response* callback(Request* request);
+private: 
+	MiniNet* miniNetAccess;	
 };
 
 

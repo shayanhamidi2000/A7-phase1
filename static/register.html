@@ -8,10 +8,10 @@
       <form action="/register" method="post">
         Username: <input name="username" type="text" placeholder="Username" required="required" /> <br><br>
         Email: <input name="email" type="email" placeholder="Email" required="required" /> <br><br>
-        Age: <input name="age" type="number" placeholder="Age" required="required" /> <br><br>
+        Age: <input name="age" type="number" placeholder="Age" required="required" min="1" /> <br><br>
         Password: <input type="password" name="password" placeholder="Password" required="required" /> <br><br>
         Confirm Password: <input type="password" name="confirmedPassword" placeholder="Password" required="required" /> <br><br>
-        Publishing State: <input type="radio" name="publisher" value="customer" checked>Customer          <input type="radio" name="publishingState" value="publisher">Publisher <br><br>
+        Publishing State: <input type="radio" name="publishingState" value="customer" checked>Customer          <input type="radio" name="publishingState" value="publisher">Publisher <br><br>
         <button type="submit" >Sign-up</button>
       </form>
     </div>
