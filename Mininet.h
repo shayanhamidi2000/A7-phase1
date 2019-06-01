@@ -9,7 +9,7 @@
 #include "Publisher.h"
 #include "Purchase.h"
 #include "Security.h"
-
+#include "server/server.hpp"
 
 class MiniNet{
 public:
@@ -43,7 +43,6 @@ public:
 private:
 	unsigned int totalNetCredit;
 	unsigned int theIdsAssigned;
-	CommandHandler* manageCommand;
 	FilmRepository* films;
 	Customer* onlineUser;
 	Security* systemSecurity;

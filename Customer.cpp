@@ -57,7 +57,7 @@ void Customer::addToCredit(const unsigned int amount){
 
 void Customer::withdrawCredit(const int amount){
 	if( (credit -  amount) < 0 )
-		throw PermissionDenialException();
+		throw NotEnoughMoneyException();
 
 	credit -= amount;
 }

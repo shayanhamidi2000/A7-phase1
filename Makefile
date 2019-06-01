@@ -2,17 +2,17 @@ CC = g++ -std=c++11
 
 all:Myserver.out
 
-Myserver.out:main.o Mininet.o CommandHandler.o Point.o FilmRepository.o FilmGraph.o Customer.o Message.o Comment.o Publisher.o Film.o Purchase.o Security.o Admin.o server.o response.o request.o utilities.o route.o
-	${CC} main.o Mininet.o CommandHandler.o FilmRepository.o Customer.o Admin.o Message.o Comment.o Publisher.o Film.o Purchase.o Point.o Security.o FilmGraph.o server.o response.o request.o utilities.o route.o -o Mininet.out
+Myserver.out:main.o Mininet.o Handlers.o Point.o FilmRepository.o FilmGraph.o Customer.o Message.o Comment.o Publisher.o Film.o Purchase.o Security.o Admin.o server.o response.o request.o utilities.o route.o
+	${CC} main.o Mininet.o Handlers.o FilmRepository.o Customer.o Admin.o Message.o Comment.o Publisher.o Film.o Purchase.o Point.o Security.o FilmGraph.o server.o response.o request.o utilities.o route.o -o Mininet.out
 
 main.o:main.cpp Mininet.h
 	${CC} -c main.cpp -o main.o
 
-Mininet.o:Mininet.cpp Mininet.h FilmRepository.h Customer.h Admin.h CommandHandler.h Publisher.h Purchase.h Film.h Security.h Exceptions.h Config.h server/server.hpp
+Mininet.o:Mininet.cpp Mininet.h FilmRepository.h Customer.h Admin.h Handlers.h Publisher.h Purchase.h Film.h Security.h Exceptions.h Config.h server/server.hpp
 	${CC} -c Mininet.cpp -o Mininet.o
 
-CommandHandler.o: CommandHandler.cpp CommandHandler.h Exceptions.h Config.h Mininet.h server/server.hpp
-	${CC} -c CommandHandler.cpp -o CommandHandler.o
+Handlers.o: Handlers.cpp Handlers.h Exceptions.h Config.h Mininet.h server/server.hpp
+	${CC} -c Handlers.cpp -o Handlers.o
 
 FilmRepository.o: FilmRepository.cpp FilmRepository.h Film.h Publisher.h FilmGraph.h Exceptions.h Config.h
 	${CC} -c FilmRepository.cpp -o FilmRepository.o

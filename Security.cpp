@@ -13,13 +13,13 @@ string Security::hashPassword(const string& rawPassword , const string& salt){
 
 void Security::isUsernameMatchingPassword(const vector<Customer*>& allUsers , string username , string password){
 	if(!findUserByUsername(allUsers , username)->hasPassword(this->hashPassword(password , username) ) )
-		throw BadRequestException();
+		throw PasswordNotMatchingUsernameException();
 
 }
 
 void Security::isUsernameExisted(const vector<Customer*>& allUsers , string username){
 	if(findUserByUsername(allUsers , username) == nullptr)
-		throw BadRequestException();
+		throw UsernameNotExistedException();
 
 }
 
@@ -33,7 +33,7 @@ Customer* Security::findUserById(const vector<Customer*>& allUsers , unsigned in
 
 void Security::checkUsernameRepetition(const vector<Customer*>& allUsers , string username){
 	if(findUserByUsername(allUsers , username) != nullptr)
-		throw BadRequestException();		
+		throw RepeatedUsernameException();		
 }
 
 void Security::checkIdExistence(const vector<Customer*>& allUsers , unsigned int id){

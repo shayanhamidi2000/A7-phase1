@@ -4,291 +4,10 @@
 #include <algorithm>
 #include <ctype.h>
 #include "Config.h"
-#include "Exceptions.h"
 
 using namespace std;
 
-CommandHandler::CommandHandler(MiniNet* theMiniNet){
-	miniNetAccess = theMiniNet;
-}
-
-void CommandHandler::checkIdString(string idString){
-	if(!isConstantNumber(idString) )
-		throw BadRequestException();
-}
-
-string CommandHandler::deleteSpacesOfAString(string aString){
-	string modifiedString = aString;
-	modifiedString.erase(remove(modifiedString.begin(), modifiedString.end(), ' ') , modifiedString.end());
-	return modifiedString;
-}
-
-bool CommandHandler::isConstantNumber(string aPieceOfString)
-{
-	for(unsigned int i = 0 ; i < aPieceOfString.length() ; i++)
-		if(!isdigit((char) aPieceOfString[i]))
-			return false;
-
-	return true;
-}
-
-bool CommandHandler::checkSecondCommandPartValidation(string secondPart){
-	vector<string> keywordsAndValues  = splitString(secondPart);
-	if(!isEven(keywordsAndValues.size() ) )
-		return false;
-
-	return true;
-}
-
-vector<string> CommandHandler::getKeys(vector<string> keysAndValues , unsigned int minNumberOfKeys , unsigned int maxNumberOfKeys){
-	if(keysAndValues.size() > maxNumberOfKeys || keysAndValues.size() < minNumberOfKeys )
-		throw BadRequestException();
-
-	vector<string> keys;
-	for(unsigned int i = 0 ; i < keysAndValues.size() ; i++)
-		if(isEven(i))
-			keys.push_back(keysAndValues[i]);
-
-	return keys;	
-}
-
-map<string , string> CommandHandler::getMappedKeysAndValues(vector<string> keysAndValues) {
-	map<string , string> mappedKeysAndValues;
-	for(unsigned int i = 0 ; i < keysAndValues.size() ; i += 2)
-		mappedKeysAndValues.insert(pair<string , string> (keysAndValues[i] , keysAndValues[i + 1]) );
-
-	return mappedKeysAndValues;
-}
-
-string CommandHandler::concatenateTwoStrings(string firstString , string secondString){
-	return (firstString + secondString);
-}
-
-bool CommandHandler::isEven(unsigned int aNumber){
-	if(aNumber % 2 == 0)
-		return true;
-	return false;
-}
-
-vector<string> CommandHandler::splitString(string aString){
-	vector<string> splitedString;
-	string newSubString;
-	int j;
-	
-	for(unsigned int i = 0 ; i < aString.length() ; i++){
-		if(aString[i] == COMMAND_DELIMITER)
-			continue;
-		j = i;
-		newSubString = "";
-		while(aString[j] != COMMAND_DELIMITER){
-			newSubString += aString[j];
-			j++;
-			if(j == aString.length())
-				break;
-		}
-		splitedString.push_back(newSubString);
-		i = j;
-	}
-	return splitedString;
-}
-//
-void CommandHandler::getRawCommand(string rawCommandLine){
-	if(rawCommandLine.empty() )
-		return;
-	string keyCommand;
-	string restOfCommand;
-	bool hasCommandEndSign = false;
-
-	if(rawCommandLine.find_first_of(COMMAND_END_SIGN) == string::npos){
-		keyCommand = rawCommandLine;
-		restOfCommand = "";
-	}else{
-		keyCommand = rawCommandLine.substr(0 , rawCommandLine.find_first_of(COMMAND_END_SIGN) - 1);
-		restOfCommand = rawCommandLine.substr(rawCommandLine.find_first_of(COMMAND_END_SIGN) + 1);
-		hasCommandEndSign = true;
-	}
-
-	checkFirstPartAndSecondPartOfCommand(keyCommand , restOfCommand);
-	recognizeCommandType(keyCommand , restOfCommand , hasCommandEndSign);
-}
-
-bool CommandHandler::checkCommandValidation(string keyCommand) {
-	string commandSecondPart = keyCommand.substr(keyCommand.find_first_of(COMMAND_DELIMITER) + 1);
-	commandSecondPart = deleteSpacesOfAString(commandSecondPart);
-	
-	if(commandSecondPart == REGISTER_C0MMAND)
-		return true;
-	if(commandSecondPart == LOGIN_COMMAND)
-		return true;
-	if(commandSecondPart == FILMS_COMMAND)
-		return true;
-	if(commandSecondPart == FOLLOWERS_COMMAND)
-		return true;
-	if(commandSecondPart == GET_MONEY_COMMAND)
-		return true;
-	if(commandSecondPart == GET_PUBLISHED_FILMS_COMMAND)
-		return true;
-	if(commandSecondPart == REPLY_COMMAND)
-		return true;
-	if(commandSecondPart == COMMENTS_COMMAND)
-		return true;
-	if(commandSecondPart == BUY_COMMAND)
-		return true;
-	if(commandSecondPart == RATE_COMMAND)
-		return true;
-	if(commandSecondPart == PURCHASES_COMMAND)
-		return true;
-	if(commandSecondPart == NOTIFICATIONS_COMMAND)
-		return true;
-	if(commandSecondPart == READ_NOTIFICATIONS_COMMAND)
-		return true;
-	if(commandSecondPart == FILM_DELETE_COMMAND)
-		return true;
-	if(commandSecondPart == FILM_EDIT_COMMAND)
-		return true;
-	if(commandSecondPart == COMMENT_DELETE_COMMAND)
-		return true;
-	if(commandSecondPart == LOGOUT_COMMAND)
-		return true;
-
-	return false;	
-}
-
-void CommandHandler::checkFirstPartAndSecondPartOfCommand(string keyCommand , string restOfCommand){
-	if(!checkCommandValidation(keyCommand))
-		throw NotFoundException();
-
-	if(!checkSecondCommandPartValidation(restOfCommand))
-		throw BadRequestException();
-}
-
-void CommandHandler::recognizeCommandType(string keyCommand , string restOfCommand , bool hasCommandEndSign){
-	keyCommand = deleteSpacesOfAString(keyCommand);
-
-	if(concatenateTwoStrings(POST_KW , REGISTER_C0MMAND) == keyCommand){
-		manageSignUp(restOfCommand);
-
-	}else if(concatenateTwoStrings(POST_KW , LOGIN_COMMAND) == keyCommand){
-		manageLogin(restOfCommand);
-
-	}else if(concatenateTwoStrings(POST_KW , FILMS_COMMAND) == keyCommand){
-		manageFilmUpload(restOfCommand);
-
-	}else if(concatenateTwoStrings(POST_KW , FILM_EDIT_COMMAND) == keyCommand){
-		manageFilmEdit(restOfCommand);
-
-	}else if(concatenateTwoStrings(POST_KW , FILM_DELETE_COMMAND) == keyCommand){
-		manageFilmDelete(restOfCommand);
-
-	}else if(concatenateTwoStrings(GET_KW , FOLLOWERS_COMMAND) == keyCommand){
-		if(hasCommandEndSign)
-			throw BadRequestException();
-		manageFollowerListRequest();
-
-	}else if(concatenateTwoStrings(POST_KW , GET_MONEY_COMMAND) == keyCommand){
-		if(hasCommandEndSign){
-			manageAddMoney(restOfCommand);
-		}else{
-			if(hasCommandEndSign)
-				throw BadRequestException();
-			manageGetMoney();
-		}	
-	}else if(concatenateTwoStrings(GET_KW , GET_PUBLISHED_FILMS_COMMAND) == keyCommand){
-		managePublishedFilmsList(restOfCommand);
-
-	}else if(concatenateTwoStrings(POST_KW , REPLY_COMMAND) == keyCommand){
-		manageReplyComment(restOfCommand);
-
-	}else if(concatenateTwoStrings(POST_KW , COMMENT_DELETE_COMMAND) == keyCommand){
-		manageDeleteComment(restOfCommand);
-
-	}else if(concatenateTwoStrings(POST_KW , FOLLOWERS_COMMAND) == keyCommand){
-		manageFollow(restOfCommand);
-
-	}else if(concatenateTwoStrings(GET_KW , FILMS_COMMAND) == keyCommand){
-		checkFilmSearchOrFurtherInfo(restOfCommand);
-
-	}else if(concatenateTwoStrings(POST_KW , BUY_COMMAND) == keyCommand){
-		manageBuyFilm(restOfCommand);
-
-	}else if(concatenateTwoStrings(POST_KW , RATE_COMMAND) == keyCommand){
-		manageFilmRating(restOfCommand);
-
-	}else if(concatenateTwoStrings(POST_KW , COMMENTS_COMMAND) == keyCommand){
-		manageCommenting(restOfCommand);
-
-	}else if(concatenateTwoStrings(GET_KW , PURCHASES_COMMAND) == keyCommand){
-		managePurchasesList(restOfCommand);
-
-	}else if(concatenateTwoStrings(GET_KW , NOTIFICATIONS_COMMAND) == keyCommand){
-		if(hasCommandEndSign)
-			throw BadRequestException();
-		manageUnreadNotifications();
-
-	}else if(concatenateTwoStrings(GET_KW , READ_NOTIFICATIONS_COMMAND) == keyCommand){
-		manageAllNotifications(restOfCommand);
-
-	}else if(concatenateTwoStrings(POST_KW , LOGOUT_COMMAND) == keyCommand){
-		if(hasCommandEndSign)
-			throw BadRequestException();
-		manageLogout();
-
-	}else if(concatenateTwoStrings(GET_KW , GET_MONEY_COMMAND) == keyCommand){
-		if(hasCommandEndSign)
-			throw BadRequestException();
-		manageCreditShow();
-
-	}else{
-		throw BadRequestException();
-	}   
-		
-}
-
-bool CommandHandler::checkEmailValidation(string email){
-	int numberOfDots = count(email.begin() , email.end() , '.'); 
-	int numberOfAsign = count(email.begin() , email.end() , '@');
-	if(numberOfAsign != 1)
-		return false;
-
-	if(numberOfDots == 0)
-		return false;
-
-	if(email.find_first_of('@') > email.find_first_of('.') )
-		return false;
-
-	if(isConstantNumber(email.substr(0 , email.find_first_of('@') - 1) ) )
-		return false;
-
-	return true;
-}
-
-void CommandHandler::checkSignupValues(string age , string email , string isPublisher){
-	if(!checkEmailValidation(email) ){
-		throw BadRequestException();
-	}
-	if(!isConstantNumber(age) ){
-		throw BadRequestException();
-	}
-
-	if(isPublisher != IS_NOT_PUBLISHER && isPublisher != IS_PUBLISHER)
-		throw BadRequestException();
-}
-
-void CommandHandler::checkSignupKeys(vector<string> keys){
-	int numberOfEmails = count(keys.begin() , keys.end() , EMAIL_KEY);
-	int numberOfUsernames = count(keys.begin() , keys.end() , USERNAME_KEY);
-	int numberOfPasswords = count(keys.begin() , keys.end() , PASSWORD_KEY);
-	int numberOfAges = count(keys.begin() , keys.end() , AGE_KEY);
-	int numberOfPublishers = count(keys.begin() , keys.end() , PUBLISHER_KEY);
-
-	if((numberOfEmails != 1) || (numberOfUsernames != 1) || (numberOfPasswords != 1) || (numberOfAges != 1) )
-		throw BadRequestException(); 
-
-	if( (numberOfAges + numberOfPublishers + numberOfUsernames + numberOfPasswords + numberOfEmails) != keys.size() )
-		throw BadRequestException();
-}
-
-void CommandHandler::manageSignUp(string signUpInfo){
+/*void CommandHandler::manageSignUp(string signUpInfo){
 	string username,password,email;
 	unsigned int age;
 	bool isPublisher = false;
@@ -309,13 +28,6 @@ void CommandHandler::manageSignUp(string signUpInfo){
 	miniNetAccess->registerUser(email , username , password , age , isPublisher);
 }
 
-void CommandHandler::checkLoginKeys(vector<string> keys){
-	int numberOfUsernames = count(keys.begin() , keys.end() , USERNAME_KEY);
-	int numberOfPasswords = count(keys.begin() , keys.end() , PASSWORD_KEY);
-	if((numberOfPasswords != 1) || (numberOfUsernames != 1))
-		throw BadRequestException();
-}
-
 void CommandHandler::manageLogin(string loginInfo){
 	string username;
 	string password;
@@ -328,34 +40,6 @@ void CommandHandler::manageLogin(string loginInfo){
 	password = mappedKeysAndValues[PASSWORD_KEY];
 
 	miniNetAccess->loginUser(username , password);
-}
-
-void CommandHandler::checkFilmUploadKeys(vector<string> keys){
-	int numberOfYears = count(keys.begin() , keys.end() , FILM_YEAR_KEY);
-	int numberOfDirectors = count(keys.begin() , keys.end() , FILM_DIRECTOR_KEY);
-	int numberOfPrices = count(keys.begin() , keys.end() , FILM_PRICE_KEY);
-	int numberOfLengths = count(keys.begin() , keys.end() , FILM_LENGTH_KEY);
-	int numberOfSummaries = count(keys.begin() , keys.end() , FILM_SUMMARY_KEY);
-	int numberOfNames = count(keys.begin() , keys.end() , FILM_NAME_KEY);
-
-	if( (numberOfNames != 1) || (numberOfPrices != 1) || (numberOfLengths != 1) || (numberOfSummaries != 1) || (numberOfDirectors != 1) || (numberOfYears != 1) )
-		throw BadRequestException();
-}
-
-void CommandHandler::checkFilmValues(string year , string lenght , string price){
-	if(!isConstantNumber(year) || !isConstantNumber(lenght) || !isConstantNumber(price) )
-		throw BadRequestException();
-}
-
-map<string , string> CommandHandler::initializeEmptyFilmEditKeys(map<string , string> givenMap){
-	map<string , string> modifiedMap = givenMap;
-
-	modifiedMap.insert(pair<string , string> (FILM_YEAR_KEY , "") );
-	modifiedMap.insert(pair<string , string> (FILM_NAME_KEY , "") );
-	modifiedMap.insert(pair<string , string> (FILM_LENGTH_KEY , "") );
-	modifiedMap.insert(pair<string , string> (FILM_SUMMARY_KEY , "") );
-
-	return modifiedMap;
 }
 
 void CommandHandler::manageFilmUpload(string newFilmInfo){
@@ -377,57 +61,6 @@ void CommandHandler::manageFilmUpload(string newFilmInfo){
 	miniNetAccess->addFilmOnNet(name , year , director , summary , price , length);
 }
 
-void CommandHandler::checkFilmEditKeys(vector<string> keys){
-	int numberOfYears = count(keys.begin() , keys.end() , FILM_YEAR_KEY);
-	int numberOfDirectors = count(keys.begin() , keys.end() , FILM_DIRECTOR_KEY);
-	int numberOfIds = count(keys.begin() , keys.end() , FILM_ID_KEY);
-	int numberOfLengths = count(keys.begin() , keys.end() , FILM_LENGTH_KEY);
-	int numberOfSummaries = count(keys.begin() , keys.end() , FILM_SUMMARY_KEY);
-	int numberOfNames = count(keys.begin() , keys.end() , FILM_NAME_KEY);
-
-	if(numberOfIds != 1)
-		throw BadRequestException();
-
-	if( (numberOfYears > 1) || (numberOfNames > 1) || (numberOfSummaries > 1) || (numberOfLengths > 1) || (numberOfDirectors > 1) )
-		throw BadRequestException();
-
-	if( (numberOfDirectors + numberOfLengths + numberOfSummaries + numberOfYears + numberOfNames) != (keys.size() - 1) )
-		throw BadRequestException();
-
-}
-
-void CommandHandler::manageFilmEdit(string editedFilmInfo){
-	string modifiedName,modifiedSummary , modifiedDirector;
-	unsigned int modifiedYear , modifiedLength , id;
-	modifiedYear = 0; modifiedLength = 0;
-
-	vector<string> keywordsAndValues = splitString(editedFilmInfo);
-	vector<string> keys = getKeys(keywordsAndValues , MIN_KEYS_AND_VALUES_FOR_FILM_EDIT , MAX_KEYS_AND_VALUES_FOR_FILM_EDIT);
-	checkFilmEditKeys(keys);
-	map<string , string> mappedKeysAndValues = getMappedKeysAndValues(keywordsAndValues);
-	mappedKeysAndValues = initializeEmptyFilmEditKeys(mappedKeysAndValues);
-	checkFilmValues( mappedKeysAndValues[FILM_YEAR_KEY] , mappedKeysAndValues[FILM_LENGTH_KEY] , "" );
-	checkIdString(mappedKeysAndValues[FILM_ID_KEY]);
-
-	id = stoi(mappedKeysAndValues[FILM_ID_KEY]);
-	modifiedName = mappedKeysAndValues[FILM_NAME_KEY];
-	modifiedSummary = mappedKeysAndValues[FILM_SUMMARY_KEY];
-	modifiedDirector = mappedKeysAndValues[FILM_DIRECTOR_KEY];
-	if( mappedKeysAndValues[FILM_LENGTH_KEY] != "" )
-		modifiedLength = stoi(mappedKeysAndValues[FILM_LENGTH_KEY]);
-	if( mappedKeysAndValues[FILM_YEAR_KEY] != "" )
-		modifiedYear = stoi(mappedKeysAndValues[FILM_YEAR_KEY]);
-	
-	miniNetAccess->editAFilm(id , modifiedName , modifiedYear , modifiedLength , modifiedSummary , modifiedDirector);
-}
-
-void CommandHandler::checkFilmKeys(vector<string> keys){
-	int numberOfIds = count(keys.begin() , keys.end() , FILM_ID_KEY);
-
-	if(numberOfIds != 1)
-		throw BadRequestException();
-}
-
 void CommandHandler::manageFilmDelete(string deletedFilmInfo){
 	unsigned int id;
 
@@ -441,40 +74,6 @@ void CommandHandler::manageFilmDelete(string deletedFilmInfo){
 
 	miniNetAccess->deleteAFilm(id);
 
-}
-
-void CommandHandler::checkFilmSearchKeys(vector<string> keys){
-	int numberOfMaxYears = count(keys.begin() , keys.end() , FILM_MAXIMUM_YEAR_KEY);
-	int numberOfMinYears = count(keys.begin() , keys.end() , FILM_MINIMUM_YEAR_KEY);
-	int numberOfNames = count(keys.begin() , keys.end() , FILM_NAME_KEY);
-	int numberOfPrices = count(keys.begin() , keys.end() , FILM_PRICE_KEY);
-	int numberOfDirectors = count(keys.begin() , keys.end() , FILM_DIRECTOR_KEY);
-	int numberOfMinRates = count(keys.begin() , keys.end() , FILM_MINIMUM_RATE_KEY);
-
-	if( (numberOfMaxYears + numberOfDirectors + numberOfNames + numberOfPrices + numberOfMinRates + numberOfMinYears) != keys.size() )
-		throw BadRequestException();
-}
-
-void CommandHandler::checkSearchValues(string minPoint , string minYear , string maxYear , string price){
-	if(!isConstantNumber(minYear) || !isConstantNumber(minPoint) || !isConstantNumber(maxYear) || !isConstantNumber(price) )
-		throw BadRequestException();
-
-	if(minPoint != ""){
-		if(stoi(minPoint) > MAX_POINT)
-			throw BadRequestException();
-	}
-}
-
-map<string , string> CommandHandler::initializeEmptySearchFilmKeys(map<string , string> givenMap){
-	map<string , string> modifiedMap = givenMap;
-
-	modifiedMap.insert(pair<string , string> (FILM_MINIMUM_RATE_KEY , "") );
-	modifiedMap.insert(pair<string , string> (FILM_MINIMUM_YEAR_KEY , "") );
-	modifiedMap.insert(pair<string , string> (FILM_MAXIMUM_YEAR_KEY , "") );
-	modifiedMap.insert(pair<string , string> (FILM_DIRECTOR_KEY , "") );
-	modifiedMap.insert(pair<string , string> (FILM_PRICE_KEY , "") );
-	modifiedMap.insert(pair<string , string> (FILM_NAME_KEY , "") );
-	return modifiedMap;
 }
 
 void CommandHandler::managePublishedFilmsList(string searchInfo){
@@ -503,98 +102,6 @@ void CommandHandler::managePublishedFilmsList(string searchInfo){
 
 	miniNetAccess->getPublishedList(name , minPoint , minYear , price , maxYear , directorName);
 	
-}
-
-void CommandHandler::manageFollowerListRequest(){
-	miniNetAccess->getFollowersList();
-}
-
-void CommandHandler::manageGetMoney(){
-	miniNetAccess->getMoneyFromNet();
-}
-
-void CommandHandler::checkCommentReplyKeys(vector<string> keys){
-	int numberOfContents = count(keys.begin() , keys.end() , COMMENT_OR_REPLY_CONTENT_KEY);
-	int numberOfCommentIds = count(keys.begin() , keys.end() , COMMENT_ID_KEY);
-	int numberOfFilmIds = count(keys.begin() , keys.end() , FILM_ID_KEY);
-
-	if( (numberOfContents != 1) || (numberOfCommentIds != 1) || (numberOfFilmIds != 1) )
-		throw BadRequestException();
-}
-
-void CommandHandler::manageReplyComment(string commentInfo){
-	unsigned int filmId , commentId;
-	string content;
-
-	vector<string> keywordsAndValues = splitString(commentInfo);
-	vector<string> keys = getKeys(keywordsAndValues , MIN_KEYS_AND_VALUES_FOR_COMMENT_REPLY , MAX_KEYS_AND_VALUES_FOR_COMMENT_REPLY);
-	checkCommentDeleteKeys(keys);
-	map<string , string> mappedKeysAndValues = getMappedKeysAndValues(keywordsAndValues);
-	checkIdString(mappedKeysAndValues[FILM_ID_KEY]);
-	checkIdString(mappedKeysAndValues[COMMENT_ID_KEY] );
-
-	content = mappedKeysAndValues[COMMENT_OR_REPLY_CONTENT_KEY];
-	filmId = stoi(mappedKeysAndValues[FILM_ID_KEY] );
-	commentId = stoi(mappedKeysAndValues[COMMENT_ID_KEY] );
-
-	miniNetAccess->replyComment(filmId , commentId , content);
-}
-
-void CommandHandler::checkCommentDeleteKeys(vector<string> keys){
-	int numberOfCommentIds = count(keys.begin() , keys.end() , COMMENT_ID_KEY);
-	int numberOfFilmIds = count(keys.begin() , keys.end() , FILM_ID_KEY);
-
-	if((numberOfCommentIds != 1) || (numberOfFilmIds != 1))
-		throw BadRequestException();
-}
-
-void CommandHandler::manageDeleteComment(string commentInfo){
-	unsigned int filmId , commentId;
-
-	vector<string> keywordsAndValues = splitString(commentInfo);
-	vector<string> keys = getKeys(keywordsAndValues , MIN_KEYS_AND_VALUES_FOR_COMMENT_DELETE , MAX_KEYS_AND_VALUES_FOR_COMMENT_DELETE);
-	checkCommentDeleteKeys(keys);
-	map<string , string> mappedKeysAndValues = getMappedKeysAndValues(keywordsAndValues);
-	checkIdString(mappedKeysAndValues[FILM_ID_KEY]);
-	checkIdString(mappedKeysAndValues[COMMENT_ID_KEY] );
-
-	filmId = stoi(mappedKeysAndValues[FILM_ID_KEY] );
-	commentId = stoi(mappedKeysAndValues[COMMENT_ID_KEY] );
-
-	miniNetAccess->deleteComment(filmId , commentId);
-}
-
-void CommandHandler::checkFollowKeys(vector<string> keys){
-	int numberOfIds = count(keys.begin() , keys.end() , USER_ID_KEY);
-
-	if(numberOfIds != 1)
-		throw BadRequestException();
-}
-
-void CommandHandler::manageFollow(string followedInfo){
-	unsigned int id;
-
-	vector<string> keywordsAndValues = splitString(followedInfo);
-	vector<string> keys = getKeys(keywordsAndValues , MIN_KEYS_AND_VALUES_FOR_FOLLOW , MAX_KEYS_AND_VALUES_FOR_FOLLOW);
-	checkFollowKeys(keys);
-	map<string , string> mappedKeysAndValues = getMappedKeysAndValues(keywordsAndValues);
-	checkIdString( mappedKeysAndValues[USER_ID_KEY] );
-	id = stoi(mappedKeysAndValues[USER_ID_KEY]);
-
-	miniNetAccess->follow(id);
-}
-
-void CommandHandler::checkAddMoneyKeys(vector<string> keys){
-	int numberOfAmounts = count(keys.begin() , keys.end() , MONEY_AMOUNT_KEY);
-
-	if(numberOfAmounts != 1)
-		throw BadRequestException();
-}
-
-void CommandHandler::checkAddMoneyValues(string amount){
-	if(!isConstantNumber(amount))
-		throw BadRequestException();
-
 }
 
 void CommandHandler::manageAddMoney(string amountOfMoneyInfo){
@@ -678,22 +185,6 @@ void CommandHandler::manageBuyFilm(string filmInfo){
 	miniNetAccess->buyFilm(id);
 }
 
-void CommandHandler::checkFilmRateKeys(vector<string> keys){
-	int numberOfIds = count(keys.begin() , keys.end() , FILM_ID_KEY);
-	int numberOfScores = count(keys.begin() , keys.end() , SCORE_GIVEN_KEY);
-
-	if( (numberOfIds != 1) || (numberOfScores != 1) )
-		throw BadRequestException();
-
-}
-
-void CommandHandler::checkFilmRateValues(string id , string score){
-	if(!isConstantNumber(id) || !isConstantNumber(score) )
-		throw BadRequestException();
-	if(stoi(score) < MIN_POINT || stoi(score) > MAX_POINT)
-		throw BadRequestException();
-}
-
 void CommandHandler::manageFilmRating(string ratingInfo){
 	unsigned int score , id;
 	vector<string> keywordsAndValues = splitString(ratingInfo);
@@ -706,14 +197,6 @@ void CommandHandler::manageFilmRating(string ratingInfo){
 	id = stoi(mappedKeysAndValues[FILM_ID_KEY] );
 
 	miniNetAccess->rateFilm(id , score);
-}
-
-void CommandHandler::checkCommentingKeys(vector<string> keys){
-	int numberOfIds = count(keys.begin() , keys.end() , FILM_ID_KEY);
-	int numberOfContents = count(keys.begin() , keys.end() , COMMENT_OR_REPLY_CONTENT_KEY);
-
-	if( (numberOfIds != 1) || (numberOfContents != 1) )
-		throw BadRequestException();
 }
 
 void CommandHandler::manageCommenting(string newCommentInfo){
@@ -759,37 +242,11 @@ void CommandHandler::managePurchasesList(string searchInfo){
 	miniNetAccess->getPurchasedList(name , minYear , price , maxYear , directorName);
 }
 
-void CommandHandler::manageUnreadNotifications(){
-	miniNetAccess->getUnreadMessages();
-}
-
-void CommandHandler::checkAllNotificationsKeys(vector<string> keys){
-	int numberOfLimits = count(keys.begin() , keys.end() , LIMIT_MESSAGES_SHOWN_KEY);
-
-	if(numberOfLimits != 1)
-		throw BadRequestException();
-}
-
-void CommandHandler::manageAllNotifications(string limitInfo){
-	unsigned int limit;
-
-	vector<string> keywordsAndValues = splitString(limitInfo);
-	vector<string> keys = getKeys(keywordsAndValues , MIN_KEYS_AND_VALUES_FOR_ALL_NOTIFICATIONS , MAX_KEYS_AND_VALUES_FOR_ALL_NOTIFICATIONS);
-	checkAllNotificationsKeys(keys);
-	map<string , string> mappedKeysAndValues = getMappedKeysAndValues(keywordsAndValues);
-	if(!isConstantNumber(mappedKeysAndValues[LIMIT_MESSAGES_SHOWN_KEY] ) )
-		throw BadRequestException();
-
-	limit = stoi(mappedKeysAndValues[LIMIT_MESSAGES_SHOWN_KEY]);
-
-	miniNetAccess->getAllMessages(limit);
-}
-
 void CommandHandler::manageLogout(){
 	miniNetAccess->logout();
 }
 
 void CommandHandler::manageCreditShow(){
 	miniNetAccess->showCredit();
-}
+}*/
 

@@ -11,14 +11,12 @@ MiniNet::MiniNet(){
 	totalNetCredit = 0;
 	theIdsAssigned = BASIC_ID_VALUE; 
 	onlineUser = nullptr;
-	manageCommand = new CommandHandler(this);
 	systemSecurity = new Security();
 	films = new FilmRepository();
 	users.push_back(new Admin(systemSecurity->hashPassword(ADMIN_DEFAULT_PASSWORD , ADMIN_DEFAULT_USERNAME) , this) );
 }
 
 MiniNet::~MiniNet(){
-	delete manageCommand;
 	delete systemSecurity;
 	films->~FilmRepository();
 	purchases.clear();
@@ -58,14 +56,7 @@ void MiniNet::goToNextId() {
 }
 
 void MiniNet::startNet(){
-	string line = "";
-	while(getline(cin , line)){
-		try{
-			manageCommand->getRawCommand(line);
-		}catch(exception& ex){
-			cout << ex.what() << endl;
-		}
-	}
+
 }
 
 void MiniNet::showCredit(){
@@ -87,7 +78,6 @@ void MiniNet::registerUser(string email , string username , string password , un
 
 	users.push_back(onlineUser);
 	this->goToNextId();
-	cout << SUCCESS_MESSAGE << endl;
 }
 
 void MiniNet::loginUser(string username , string password){
@@ -97,14 +87,12 @@ void MiniNet::loginUser(string username , string password){
 	systemSecurity->isUsernameMatchingPassword(users , username , password);
 	this->onlineUser = systemSecurity->findUserByUsername(users , username);
 
-	cout << SUCCESS_MESSAGE << endl;
 }
 
 void MiniNet::logout(){
 	if(!isAnyOneOnline() )
 		throw BadRequestException();
 	onlineUser = nullptr;
-	cout << SUCCESS_MESSAGE << endl;
 }
 
 
@@ -113,7 +101,6 @@ void MiniNet::addFilmOnNet(string name , unsigned int year , string director , s
 		throw PermissionDenialException();
 
 	films->addNewFilm((Publisher*) this->onlineUser , name , year , director , summary , price , length);
-	cout << SUCCESS_MESSAGE << endl;
 }
 
 void MiniNet::editAFilm(unsigned int id , string newName , unsigned int newYear , unsigned int newLength , string newSummary , string newDirector){
@@ -121,7 +108,7 @@ void MiniNet::editAFilm(unsigned int id , string newName , unsigned int newYear 
 		throw PermissionDenialException();
 
 	films->editFilm((Publisher*) this->onlineUser , id , newName , newYear , newLength , newSummary , newDirector);
-	cout << SUCCESS_MESSAGE << endl;
+
 }
 
 void MiniNet::deleteAFilm(unsigned int id){
@@ -129,7 +116,6 @@ void MiniNet::deleteAFilm(unsigned int id){
 		throw PermissionDenialException();
 
 	films->deleteFilm((Publisher*) this->onlineUser , id );
-	cout << SUCCESS_MESSAGE << endl;
 }
 
 void MiniNet::getPublishedList(string name , unsigned int minPoint , unsigned int minYear , unsigned int price , unsigned maxYear , string directorName){
@@ -157,14 +143,12 @@ void MiniNet::follow(unsigned int id){
 	Publisher* followed = (Publisher*) systemSecurity->findUserById(users , id);
 	followed->addToFollowers(onlineUser);
 	onlineUser->sendMessageToFollowedPublisher(followed);
-	cout << SUCCESS_MESSAGE << endl;	
 }
 
 void MiniNet::addMoney(unsigned int amount){
 	if(!isAnyOneOnline() || isOnlineUserAdmin() )
 		throw PermissionDenialException();
 	onlineUser->addToCredit(amount);
-	cout << SUCCESS_MESSAGE << endl;
 }
 
 void MiniNet::buyFilm(unsigned int filmId){
@@ -180,7 +164,7 @@ void MiniNet::buyFilm(unsigned int filmId){
 		addToNetCredit(desiredFilm->getPrice() );
 		purchases.push_back(new Purchase(desiredFilm->getPrice() , desiredFilm->getRatingQuality() , desiredFilm->getOwner() ) );
 	}
-	cout << SUCCESS_MESSAGE << endl;
+
 }
 
 unsigned int MiniNet::getPublisherSoldFilmsMoney(){
@@ -218,7 +202,6 @@ void MiniNet::getMoneyFromNet(){
 		throw PermissionDenialException();
 
 	onlineUser->addToCredit(getPublisherSoldFilmsMoney() );
-	cout << SUCCESS_MESSAGE << endl;
 }
 
 void MiniNet::getPurchasedList(string name , unsigned int minYear , unsigned int price , unsigned maxYear , string directorName){
