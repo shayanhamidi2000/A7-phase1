@@ -5,6 +5,8 @@
 #include "Publisher.h"
 #include <algorithm>
 #include <iostream>
+#include <iomanip>
+#include <sstream>
 
 using namespace std;
 
@@ -73,9 +75,11 @@ void Film::setSummary(const string& summary) {
  	this->summary = summary; 
 } 
 
-void Film::printYourself() const{
-	cout.precision(2);
-	cout << id << " | " << name << " | " << length << " | " << price << " | " << averagePoint <<  " | " << manufacturedYear << " | " << directorName;
+string Film::printYourself() const{
+	stringstream avgPointStream;
+	avgPointStream << setprecision(2) << this->averagePoint;
+	string avgPointString = avgPointStream.str();
+	return  name + " | " + to_string(length) + " | " + to_string(price) + " | " + avgPointString +  " | " + to_string(manufacturedYear) + " | " + directorName;
 }
 
 void Film::printRecommendedEdition() const{

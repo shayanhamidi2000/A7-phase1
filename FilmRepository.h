@@ -16,8 +16,9 @@ public:
 	void editFilm(Publisher* filmOwner , unsigned int id , std::string newName , unsigned int newYear , unsigned int newLength , std::string newSummary , std::string newDirector);
 	void deleteFilm(Publisher* filmOwner , unsigned int id);
 	Film* findFilmByIdInDatabase(unsigned int id);
-	void getSearchedDatabaseList(std::string name  , unsigned int minPoint , unsigned int minYear , unsigned int price , unsigned maxYear , std::string directorName);	
-	void getPublihsedOrPurchasedList(std::vector<Film*> givenList , std::string name  , unsigned int minPoint , unsigned int minYear , unsigned int price , unsigned maxYear , std::string directorName);
+	std::string getSearchedDatabaseList(std::string name  , unsigned int minPoint , unsigned int minYear , unsigned int price , unsigned maxYear , std::string directorName);	
+	std::string getPublihsedList(std::vector<Film*> givenList , std::string name  , unsigned int minPoint , unsigned int minYear , unsigned int price , unsigned maxYear , std::string directorName);
+	std::string getPurchasedList(std::vector<Film*> givenList , std::string name  , unsigned int minPoint , unsigned int minYear , unsigned int price , unsigned maxYear , std::string directorName);
 	void checkFilmPurchased(Customer* assertedPurchaser , unsigned int id);
 	void checkFilmOwnership(Publisher* assertedOwner , unsigned int id);
 	void updateFilmsGraph(Film* boughtFilm , std::vector<Film*> commonlyBoughtFilms);
@@ -29,7 +30,9 @@ private:
 	//
 	void goToNextId();	
 	unsigned int findPositionById(unsigned int id , std::vector<Film*> listOfFilms);
-	void printFilmList(std::vector<Film*> desiredList);
+	std::string printFilmList(std::vector<Film*> desiredList);
+	std::string printPublishedFilms(std::vector<Film*> desiredList);
+	std::string makeDeleteButtonForFilm(unsigned int id);
 	std::vector<Film*> searchFilmWithFactorsInAList(std::vector<Film*> givenList , std::string name  , unsigned int minPoint , unsigned int minYear , unsigned int price , unsigned maxYear , std::string directorName);
 	std::vector<Film*> filterFilmsByDatabaseAvailability(std::vector<Film*> givenFilmList);
 	std::vector<Film*> filterFilmsByMinPoint(std::vector<Film*> givenFilmList , unsigned int minPoint);

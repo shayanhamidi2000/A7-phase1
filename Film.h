@@ -29,7 +29,7 @@ public:
 	void setDirectorName(const std::string& directorName);
 	void setSummary(const std::string& summary);
 	Publisher* getOwner() const;
-	void printYourself() const;
+	std::string printYourself() const;
 	void printDetailedVersionOfYourself() const;
 	void printRecommendedEdition() const;
 	void rate(Customer* rater , const unsigned int rate);

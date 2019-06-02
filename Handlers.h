@@ -2,8 +2,6 @@
 #define HANDLERS_H
 
 #include <string>
-#include <vector>
-#include <map>
 #include "server/server.hpp"
 
 class MiniNet;
@@ -22,6 +20,17 @@ public:
 	virtual Response* callback(Request* request);
 private: 
 	MiniNet* miniNetAccess;	
+};
+
+class HomePageHandler : public RequestHandler{
+public:
+	HomePageHandler(MiniNet* theMiniNet);
+	virtual Response* callback(Request* request);
+private:
+	MiniNet* miniNetAccess;	
+	std::string accumulateHeadOfHtml(const std::string& body);
+	std::string accumulateBodyOfHtml(const std::string& body);
+	std::string accumulateNavbar(const std::string& body);
 };
 
 

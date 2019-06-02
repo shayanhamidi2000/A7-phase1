@@ -96,16 +96,21 @@ void FilmRepository::editFilm(Publisher* assertedOwner , unsigned int id , strin
 
 }
 
-void FilmRepository::getSearchedDatabaseList(string name  , unsigned int minPoint , unsigned int minYear , unsigned int price , unsigned maxYear , string directorName){
+string FilmRepository::getSearchedDatabaseList(string name  , unsigned int minPoint , unsigned int minYear , unsigned int price , unsigned maxYear , string directorName){
 	vector<Film*> filteredList = searchFilmWithFactorsInAList(this->allFilms , name , minPoint , minYear , price , maxYear , directorName);
 	filteredList = filterFilmsByDatabaseAvailability(filteredList);
-	printFilmList(filteredList);
+	return printFilmList(filteredList);
 }
 
-void FilmRepository::getPublihsedOrPurchasedList(vector<Film*> givenList , string name  , unsigned int minPoint , unsigned int minYear , unsigned int price , unsigned maxYear , string directorName){
+string FilmRepository::getPurchasedList(vector<Film*> givenList , string name  , unsigned int minPoint , unsigned int minYear , unsigned int price , unsigned maxYear , string directorName){
 	vector<Film*> filteredList = searchFilmWithFactorsInAList(givenList , name , minPoint , minYear , price , maxYear , directorName);
-	printFilmList(filteredList);
+	return printFilmList(filteredList);
 }
+
+string FilmRepository::getPublihsedList(vector<Film*> givenList , string name  , unsigned int minPoint , unsigned int minYear , unsigned int price , unsigned maxYear , string directorName){
+	vector<Film*> filteredList = searchFilmWithFactorsInAList(givenList , name , minPoint , minYear , price , maxYear , directorName);
+	return printPublishedFilms(filteredList);
+}	
 
 vector<Film*> FilmRepository::searchFilmWithFactorsInAList(vector<Film*> givenList , string name  , unsigned int minPoint , unsigned int minYear , unsigned int price , unsigned maxYear , string directorName){
 	vector<Film*> filteredList = givenList;
@@ -201,14 +206,36 @@ vector<Film*> FilmRepository::filterFilmsMaxYear(vector<Film*> givenFilmList , u
 	return filteredListByMaxYear;
 }
 
-void FilmRepository::printFilmList(vector<Film*> desiredList){
-	cout << "#. Film Id | Film Name | Film Length | Film price | Rate | Production Year | Film Director" << endl;
+string FilmRepository::printPublishedFilms(vector<Film*> desiredList){
+	string filmsDatas;
 	for(unsigned int i = 0 ; i < desiredList.size() ; i++){
-		cout << i + 1 << ". ";
-		desiredList[i]->printYourself();
-		cout << endl;
+		filmsDatas += to_string(i + 1) + ". ";
+		filmsDatas += desiredList[i]->printYourself();
+		filmsDatas += makeDeleteButtonForFilm(desiredList[i]->getId() );
+		filmsDatas += "<br>";
 	}
+	return filmsDatas;
 }
+
+string FilmRepository::makeDeleteButtonForFilm(unsigned int id){
+	string deleteButton;	
+	deleteButton += "<form action='/deleteFilm' method='post' >";
+	deleteButton += ("<input type='hidden' name='film_id' value='" + to_string(id) + "'/>" );
+	deleteButton += "<button type='submit'> Delete </button> ";
+	deleteButton += "</form>";
+	return deleteButton;
+}
+
+string FilmRepository::printFilmList(vector<Film*> desiredList){
+	string filmsDatas;
+	for(unsigned int i = 0 ; i < desiredList.size() ; i++){
+		filmsDatas += to_string(i + 1) + ". ";
+		filmsDatas += desiredList[i]->printYourself();
+		filmsDatas += "<br>";
+	}
+	return filmsDatas;
+}
+
 
 bool filmIdComparator(const Film* film1 , const Film* film2){
 	return (film1->getId() <  film2->getId() );
