@@ -32,5 +32,12 @@ LoginHandler::LoginHandler(MiniNet* theMiniNet) : RequestHandler() {
 }
 
 Response* LoginHandler::callback(Request* request){
-	
+	Response* response = new Response();
+	try{
+		miniNetAccess->loginUser(request->getBodyParam(USERNAME_KEY) , request->getBodyParam(PASSWORD_KEY) ); 
+	}catch(exception& ex){
+		throw Server::Exception(ex.what() );
+	}
+	response->setSessionId(request->getBodyParam(USERNAME_KEY) );
+	return response->redirect("/");
 }

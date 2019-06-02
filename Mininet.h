@@ -16,6 +16,7 @@ public:
 	unsigned int getTotalNetCredit() const;
 	//
 	void startNet();
+	void updateRequestingUser(std::string newRequestingUsername);
 	void registerUser(std::string email , std::string username , std::string password , unsigned int age , bool isPublisher);
 	void loginUser(std::string username , std::string password);
 	void logout();
@@ -42,15 +43,14 @@ private:
 	unsigned int totalNetCredit;
 	unsigned int theIdsAssigned;
 	FilmRepository* films;
-	Customer* onlineUser;
+	Customer* requestingUser;
 	Security* systemSecurity;
 	std::vector<Customer*> users;
 	std::vector<Purchase*> purchases;
 	//
 	void goToNextId();
-	bool isOnlineUserPublisher();
-	bool isOnlineUserAdmin();
-	bool isAnyOneOnline();
+	bool isrequestingUserPublisher();
+	bool isrequestingUserAdmin();
 	void addToNetCredit(unsigned int amount);
 	void withdrawNetCredit(unsigned int amount);
 	unsigned int getPublisherSoldFilmsMoney();
