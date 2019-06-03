@@ -46,5 +46,13 @@ private:
 	MiniNet* miniNetAccess;	
 };
 
+class DeleteFilmHandler : public RequestHandler{
+public:
+	DeleteFilmHandler(MiniNet* theMiniNet);
+	virtual Response* callback(Request* request);
+private:
+	MiniNet* miniNetAccess;	
+};
+
 
 #endif

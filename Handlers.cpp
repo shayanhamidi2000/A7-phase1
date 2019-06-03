@@ -124,3 +124,15 @@ Response* AddFilmHandler::callback(Request* request){
 	Response* response = Response::redirect("/home");
 	return response;
 }
+
+DeleteFilmHandler::DeleteFilmHandler(MiniNet* theMiniNet) : RequestHandler() {
+	miniNetAccess = theMiniNet;
+}
+
+Response* DeleteFilmHandler::callback(Request* request){
+	miniNetAccess->updateRequestingUser(request->getSessionId() );
+	miniNetAccess->deleteAFilm(stoi(request->getBodyParam(FILM_ID_KEY) ) );
+
+	Response* response = Response::redirect("/home");
+	return response;
+}
