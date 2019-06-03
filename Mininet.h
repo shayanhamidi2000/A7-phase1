@@ -30,7 +30,7 @@ public:
 	void addMoney(unsigned int amount);
 	void buyFilm(unsigned int filmId);
 	void getMoneyFromNet();
-	void showCredit();
+	std::string showCredit();
 	std::string getPurchasedList(std::string name , unsigned int minYear , unsigned int price , unsigned int maxYear , std::string directorName);
 	void rateFilm(unsigned int filmId , unsigned int score);
 	void comment(unsigned int filmId , std::string commentContent);

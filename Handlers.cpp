@@ -45,29 +45,10 @@ Response* LoginHandler::callback(Request* request){
 	return response;
 }
 
-HomePageHandler::HomePageHandler(MiniNet* theMiniNet) : RequestHandler() {
-	miniNetAccess = theMiniNet;
-}
-
-Response* HomePageHandler::callback(Request* request){
-	Response* response = new Response();
-	response->setHeader("Content-Type", "text/html");
-	miniNetAccess->updateRequestingUser(request->getSessionId() );
-	string body;
-	body += "<!DOCTYPE html>";
-    body += "<html>";
-    body = accumulateHeadOfHtml(body);
-    body = accumulateBodyOfHtml(body);
-    body += "</html>";
-	response->setBody(body);
-
-	return response;
-}
-
-string HomePageHandler::accumulateHeadOfHtml(const string& body){
+string accumulateHeadOfHtml(const string& body , const string& title){
 	string modifiedBody = body;
 	modifiedBody += "<head>";
- 	modifiedBody += "<title>submit-film</title>";
+ 	modifiedBody += ("<title>" + title + "</title>");
     modifiedBody += "<style>";
     modifiedBody += "ul { list-style-type: none; margin: 0; padding: 0; overflow: hidden; background-color: #333; }";
 	modifiedBody += "li { float: left; }";
@@ -79,29 +60,47 @@ string HomePageHandler::accumulateHeadOfHtml(const string& body){
 	return modifiedBody;
 }
 
-string HomePageHandler::accumulateBodyOfHtml(const string& body){
-	string modifiedBody = body;
-	modifiedBody += "<body>";
-	modifiedBody = accumulateNavbar(modifiedBody);
-	modifiedBody += "<div>"; 
-	modifiedBody += miniNetAccess->loadHomePageDatas();
-	modifiedBody += "</div>";
-	modifiedBody += "</body>";
-
-	return modifiedBody;
-}
-
-string HomePageHandler::accumulateNavbar(const string& body){
+string accumulateNavbar(const string& body){
 	string modifiedBody = body;
 	modifiedBody += "<ul>";
 	modifiedBody += "<li><a class='active' href='/logout'>Logout</a></li>";
     modifiedBody += "<li><a class='active' href='/home'>Home</a></li>";
     modifiedBody += "<li><a class='active' href='/profile'>My Profile</a></li>";
-    
-    if(miniNetAccess->isRequestingUserPublisher() )
-    	modifiedBody += "<li><a class='active' href='/addFilm'>Add Film On Net</a></li>";
-
 	modifiedBody += "</ul>";
+
+	return modifiedBody;
+}
+
+HomePageHandler::HomePageHandler(MiniNet* theMiniNet) : RequestHandler() {
+	miniNetAccess = theMiniNet;
+}
+
+Response* HomePageHandler::callback(Request* request){
+	Response* response = new Response();
+	response->setHeader("Content-Type", "text/html");
+	miniNetAccess->updateRequestingUser(request->getSessionId() );
+	string body;
+	body += "<!DOCTYPE html>";
+    body += "<html>";
+    body = accumulateHeadOfHtml(body , "submit-film");
+    body = accumulateBodyOfHtml(body);
+    body += "</html>";
+	response->setBody(body);
+
+	return response;
+}
+
+string HomePageHandler::accumulateBodyOfHtml(const string& body){
+	string modifiedBody = body;
+	modifiedBody += "<body>";
+	modifiedBody = accumulateNavbar(modifiedBody);
+	if(miniNetAccess->isRequestingUserPublisher() )
+    	modifiedBody += "<li><a class='active' href='/addFilm'>Add Film On Net</a></li>";
+	
+	modifiedBody += "<div>"; 
+	modifiedBody += miniNetAccess->loadHomePageDatas();
+	modifiedBody += "</div>";
+	modifiedBody += "</body>";
 
 	return modifiedBody;
 }
@@ -135,4 +134,60 @@ Response* DeleteFilmHandler::callback(Request* request){
 
 	Response* response = Response::redirect("/home");
 	return response;
+}
+
+ProfilePageHandler::ProfilePageHandler(MiniNet* theMiniNet) : RequestHandler() {
+	miniNetAccess = theMiniNet;
+}
+
+Response* ProfilePageHandler::callback(Request* request){
+	Response* response = new Response();
+	response->setHeader("Content-Type", "text/html");
+	miniNetAccess->updateRequestingUser(request->getSessionId() );
+	string body;
+	body += "<!DOCTYPE html>";
+    body += "<html>";
+    body = accumulateHeadOfHtml(body , "profile");
+    body = accumulateBodyOfHtml(body);
+    body += "</html>";
+
+	response->setBody(body);
+	return response;
+}
+
+std::string ProfilePageHandler::accumulateBodyOfHtml(const std::string& body){
+	string modifiedBody = body;
+	modifiedBody += "<body>";
+	modifiedBody = accumulateNavbar(modifiedBody);
+	if(miniNetAccess->isRequestingUserPublisher() )
+    	modifiedBody += "<li><a class='active' href='/addFilm'>Add Film On Net</a></li>";
+	
+	modifiedBody += "<div>"; 
+	modifiedBody += showCredit();
+	modifiedBody += makeAccountChargeButton();
+	modifiedBody += miniNetAccess->getPurchasedList("" , 0 , 0 , 0 , "");
+	modifiedBody += "</div>";
+	modifiedBody += "</body>";
+
+	return modifiedBody;
+}
+
+string ProfilePageHandler::makeAccountChargeButton(){
+	string chargeButton;
+	chargeButton += "<form style='align = center;' action='/chargeAccount' method='post'>";
+	chargeButton += "<input type='number' value='0' min='0' name='amount' placeholder='Charge Your Account!' />";
+	chargeButton += "<button type='submit'>charge</button>";
+	chargeButton += "</form>";
+	chargeButton += "<br>";
+	return chargeButton;
+}
+
+string ProfilePageHandler::showCredit(){
+	string credit;
+	credit += "<p style='align = center;'>";
+	credit += "Your Credit:  ";
+	credit += miniNetAccess->showCredit();
+	credit += "</p>";
+	credit += "<br>";
+	return credit;
 }

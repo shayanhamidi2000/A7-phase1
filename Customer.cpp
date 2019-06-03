@@ -62,8 +62,8 @@ void Customer::withdrawCredit(const int amount){
 	credit -= amount;
 }
 
-void Customer::showCredit() const {
-	cout << credit << endl;
+string Customer::showCredit() const {
+	return to_string(credit);
 }
 
 

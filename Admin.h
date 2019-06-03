@@ -11,7 +11,7 @@ class MiniNet;
 class Admin : public Customer{
 public:
 	Admin(std::string password , MiniNet* miniNetAccess);
-	virtual void showCredit() const;
+	virtual std::string showCredit() const;
 private: 
 	MiniNet* miniNetAccess;
 };

@@ -66,14 +66,15 @@ void MiniNet::startNet(){
     server.get("/addFilm" , new ShowPage("static/addFilm.html") );
     server.post("/addFilm" , new AddFilmHandler(this) );
     server.post("/deleteFilm" , new DeleteFilmHandler(this) );
+    server.get("/profile" , new ProfilePageHandler(this) );
     server.run();
   	} catch (Server::Exception e) {
     	cerr << e.getMessage() << endl;
   	}
 }
 
-void MiniNet::showCredit(){
-	requestingUser->showCredit();
+string MiniNet::showCredit(){
+	return requestingUser->showCredit();
 }
 
 

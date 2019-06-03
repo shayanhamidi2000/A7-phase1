@@ -9,6 +9,6 @@ Admin::Admin(string password , MiniNet* miniNetAccess) : Customer(ADMIN_DEFAULT_
 	isAdmin = true;
 }
 
-void Admin::showCredit() const{
-	cout << miniNetAccess->getTotalNetCredit() << endl;
+string Admin::showCredit() const{
+	return to_string(miniNetAccess->getTotalNetCredit() );
 }	

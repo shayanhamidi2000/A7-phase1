@@ -28,9 +28,7 @@ public:
 	virtual Response* callback(Request* request);
 private:
 	MiniNet* miniNetAccess;	
-	std::string accumulateHeadOfHtml(const std::string& body);
 	std::string accumulateBodyOfHtml(const std::string& body);
-	std::string accumulateNavbar(const std::string& body);
 };
 
 class LogoutHandler : public RequestHandler{
@@ -52,6 +50,17 @@ public:
 	virtual Response* callback(Request* request);
 private:
 	MiniNet* miniNetAccess;	
+};
+
+class ProfilePageHandler : public RequestHandler {
+public:
+	ProfilePageHandler(MiniNet* theMiniNet);
+	virtual Response* callback(Request* request);
+private:
+	MiniNet* miniNetAccess;	
+	std::string accumulateBodyOfHtml(const std::string& body);
+	std::string makeAccountChargeButton();
+	std::string showCredit();
 };
 
 

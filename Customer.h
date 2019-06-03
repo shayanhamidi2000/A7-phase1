@@ -28,7 +28,7 @@ public:
 	virtual bool hasFilm(Film* newFilm);
 	virtual void showUnreadMessages();
 	virtual void showReadMessages(const unsigned int limit);
-	virtual void showCredit() const;
+	virtual std::string showCredit() const;
 protected:
 	bool isPublisher;
 	bool isAdmin;
