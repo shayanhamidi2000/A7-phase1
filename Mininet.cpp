@@ -62,6 +62,7 @@ void MiniNet::startNet(){
     server.post("/register" , new RegisterHandler(this));
     server.post("/" , new LoginHandler(this));
     server.get("/home" , new HomePageHandler(this) );
+    server.get("/logout" , new LogoutHandler() );
     server.run();
   	} catch (Server::Exception e) {
     	cerr << e.getMessage() << endl;

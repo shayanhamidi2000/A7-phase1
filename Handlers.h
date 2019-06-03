@@ -33,5 +33,10 @@ private:
 	std::string accumulateNavbar(const std::string& body);
 };
 
+class LogoutHandler : public RequestHandler{
+public:
+	virtual Response* callback(Request* request);
+};
+
 
 #endif

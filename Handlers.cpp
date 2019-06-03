@@ -10,7 +10,6 @@ RegisterHandler::RegisterHandler(MiniNet* theMiniNet) : RequestHandler() {
 }
 
 Response* RegisterHandler::callback(Request* request){
-	Response* response = new Response();
 	try{
 		if(request->getBodyParam(PASSWORD_KEY) != request->getBodyParam(CONFIRMED_PASSWORD_KEY) )
 			throw Server::Exception("Password was retyped incorrectly!");
@@ -25,8 +24,9 @@ Response* RegisterHandler::callback(Request* request){
 		throw Server::Exception(ex.what() );
 	}
 
-	//response->setSessionId(request->getBodyParam(USERNAME_KEY) );
-	return response->redirect("/");
+	Response* response = Response::redirect("/home");
+	response->setSessionId(request->getBodyParam(USERNAME_KEY) );
+	return response;
 }
 
 LoginHandler::LoginHandler(MiniNet* theMiniNet) : RequestHandler() {
@@ -34,14 +34,15 @@ LoginHandler::LoginHandler(MiniNet* theMiniNet) : RequestHandler() {
 }
 
 Response* LoginHandler::callback(Request* request){
-	Response* response = new Response();
 	try{
 		miniNetAccess->loginUser(request->getBodyParam(USERNAME_KEY) , request->getBodyParam(PASSWORD_KEY) ); 
 	}catch(exception& ex){
 		throw Server::Exception(ex.what() );
 	}
+
+	Response* response = Response::redirect("/home");
 	response->setSessionId(request->getBodyParam(USERNAME_KEY) );
-	return response->redirect("/home");
+	return response;
 }
 
 HomePageHandler::HomePageHandler(MiniNet* theMiniNet) : RequestHandler() {
@@ -103,4 +104,10 @@ string HomePageHandler::accumulateNavbar(const string& body){
 	modifiedBody += "</ul>";
 
 	return modifiedBody;
+}
+
+Response* LogoutHandler::callback(Request* request){
+	Response* response = Response::redirect("/");
+	response->setSessionId("");
+	return response;
 }
