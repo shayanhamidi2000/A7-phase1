@@ -63,5 +63,13 @@ private:
 	std::string showCredit();
 };
 
+class ChargeMoneyHandler : public RequestHandler {
+public:
+	ChargeMoneyHandler(MiniNet* theMiniNet);
+	virtual Response* callback(Request* request);
+private:
+	MiniNet* miniNetAccess;	
+};
+
 
 #endif

@@ -104,7 +104,7 @@ string FilmRepository::getSearchedDatabaseList(string name  , unsigned int minPo
 
 string FilmRepository::getPurchasedList(vector<Film*> givenList , string name  , unsigned int minPoint , unsigned int minYear , unsigned int price , unsigned maxYear , string directorName){
 	vector<Film*> filteredList = searchFilmWithFactorsInAList(givenList , name , minPoint , minYear , price , maxYear , directorName);
-	return printFilmList(filteredList);
+	return printPurchasedFilms(filteredList);
 }
 
 string FilmRepository::getPublihsedList(vector<Film*> givenList , string name  , unsigned int minPoint , unsigned int minYear , unsigned int price , unsigned maxYear , string directorName){
@@ -205,6 +205,18 @@ vector<Film*> FilmRepository::filterFilmsMaxYear(vector<Film*> givenFilmList , u
 
 	return filteredListByMaxYear;
 }
+
+string FilmRepository::printPurchasedFilms(vector<Film*> desiredList){
+	string filmsDatas;
+	filmsDatas += "<h2> -> Name | Duration | Price | Rate | Year | Director </h2> <br>";
+	for(unsigned int i = 0 ; i < desiredList.size() ; i++){
+		filmsDatas += to_string(i + 1) + ". ";
+		filmsDatas += desiredList[i]->printYourself();
+		filmsDatas += "<br>";
+	}
+	return filmsDatas;
+}
+
 
 string FilmRepository::printPublishedFilms(vector<Film*> desiredList){
 	string filmsDatas;

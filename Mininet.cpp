@@ -67,6 +67,7 @@ void MiniNet::startNet(){
     server.post("/addFilm" , new AddFilmHandler(this) );
     server.post("/deleteFilm" , new DeleteFilmHandler(this) );
     server.get("/profile" , new ProfilePageHandler(this) );
+    server.post("/chargeAccount" , new ChargeMoneyHandler(this) );
     server.run();
   	} catch (Server::Exception e) {
     	cerr << e.getMessage() << endl;

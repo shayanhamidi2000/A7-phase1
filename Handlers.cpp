@@ -162,9 +162,9 @@ std::string ProfilePageHandler::accumulateBodyOfHtml(const std::string& body){
 	if(miniNetAccess->isRequestingUserPublisher() )
     	modifiedBody += "<li><a class='active' href='/addFilm'>Add Film On Net</a></li>";
 	
-	modifiedBody += "<div>"; 
 	modifiedBody += showCredit();
 	modifiedBody += makeAccountChargeButton();
+	modifiedBody += "<div>"; 
 	modifiedBody += miniNetAccess->getPurchasedList("" , 0 , 0 , 0 , "");
 	modifiedBody += "</div>";
 	modifiedBody += "</body>";
@@ -190,4 +190,16 @@ string ProfilePageHandler::showCredit(){
 	credit += "</p>";
 	credit += "<br>";
 	return credit;
+}
+
+ChargeMoneyHandler::ChargeMoneyHandler(MiniNet* theMiniNet){
+	miniNetAccess = theMiniNet;
+}
+
+Response* ChargeMoneyHandler::callback(Request* request){
+	miniNetAccess->updateRequestingUser(request->getSessionId() );
+	miniNetAccess->addMoney(stoi(request->getBodyParam(MONEY_AMOUNT_KEY) ) );
+
+	Response* response = Response::redirect("/profile");
+	return response;
 }
