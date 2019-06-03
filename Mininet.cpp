@@ -63,6 +63,8 @@ void MiniNet::startNet(){
     server.post("/" , new LoginHandler(this));
     server.get("/home" , new HomePageHandler(this) );
     server.get("/logout" , new LogoutHandler() );
+    server.get("/addFilm" , new ShowPage("static/addFilm.html") );
+    server.post("/addFilm" , new AddFilmHandler(this) );
     server.run();
   	} catch (Server::Exception e) {
     	cerr << e.getMessage() << endl;
@@ -130,7 +132,7 @@ string MiniNet::getPublishedList(string directorName , unsigned int minPoint , u
 	if(!isRequestingUserPublisher() || isrequestingUserAdmin() )
 		throw PermissionDenialException();
 
-	string publishedFilmsDatas = "<h2>The Films You have Uploaded</h2> <br>";
+	string publishedFilmsDatas = "<h1>The Films You have Uploaded</h1> <br>";
 	publishedFilmsDatas += films->getPublihsedList( ((Publisher*) requestingUser)->getUploadedFilms() , name , minPoint , minYear , price , maxYear , directorName);
 	return publishedFilmsDatas;
 }
@@ -218,7 +220,7 @@ string MiniNet::getPurchasedList(string name , unsigned int minYear , unsigned i
 	if(isrequestingUserAdmin() )
 		throw PermissionDenialException();
 
-	string purchasedFilmsDatas = "<h2> The Films You Bought</h2><br>";
+	string purchasedFilmsDatas = "<h1> The Films You Bought</h1><br>";
 	purchasedFilmsDatas += films->getPurchasedList( requestingUser->getPurchasedFilms() , name , NOT_A_FACTOR , minYear , price , maxYear , directorName);
 	return purchasedFilmsDatas;
 }
@@ -284,7 +286,7 @@ string MiniNet::searchFilmsInDatabase(string directorName  , unsigned int minPoi
 	if(isrequestingUserAdmin() )
 		throw PermissionDenialException();
 
-	string searchedFilmsDatas = "<h2>The Films On The Net</h2> <br>";
+	string searchedFilmsDatas = "<h1>The Films On The Net</h1> <br>";
 	searchedFilmsDatas += films->getSearchedDatabaseList(name , minPoint , minYear , price , maxYear , directorName);
 	return searchedFilmsDatas;
 }

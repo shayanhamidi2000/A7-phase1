@@ -208,6 +208,7 @@ vector<Film*> FilmRepository::filterFilmsMaxYear(vector<Film*> givenFilmList , u
 
 string FilmRepository::printPublishedFilms(vector<Film*> desiredList){
 	string filmsDatas;
+	filmsDatas += "<h2> -> Name | Duration | Price | Rate | Year | Director </h2> <br>";
 	for(unsigned int i = 0 ; i < desiredList.size() ; i++){
 		filmsDatas += to_string(i + 1) + ". ";
 		filmsDatas += desiredList[i]->printYourself();
@@ -228,6 +229,7 @@ string FilmRepository::makeDeleteButtonForFilm(unsigned int id){
 
 string FilmRepository::printFilmList(vector<Film*> desiredList){
 	string filmsDatas;
+	filmsDatas += "<h2> -> Name | Duration | Price | Rate | Year | Director </h2> <br>";
 	for(unsigned int i = 0 ; i < desiredList.size() ; i++){
 		filmsDatas += to_string(i + 1) + ". ";
 		filmsDatas += desiredList[i]->printYourself();

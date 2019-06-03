@@ -79,7 +79,7 @@ string Film::printYourself() const{
 	stringstream avgPointStream;
 	avgPointStream << setprecision(2) << this->averagePoint;
 	string avgPointString = avgPointStream.str();
-	return  name + " | " + to_string(length) + " | " + to_string(price) + " | " + avgPointString +  " | " + to_string(manufacturedYear) + " | " + directorName;
+	return  name + A_GAP + to_string(length) + A_GAP + to_string(price) + A_GAP + avgPointString +  A_GAP + to_string(manufacturedYear) + A_GAP + directorName;
 }
 
 void Film::printRecommendedEdition() const{

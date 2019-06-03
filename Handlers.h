@@ -38,5 +38,13 @@ public:
 	virtual Response* callback(Request* request);
 };
 
+class AddFilmHandler : public RequestHandler{
+public:
+	AddFilmHandler(MiniNet* theMiniNet);
+	virtual Response* callback(Request* request);
+private:
+	MiniNet* miniNetAccess;	
+};
+
 
 #endif

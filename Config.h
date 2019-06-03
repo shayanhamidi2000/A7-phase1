@@ -45,6 +45,7 @@
 #define MONEY_AMOUNT_KEY "amount"
 #define SCORE_GIVEN_KEY "score"
 #define LIMIT_MESSAGES_SHOWN_KEY "limit"
+#define A_GAP " | "
 #define SUCCESS_MESSAGE "OK"
 
 #endif

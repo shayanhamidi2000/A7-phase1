@@ -111,3 +111,16 @@ Response* LogoutHandler::callback(Request* request){
 	response->setSessionId("");
 	return response;
 }
+
+AddFilmHandler::AddFilmHandler(MiniNet* theMiniNet) : RequestHandler() {
+	miniNetAccess = theMiniNet;
+}
+
+Response* AddFilmHandler::callback(Request* request){
+	miniNetAccess->updateRequestingUser(request->getSessionId() );
+	miniNetAccess->addFilmOnNet(request->getBodyParam(FILM_NAME_KEY) , stoi(request->getBodyParam(FILM_YEAR_KEY) ) , request->getBodyParam(FILM_DIRECTOR_KEY) 
+	, request->getBodyParam(FILM_SUMMARY_KEY) , stoi(request->getBodyParam(FILM_PRICE_KEY) ) , stoi(request->getBodyParam(FILM_LENGTH_KEY) ) );
+
+	Response* response = Response::redirect("/home");
+	return response;
+}
