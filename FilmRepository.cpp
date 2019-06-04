@@ -239,12 +239,23 @@ string FilmRepository::makeDeleteButtonForFilm(unsigned int id){
 	return deleteButton;
 }
 
+string FilmRepository::makeFurtherInfoButton(unsigned int id){
+	string furtherInfoButton;	
+	furtherInfoButton += "<form action='/seeFurther' method='post' >";
+	furtherInfoButton += ("<input type='hidden' name='film_id' value='" + to_string(id) + "'/>" );
+	furtherInfoButton += "<button type='submit'> see More </button> ";
+	furtherInfoButton += "</form>";
+	return furtherInfoButton;
+}
+
+
 string FilmRepository::printFilmList(vector<Film*> desiredList){
 	string filmsDatas;
 	filmsDatas += "<h2> -> Name | Duration | Price | Rate | Year | Director </h2> <br>";
 	for(unsigned int i = 0 ; i < desiredList.size() ; i++){
 		filmsDatas += to_string(i + 1) + ". ";
 		filmsDatas += desiredList[i]->printYourself();
+		filmsDatas += makeFurtherInfoButton(desiredList[i]->getId() );
 		filmsDatas += "<br>";
 	}
 	return filmsDatas;

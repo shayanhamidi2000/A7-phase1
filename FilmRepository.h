@@ -34,6 +34,7 @@ private:
 	std::string printPublishedFilms(std::vector<Film*> desiredList);
 	std::string printPurchasedFilms(std::vector<Film*> desiredList);
 	std::string makeDeleteButtonForFilm(unsigned int id);
+	std::string makeFurtherInfoButton(unsigned int id);
 	std::vector<Film*> searchFilmWithFactorsInAList(std::vector<Film*> givenList , std::string name  , unsigned int minPoint , unsigned int minYear , unsigned int price , unsigned maxYear , std::string directorName);
 	std::vector<Film*> filterFilmsByDatabaseAvailability(std::vector<Film*> givenFilmList);
 	std::vector<Film*> filterFilmsByMinPoint(std::vector<Film*> givenFilmList , unsigned int minPoint);
