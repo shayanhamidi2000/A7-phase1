@@ -23,9 +23,8 @@ void Comment::addReply(const string& newRepliedMessage){
 	replies.push_back(newRepliedMessage);
 }
 
-void Comment::printYourself() const{
-	cout << id << ". " << content << endl;
-	printReplies();
+string Comment::printYourself() const{
+	return (to_string(id) + ". " + content + "<br>");
 }
 
 void Comment::printReplies() const{

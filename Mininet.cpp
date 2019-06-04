@@ -19,7 +19,7 @@ MiniNet::MiniNet(){
 
 MiniNet::~MiniNet(){
 	delete systemSecurity;
-	films->~FilmRepository();
+	delete films;
 	purchases.clear();
 	users.clear();
 }
@@ -72,6 +72,7 @@ void MiniNet::startNet(){
     server.post("/seeFurther" , new MoreInfoPageHandler(this) );
     server.post("/buyFilm" , new BuyFilmHandler(this) );
     server.post("/rateFilm" , new RateFilmHandler(this) );
+    server.post("/newComment" , new NewCommentHandler(this) );
     server.run();
   	} catch (Server::Exception e) {
     	cerr << e.getMessage() << endl;
@@ -212,27 +213,23 @@ void MiniNet::rateFilm(unsigned int filmId , unsigned int score){
 	Film* desiredFilm = films->findFilmByIdInDatabase(filmId);
 	desiredFilm->rate(requestingUser , score);
 	requestingUser->sendMessageToRatedPublisher(desiredFilm);
-	cout << SUCCESS_MESSAGE << endl;
 }
 
 void MiniNet::comment(unsigned int filmId , string commentContent){
 	Film* desiredFilm = films->findFilmByIdInDatabase(filmId);
 	desiredFilm->newComment(requestingUser , commentContent);
 	requestingUser->sendMessageToCommentedPublisher(desiredFilm);
-	cout << SUCCESS_MESSAGE << endl;
 }
 
 void MiniNet::replyComment(unsigned int filmId , unsigned int commentId , string content){
 	Film* desiredFilm = films->findFilmByIdInDatabase(filmId);
 	desiredFilm->replyOneComment(commentId , content);
 	((Publisher*) requestingUser)->notifyCommenterOnReply(desiredFilm->findCommentById(commentId)->getCommentOwner() );
-	cout << SUCCESS_MESSAGE << endl;
 }
 
 void MiniNet::deleteComment(unsigned int filmId , unsigned int commentId){
 	Film* desiredFilm = films->findFilmByIdInDatabase(filmId);
 	desiredFilm->deleteOneComment(commentId);
-	cout << SUCCESS_MESSAGE << endl;
 }
 
 void MiniNet::getUnreadMessages(){

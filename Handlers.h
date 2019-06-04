@@ -87,6 +87,7 @@ private:
 	std::string accumulateBodyOfHtml(const std::string& body , unsigned int filmId);
 	std::string makeBuyButton(unsigned int filmId , MiniNet* miniNetAccess);
 	std::string makeRateForm(unsigned int filmId);
+	std::string makeCommentForm(unsigned int filmId);
 };
 
 class BuyFilmHandler : public RequestHandler {
@@ -100,6 +101,14 @@ private:
 class RateFilmHandler : public RequestHandler {
 public:
 	RateFilmHandler(MiniNet* theMiniNet);
+	virtual Response* callback(Request* request);
+private:
+	MiniNet* miniNetAccess;	
+};
+
+class NewCommentHandler : public RequestHandler {
+public:
+	NewCommentHandler(MiniNet* theMiniNet);
 	virtual Response* callback(Request* request);
 private:
 	MiniNet* miniNetAccess;	

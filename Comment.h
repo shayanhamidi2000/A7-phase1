@@ -12,7 +12,7 @@ public:
 	unsigned int getId() const;
 	Customer* getCommentOwner() const;
 	void addReply(const std::string& newRepliedMessage);
-	void printYourself() const;
+	std::string printYourself() const;
 private:
 	Customer* commentOwner;
 	unsigned int id;

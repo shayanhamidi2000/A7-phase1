@@ -56,7 +56,7 @@ private:
 	void updateAveragePoint();
 	void goToNextId();
 	void checkCommentExistence(const unsigned int commentId);
-	void printComments() const;
+	std::string printComments() const;
 };
 
 #endif

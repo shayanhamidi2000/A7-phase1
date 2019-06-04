@@ -276,6 +276,17 @@ string MoreInfoPageHandler::makeRateForm(unsigned int id){
 	return rateForm;
 }	
 
+string MoreInfoPageHandler::makeCommentForm(unsigned int filmId){
+	string commentForm;
+	commentForm += "<form action='/newComment' method='post'>";
+	commentForm += "<textarea name='content' placeholder='comment Here!' > </textarea><br>";
+	commentForm += ("<input type='hidden' name='film_id' value='" + to_string(filmId) + "'/>" );
+	commentForm += "<button type='submit'>Comment</button>";
+	commentForm += "</form>";
+	return commentForm;
+}
+
+
 string MoreInfoPageHandler::accumulateBodyOfHtml(const string& body , unsigned int filmId){
 	string modifiedBody = body;
 	modifiedBody += "<body>";
@@ -286,6 +297,8 @@ string MoreInfoPageHandler::accumulateBodyOfHtml(const string& body , unsigned i
 	modifiedBody += "<div>"; 
 	modifiedBody += miniNetAccess->showFurtherInfo(filmId);
 	modifiedBody += "</div>";
+	if(miniNetAccess->hasRequestingUserBoughtThisFilm(filmId) )
+		modifiedBody += makeCommentForm(filmId);
 	modifiedBody += "</body>";
 
 	return modifiedBody;
@@ -310,6 +323,18 @@ RateFilmHandler::RateFilmHandler(MiniNet* theMiniNet){
 Response* RateFilmHandler::callback(Request* request){
 	miniNetAccess->updateRequestingUser(request->getSessionId() );
 	miniNetAccess->rateFilm(stoi(request->getBodyParam(FILM_ID_KEY) ) , stoi(request->getBodyParam(SCORE_GIVEN_KEY) ) );
+
+	Response* response = Response::redirect("/home");
+	return response;
+}
+
+NewCommentHandler::NewCommentHandler(MiniNet* theMiniNet){
+	miniNetAccess = theMiniNet;
+}
+
+Response* NewCommentHandler::callback(Request* request){
+	miniNetAccess->updateRequestingUser(request->getSessionId() );
+	miniNetAccess->comment(stoi(request->getBodyParam(FILM_ID_KEY) ) , request->getBodyParam(COMMENT_OR_REPLY_CONTENT_KEY) );
 
 	Response* response = Response::redirect("/home");
 	return response;

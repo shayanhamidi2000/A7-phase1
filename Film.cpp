@@ -26,10 +26,9 @@ Film::Film(unsigned int id , string name , unsigned manufacturedYear , unsigned 
 }
 
 Film::~Film(){
-	comments.clear();
 	points.clear();
+	comments.clear();
 }
-
 
 void Film::goToNextId(){
 	theIdsAssignedToComments++;
@@ -176,6 +175,7 @@ string Film::printDetailedVersionOfYourself() const{
 	avgPointStream << setprecision(2) << this->averagePoint;
 	string avgPointString = avgPointStream.str();
 
+	detailedData += "Name :   " + name + "<br>";
 	detailedData += "Director :   " + directorName + "<br>";
 	detailedData += "Length :   " + to_string(length) + "<br>";
 	detailedData += "Year :   " + to_string(manufacturedYear) + "<br>";
@@ -183,12 +183,15 @@ string Film::printDetailedVersionOfYourself() const{
 	detailedData += "Rate :   " + avgPointString + "<br>";
 	detailedData += "Price :   " + to_string(price) + "<br>";
 	detailedData += "<br>";
-	//printComments();
+	detailedData += printComments();
 	return detailedData;
 }
 
-void Film::printComments() const {
-	cout << "Comments" << endl;
-	for(unsigned int i = 0 ; comments.size() ; i++)
-		comments[i]->printYourself();	
+string Film::printComments() const {
+	string commentsDetails;
+	commentsDetails += "<h2>Comments :</h2><br>";
+	for(unsigned int i = 0 ; i < comments.size() ; i++)
+		commentsDetails += comments[i]->printYourself();	
+
+	return commentsDetails;
 }
