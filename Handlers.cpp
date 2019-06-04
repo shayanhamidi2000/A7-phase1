@@ -303,3 +303,14 @@ Response* BuyFilmHandler::callback(Request* request){
 	return response;
 }
 
+RateFilmHandler::RateFilmHandler(MiniNet* theMiniNet){
+	miniNetAccess = theMiniNet;
+}
+
+Response* RateFilmHandler::callback(Request* request){
+	miniNetAccess->updateRequestingUser(request->getSessionId() );
+	miniNetAccess->rateFilm(stoi(request->getBodyParam(FILM_ID_KEY) ) , stoi(request->getBodyParam(SCORE_GIVEN_KEY) ) );
+
+	Response* response = Response::redirect("/home");
+	return response;
+}

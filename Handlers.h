@@ -97,5 +97,13 @@ private:
 	MiniNet* miniNetAccess;	
 };
 
+class RateFilmHandler : public RequestHandler {
+public:
+	RateFilmHandler(MiniNet* theMiniNet);
+	virtual Response* callback(Request* request);
+private:
+	MiniNet* miniNetAccess;	
+};
+
 
 #endif

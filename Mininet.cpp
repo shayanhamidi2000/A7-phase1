@@ -71,6 +71,7 @@ void MiniNet::startNet(){
     server.post("/chargeAccount" , new ChargeMoneyHandler(this) );
     server.post("/seeFurther" , new MoreInfoPageHandler(this) );
     server.post("/buyFilm" , new BuyFilmHandler(this) );
+    server.post("/rateFilm" , new RateFilmHandler(this) );
     server.run();
   	} catch (Server::Exception e) {
     	cerr << e.getMessage() << endl;
