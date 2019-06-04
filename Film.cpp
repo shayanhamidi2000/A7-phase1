@@ -82,8 +82,11 @@ string Film::printYourself() const{
 	return  name + A_GAP + to_string(length) + A_GAP + to_string(price) + A_GAP + avgPointString +  A_GAP + to_string(manufacturedYear) + A_GAP + directorName;
 }
 
-void Film::printRecommendedEdition() const{
-	cout << id << " | " << name << " | " << length << " | " << directorName;
+string Film::printRecommendedEdition() const{
+	string recommendedDetail;
+	recommendedDetail += (name + A_GAP + to_string(length) + A_GAP + directorName);
+
+ 	return recommendedDetail;
  }
 
 
@@ -167,18 +170,21 @@ void Film::deleteOneComment(const unsigned int commentId){
 	comments.erase(find(comments.begin() , comments.end() , deletedComment) );
 }
 
-void Film::printDetailedVersionOfYourself() const{
-	cout.precision(2);
-	cout << "Details of Film " << name << endl;
-	cout << "Id = " << id << endl;
-	cout << "Director = " << directorName << endl;
-	cout << "Length = " << length << endl;
-	cout << "Year = " << manufacturedYear << endl;
-	cout << "Summary = " << summary << endl;
-	cout << "Rate = " << averagePoint << endl;
-	cout << "Price = " << price << endl;
-	cout << endl;
-	printComments();
+string Film::printDetailedVersionOfYourself() const{
+	string detailedData;
+	stringstream avgPointStream;
+	avgPointStream << setprecision(2) << this->averagePoint;
+	string avgPointString = avgPointStream.str();
+
+	detailedData += "Director :   " + directorName + "<br>";
+	detailedData += "Length :   " + to_string(length) + "<br>";
+	detailedData += "Year :   " + to_string(manufacturedYear) + "<br>";
+	detailedData += "Summary :   " + summary + "<br>";
+	detailedData += "Rate :   " + avgPointString + "<br>";
+	detailedData += "Price :   " + to_string(price) + "<br>";
+	detailedData += "<br>";
+	//printComments();
+	return detailedData;
 }
 
 void Film::printComments() const {

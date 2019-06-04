@@ -1,5 +1,4 @@
 #include "Customer.h"
-#include "Exceptions.h"
 #include <iostream>
 #include <algorithm>
 #include "Publisher.h"
@@ -56,14 +55,15 @@ void Customer::addToCredit(const unsigned int amount){
 }
 
 void Customer::withdrawCredit(const int amount){
-	if( (credit -  amount) < 0 )
-		throw NotEnoughMoneyException();
-
 	credit -= amount;
 }
 
 string Customer::showCredit() const {
 	return to_string(credit);
+}
+
+bool Customer::hasMoney(const unsigned int amount) const {
+	return (credit >= amount);
 }
 
 

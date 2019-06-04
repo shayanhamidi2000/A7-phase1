@@ -1,5 +1,4 @@
 #include "Publisher.h"
-#include "Exceptions.h"
 #include <iostream>
 #include <algorithm>
 
@@ -23,8 +22,6 @@ void Publisher::addToUploadedFilms(Film* newFilm) {
 }
 
 void Publisher::addToFollowers(Customer* newFollower) { 
-	if(newFollower == this)
-		throw BadRequestException();
 	if(!checkFollowerRepitition(newFollower->getId() ) ){
 		followers.push_back(newFollower); 
 		sortFollowersById();

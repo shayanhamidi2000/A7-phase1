@@ -78,5 +78,16 @@ private:
 	MiniNet* miniNetAccess;	
 };
 
+class MoreInfoPageHandler : public RequestHandler {
+public:
+	MoreInfoPageHandler(MiniNet* theMiniNet);
+	virtual Response* callback(Request* request);
+private:
+	MiniNet* miniNetAccess;	
+	std::string accumulateBodyOfHtml(const std::string& body , unsigned int filmId);
+	std::string makeBuyButton(unsigned int filmId , MiniNet* miniNetAccess);
+	std::string makeRateForm(unsigned int filmId);
+};
+
 
 #endif

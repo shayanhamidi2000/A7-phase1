@@ -232,3 +232,61 @@ Response* FilterFilmsHanlder::callback(Request* request){
 
 	return response;
 }
+
+MoreInfoPageHandler::MoreInfoPageHandler(MiniNet* theMiniNet){
+	miniNetAccess = theMiniNet;
+}
+
+Response* MoreInfoPageHandler::callback(Request* request){
+	Response* response = new Response();
+	response->setHeader("Content-Type" , "text/html");
+	miniNetAccess->updateRequestingUser(request->getSessionId() );
+	string body;
+	body += "<!DOCTYPE html>";
+    body += "<html>";
+    body = accumulateHeadOfHtml(body , "See Further Info!");
+    body = accumulateBodyOfHtml(body , stoi(request->getBodyParam(FILM_ID_KEY) ) );
+    body += "</html>";
+	response->setBody(body);
+	return response;
+}
+
+string MoreInfoPageHandler::makeBuyButton(unsigned int id , MiniNet* miniNetAccess){
+	string buyButton;	
+	buyButton += "<form action='/buyFilm' method='post' >";
+	buyButton += ("<input type='hidden' name='film_id' value='" + to_string(id) + "'/>" );
+	buyButton += "<button type='submit'";
+	if(!miniNetAccess->hasRequestingUserMoneyForFilm(id) )
+		buyButton += "disabled='disabled'>";
+
+	buyButton += "Buy This Film</button> ";
+	buyButton += "</form>";
+	buyButton += "<br>";
+	return buyButton;
+}
+
+string MoreInfoPageHandler::makeRateForm(unsigned int id){
+	string rateForm;	
+	rateForm += "<form action='/rateFilm' method='post' >";
+	rateForm += ("<input type='hidden' name='film_id' value='" + to_string(id) + "'/>" );
+	rateForm += "<input type='number' name='score' min='1' max='10'/>";
+	rateForm += "<button type='submit'>Rate This Film</button> ";
+	rateForm += "</form>";
+	rateForm += "<br>";
+	return rateForm;
+}	
+
+string MoreInfoPageHandler::accumulateBodyOfHtml(const string& body , unsigned int filmId){
+	string modifiedBody = body;
+	modifiedBody += "<body>";
+	modifiedBody = accumulateNavbar(modifiedBody , miniNetAccess);
+	modifiedBody += makeBuyButton(filmId , miniNetAccess);
+	if(miniNetAccess->hasRequestingUserBoughtThisFilm(filmId) )
+		modifiedBody += makeRateForm(filmId);
+	modifiedBody += "<div>"; 
+	modifiedBody += miniNetAccess->showFurtherInfo(filmId);
+	modifiedBody += "</div>";
+	modifiedBody += "</body>";
+
+	return modifiedBody;
+}

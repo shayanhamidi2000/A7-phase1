@@ -69,6 +69,7 @@ void MiniNet::startNet(){
     server.post("/deleteFilm" , new DeleteFilmHandler(this) );
     server.get("/profile" , new ProfilePageHandler(this) );
     server.post("/chargeAccount" , new ChargeMoneyHandler(this) );
+    server.post("/seeFurther" , new MoreInfoPageHandler(this) );
     server.run();
   	} catch (Server::Exception e) {
     	cerr << e.getMessage() << endl;
@@ -79,6 +80,9 @@ string MiniNet::showCredit(){
 	return requestingUser->showCredit();
 }
 
+bool MiniNet::hasRequestingUserMoneyForFilm(unsigned int id){
+	return requestingUser->hasMoney(films->findFilmByIdInDatabase(id)->getPrice() );
+}
 
 void MiniNet::registerUser(string email , string username , string password , unsigned int age , bool isPublisher){
 	systemSecurity->checkUsernameRepetition(users , username);
@@ -109,68 +113,47 @@ string MiniNet::loadHomePageDatas(string director){
 	return homePageDatas;
 }
 
+bool MiniNet::hasRequestingUserBoughtThisFilm(unsigned int id){
+	return films->checkFilmPurchased(requestingUser , id);
+}
+
+
 
 void MiniNet::addFilmOnNet(string name , unsigned int year , string director , string summary , unsigned int price , unsigned int length){
-	if(!isRequestingUserPublisher() || isrequestingUserAdmin())
-		throw PermissionDenialException();
-
 	films->addNewFilm((Publisher*) this->requestingUser , name , year , director , summary , price , length);
 }
 
 void MiniNet::editAFilm(unsigned int id , string newName , unsigned int newYear , unsigned int newLength , string newSummary , string newDirector){
-	if(!isRequestingUserPublisher() || isrequestingUserAdmin())
-		throw PermissionDenialException();
-
 	films->editFilm((Publisher*) this->requestingUser , id , newName , newYear , newLength , newSummary , newDirector);
 
 }
 
 void MiniNet::deleteAFilm(unsigned int id){
-	if(!isRequestingUserPublisher() || isrequestingUserAdmin() )
-		throw PermissionDenialException();
-
 	films->deleteFilm((Publisher*) this->requestingUser , id );
 }
 
 string MiniNet::getPublishedList(string directorName , unsigned int minPoint , unsigned int minYear , unsigned int price , unsigned int maxYear , string name){
-	if(!isRequestingUserPublisher() || isrequestingUserAdmin() )
-		throw PermissionDenialException();
-
 	string publishedFilmsDatas = "<h1>The Films You have Uploaded</h1> <br>";
 	publishedFilmsDatas += films->getPublihsedList( ((Publisher*) requestingUser)->getUploadedFilms() , name , minPoint , minYear , price , maxYear , directorName);
 	return publishedFilmsDatas;
 }
 
 void MiniNet::getFollowersList(){
-	if(!isRequestingUserPublisher() || isrequestingUserAdmin() )
-		throw PermissionDenialException();
-
 	((Publisher*) requestingUser)->printYourFollowers();
 }
 
 void MiniNet::follow(unsigned int id){
-	if(isrequestingUserAdmin() )
-		throw PermissionDenialException();
-
 	systemSecurity->checkIdExistence(users , id);
-	if(!systemSecurity->findUserById(users , id)->getPublishingState() )
-		throw PermissionDenialException();
-
 	Publisher* followed = (Publisher*) systemSecurity->findUserById(users , id);
 	followed->addToFollowers(requestingUser);
 	requestingUser->sendMessageToFollowedPublisher(followed);
 }
 
 void MiniNet::addMoney(unsigned int amount){
-	if(isrequestingUserAdmin() )
-		throw PermissionDenialException();
 	requestingUser->addToCredit(amount);
 }
 
 void MiniNet::buyFilm(unsigned int filmId){
-	if(isrequestingUserAdmin() )
-		throw PermissionDenialException();
-
 	Film* desiredFilm = films->findFilmByIdInDatabase(filmId);
 
 	if(!requestingUser->hasFilm(desiredFilm) ){
@@ -214,26 +197,16 @@ vector<unsigned int> MiniNet::decreaseEachIndexByOne(vector<unsigned int> anInde
 }
 
 void MiniNet::getMoneyFromNet(){
-	if(!isRequestingUserPublisher() || isrequestingUserAdmin() )
-		throw PermissionDenialException();
-
 	requestingUser->addToCredit(getPublisherSoldFilmsMoney() );
 }
 
 string MiniNet::getPurchasedList(string name , unsigned int minYear , unsigned int price , unsigned int maxYear , string directorName){
-	if(isrequestingUserAdmin() )
-		throw PermissionDenialException();
-
 	string purchasedFilmsDatas = "<h1> The Films You Bought</h1><br>";
 	purchasedFilmsDatas += films->getPurchasedList( requestingUser->getPurchasedFilms() , name , NOT_A_FACTOR , minYear , price , maxYear , directorName);
 	return purchasedFilmsDatas;
 }
 
 void MiniNet::rateFilm(unsigned int filmId , unsigned int score){
-	if(isrequestingUserAdmin() )
-		throw PermissionDenialException();
-
-	films->checkFilmPurchased(requestingUser , filmId);
 	Film* desiredFilm = films->findFilmByIdInDatabase(filmId);
 	desiredFilm->rate(requestingUser , score);
 	requestingUser->sendMessageToRatedPublisher(desiredFilm);
@@ -241,10 +214,6 @@ void MiniNet::rateFilm(unsigned int filmId , unsigned int score){
 }
 
 void MiniNet::comment(unsigned int filmId , string commentContent){
-	if(isrequestingUserAdmin() )
-		throw PermissionDenialException();
-
-	films->checkFilmPurchased(requestingUser , filmId);
 	Film* desiredFilm = films->findFilmByIdInDatabase(filmId);
 	desiredFilm->newComment(requestingUser , commentContent);
 	requestingUser->sendMessageToCommentedPublisher(desiredFilm);
@@ -252,10 +221,6 @@ void MiniNet::comment(unsigned int filmId , string commentContent){
 }
 
 void MiniNet::replyComment(unsigned int filmId , unsigned int commentId , string content){
-	if(!isRequestingUserPublisher() || isrequestingUserAdmin() )
-		throw PermissionDenialException();
-
-	films->checkFilmOwnership( (Publisher*)requestingUser , filmId);
 	Film* desiredFilm = films->findFilmByIdInDatabase(filmId);
 	desiredFilm->replyOneComment(commentId , content);
 	((Publisher*) requestingUser)->notifyCommenterOnReply(desiredFilm->findCommentById(commentId)->getCommentOwner() );
@@ -263,44 +228,32 @@ void MiniNet::replyComment(unsigned int filmId , unsigned int commentId , string
 }
 
 void MiniNet::deleteComment(unsigned int filmId , unsigned int commentId){
-	if(!isRequestingUserPublisher() || isrequestingUserAdmin() )
-		throw PermissionDenialException();
-
-	films->checkFilmOwnership( (Publisher*) requestingUser , filmId);
 	Film* desiredFilm = films->findFilmByIdInDatabase(filmId);
 	desiredFilm->deleteOneComment(commentId);
 	cout << SUCCESS_MESSAGE << endl;
 }
 
 void MiniNet::getUnreadMessages(){
-	if(isrequestingUserAdmin() )
-		throw PermissionDenialException();
-
 	requestingUser->showUnreadMessages();
 }
 
 void MiniNet::getAllMessages(unsigned int limit){
-	if(isrequestingUserAdmin() )
-		throw PermissionDenialException();
-
 	requestingUser->showReadMessages(limit);
 }
 
 string MiniNet::searchFilmsInDatabase(string directorName  , unsigned int minPoint , unsigned int minYear  , unsigned int price , unsigned int maxYear , string name ){
-	if(isrequestingUserAdmin() )
-		throw PermissionDenialException();
-
 	string searchedFilmsDatas = "<h1>The Films On The Net</h1> <br>";
 	searchedFilmsDatas += films->getSearchedDatabaseList(name , minPoint , minYear , price , maxYear , directorName);
 	return searchedFilmsDatas;
 }
 
-void MiniNet::showFurtherInfo(unsigned int filmId){
-	if(isrequestingUserAdmin() )
-		throw PermissionDenialException();
-
+string MiniNet::showFurtherInfo(unsigned int filmId){
+	string filmFurtherInfo;
 	Film* desiredFilm = films->findFilmByIdInDatabase(filmId);
-	desiredFilm->printDetailedVersionOfYourself();
-	cout << endl;
-	films->giveRecommendation(requestingUser , desiredFilm);
+	filmFurtherInfo += "<h2>Details :</h2><br>";
+	filmFurtherInfo += desiredFilm->printDetailedVersionOfYourself();
+	filmFurtherInfo += "<br>";
+	filmFurtherInfo += films->giveRecommendation(requestingUser , desiredFilm);
+
+	return filmFurtherInfo;
 }

@@ -59,21 +59,15 @@ void FilmRepository::checkFilmExistence(unsigned int id){
 		throw NotFoundException();
 }
 
-void FilmRepository::checkFilmOwnership(Publisher* assertedOwner , unsigned int id){
-	checkFilmExistence(id);
-	if(findFilmById(id , assertedOwner->getUploadedFilms() ) == nullptr)
-		throw PermissionDenialException();
-}
-
-void FilmRepository::checkFilmPurchased(Customer* assertedPurchaser , unsigned int id){
-	checkFilmExistence(id);
+bool FilmRepository::checkFilmPurchased(Customer* assertedPurchaser , unsigned int id){
 	if(findFilmById(id , assertedPurchaser->getPurchasedFilms()) == nullptr)
-		throw PermissionDenialException();
+		return false;
+
+	return true;
 }
 
 
 void FilmRepository::deleteFilm(Publisher* filmOwner , unsigned int id){
-	checkFilmOwnership(filmOwner , id);
 	Film* deletedFilm = findFilmById(id , allFilms);
 	deletedFilm->beUnavailable();
 	filmOwner->deleteMyFilm(findPositionById(id , filmOwner->getUploadedFilms() ) );
@@ -81,7 +75,6 @@ void FilmRepository::deleteFilm(Publisher* filmOwner , unsigned int id){
 }
 
 void FilmRepository::editFilm(Publisher* assertedOwner , unsigned int id , string newName , unsigned int newYear , unsigned int newLength , string newSummary , string newDirector){
-	checkFilmOwnership(assertedOwner , id);
 	Film* modifiedFilm = findFilmById(id , allFilms);
 	if(newName != "")
 		modifiedFilm->setName(newName);
@@ -281,23 +274,26 @@ vector<Film*> FilmRepository::getFilmsWithoutRecommendedCustomerPurchases(vector
 	return desiredList;	
 }
 
-void FilmRepository::giveRecommendation(Customer* recommendedCustomer , Film* recommendedOnFilm){
+string FilmRepository::giveRecommendation(Customer* recommendedCustomer , Film* recommendedOnFilm){
 	vector<Film*> recommendedGraphFilms = graphOfFilms->getRecommendedFilms(recommendedOnFilm);
 	vector<Film*> dislikedList = recommendedCustomer->getPurchasedFilms();
 	dislikedList.push_back(recommendedOnFilm);
 	vector<Film*> filteredList = getFilmsWithoutRecommendedCustomerPurchases(recommendedGraphFilms , dislikedList);
 
-	printRecommendedList(filteredList);
+	return printRecommendedList(filteredList);
 }
 
-void FilmRepository::printRecommendedList(vector<Film*> recommendedList){
-	cout << "Recommendation Film" << endl;
-	cout << "#. Film Id | Film Name | Film Length | Film Director" << endl;
+string FilmRepository::printRecommendedList(vector<Film*> recommendedList){
+	string recommendedFilms;
+	recommendedFilms += "<h2>Recommended Films :</h2><br>";
+	recommendedFilms += "<h3>->Film Name | Film Length | Film Director</h3><br>";
 	for(unsigned int i = 0 ; i < recommendedList.size() ; i++){
 		if(i == NUMBER_OF_ELEMENTS_GIVEN_AS_RECOMMENDATION_LIST )
 			break;
-		cout << i + 1 << ". ";
-		recommendedList[i]->printRecommendedEdition();
-		cout << endl;
+		recommendedFilms += (to_string(i + 1) + ". ");
+		recommendedFilms += recommendedList[i]->printRecommendedEdition();
+		recommendedFilms += makeFurtherInfoButton(recommendedList[i]->getId() );
+		recommendedFilms += "<br>";
 	}
+	return recommendedFilms;
 }

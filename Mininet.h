@@ -17,6 +17,8 @@ public:
 	//
 	void startNet();
 	void updateRequestingUser(std::string newRequestingUsername);
+	bool hasRequestingUserMoneyForFilm(unsigned int id);
+	bool hasRequestingUserBoughtThisFilm(unsigned int id);
 	bool isRequestingUserPublisher();
 	void registerUser(std::string email , std::string username , std::string password , unsigned int age , bool isPublisher);
 	void loginUser(std::string username , std::string password);
@@ -39,7 +41,7 @@ public:
 	void getUnreadMessages();
 	void getAllMessages(unsigned int limit);
 	std::string searchFilmsInDatabase(std::string directorName , unsigned int minPoint , unsigned int minYear , unsigned int price , unsigned int maxYear , std::string name);
-	void showFurtherInfo(unsigned int filmId);
+	std::string showFurtherInfo(unsigned int filmId);
 private:
 	unsigned int totalNetCredit;
 	unsigned int theIdsAssigned;

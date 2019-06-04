@@ -10,21 +10,6 @@ public:
 	virtual const char* what() const throw() { return  "Not Found"; }
 };
 
-class BadRequestException : public exception {
-public:
-	virtual const char* what() const throw() { return "Bad Request"; }
-};
-
-class PermissionDenialException : public exception {
-public: 
-	virtual const char* what() const throw() { return "Permission Denied"; }
-};
-
-class NotEnoughMoneyException : public exception {
-public:
-	virtual const char* what() const throw() { return  "Not enough Credit, recharge your account!"; }
-};
-
 class PasswordNotMatchingUsernameException : public exception {
 public:
 	virtual const char* what() const throw() { return  "Wrong Password!!!"; }

@@ -14,6 +14,7 @@ public:
 	~Customer();
 	virtual std::string getUsername() const;
 	virtual bool hasPassword(const std::string& assertedPassword) const;
+	virtual bool hasMoney(const unsigned int amount) const;
 	virtual std::vector<Film*> getPurchasedFilms() const; 
 	virtual unsigned int getId() const;
 	virtual bool getPublishingState() const;

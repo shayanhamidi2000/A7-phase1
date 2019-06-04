@@ -19,10 +19,10 @@ public:
 	std::string getSearchedDatabaseList(std::string name  , unsigned int minPoint , unsigned int minYear , unsigned int price , unsigned maxYear , std::string directorName);	
 	std::string getPublihsedList(std::vector<Film*> givenList , std::string name  , unsigned int minPoint , unsigned int minYear , unsigned int price , unsigned maxYear , std::string directorName);
 	std::string getPurchasedList(std::vector<Film*> givenList , std::string name  , unsigned int minPoint , unsigned int minYear , unsigned int price , unsigned maxYear , std::string directorName);
-	void checkFilmPurchased(Customer* assertedPurchaser , unsigned int id);
+	bool checkFilmPurchased(Customer* assertedPurchaser , unsigned int id);
 	void checkFilmOwnership(Publisher* assertedOwner , unsigned int id);
 	void updateFilmsGraph(Film* boughtFilm , std::vector<Film*> commonlyBoughtFilms);
-	void giveRecommendation(Customer* recommendedCustomer , Film* recommendedOnFilm);
+	std::string giveRecommendation(Customer* recommendedCustomer , Film* recommendedOnFilm);
 private:
 	unsigned int theIdsAssigned;
 	std::vector<Film*> allFilms;
@@ -47,7 +47,7 @@ private:
 	std::vector<Film*> sortFilmsById(std::vector<Film*> unsortedList);
 	void checkFilmExistence(unsigned int id);
 	std::vector<Film*> getFilmsWithoutRecommendedCustomerPurchases(std::vector<Film*> fullList , std::vector<Film*> dislikedList);
-	void printRecommendedList(std::vector<Film*> recommendedList);
+	std::string printRecommendedList(std::vector<Film*> recommendedList);
 };
 
 

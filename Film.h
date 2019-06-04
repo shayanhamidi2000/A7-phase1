@@ -30,8 +30,8 @@ public:
 	void setSummary(const std::string& summary);
 	Publisher* getOwner() const;
 	std::string printYourself() const;
-	void printDetailedVersionOfYourself() const;
-	void printRecommendedEdition() const;
+	std::string printDetailedVersionOfYourself() const;
+	std::string printRecommendedEdition() const;
 	void rate(Customer* rater , const unsigned int rate);
 	void newComment(Customer* commenter , const std::string& newCommentContent);
 	void replyOneComment(const unsigned int commentId , const std::string& replyContent);

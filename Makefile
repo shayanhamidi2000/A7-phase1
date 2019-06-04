@@ -17,10 +17,10 @@ Handlers.o: Handlers.cpp Handlers.h Config.h Mininet.h server/server.hpp
 FilmRepository.o: FilmRepository.cpp FilmRepository.h Film.h Publisher.h FilmGraph.h Exceptions.h Config.h
 	${CC} -c FilmRepository.cpp -o FilmRepository.o
 
-Customer.o: Customer.cpp Customer.h Publisher.h Message.h Film.h Exceptions.h
+Customer.o: Customer.cpp Customer.h Publisher.h Message.h Film.h
 	${CC} -c Customer.cpp -o Customer.o
 
-Publisher.o: Publisher.cpp Publisher.h Customer.h Film.h Exceptions.h
+Publisher.o: Publisher.cpp Publisher.h Customer.h Film.h
 	${CC} -c Publisher.cpp -o Publisher.o
 
 Film.o: Film.cpp Film.h Comment.h Point.h Publisher.h Customer.h Exceptions.h Config.h
