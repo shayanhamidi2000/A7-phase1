@@ -62,6 +62,7 @@ void MiniNet::startNet(){
     server.post("/register" , new RegisterHandler(this));
     server.post("/" , new LoginHandler(this));
     server.get("/home" , new HomePageHandler(this) );
+    server.post("/home" , new FilterFilmsHanlder(this) );
     server.get("/logout" , new LogoutHandler() );
     server.get("/addFilm" , new ShowPage("static/addFilm.html") );
     server.post("/addFilm" , new AddFilmHandler(this) );
@@ -99,12 +100,12 @@ void MiniNet::loginUser(string username , string password){
 
 }
 
-string MiniNet::loadHomePageDatas(){
+string MiniNet::loadHomePageDatas(string director){
 	string homePageDatas;
 	if(isRequestingUserPublisher() )
-		homePageDatas += getPublishedList("" , 0 , 0 , 0 , 0 , "");
+		homePageDatas += getPublishedList(director , 0 , 0 , 0 , 0 , "");
 
-	homePageDatas += searchFilmsInDatabase("" , 0 , 0 , 0 , 0 , "");
+	homePageDatas += searchFilmsInDatabase(director , 0 , 0 , 0 , 0 , "");
 	return homePageDatas;
 }
 

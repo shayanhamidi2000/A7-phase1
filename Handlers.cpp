@@ -60,13 +60,39 @@ string accumulateHeadOfHtml(const string& body , const string& title){
 	return modifiedBody;
 }
 
-string accumulateNavbar(const string& body){
+string accumulateNavbar(const string& body , MiniNet* miniNetAccess){
 	string modifiedBody = body;
 	modifiedBody += "<ul>";
 	modifiedBody += "<li><a class='active' href='/logout'>Logout</a></li>";
     modifiedBody += "<li><a class='active' href='/home'>Home</a></li>";
     modifiedBody += "<li><a class='active' href='/profile'>My Profile</a></li>";
+    if(miniNetAccess->isRequestingUserPublisher() )
+    	modifiedBody += "<li><a class='active' href='/addFilm'>Add Film On Net</a></li>";
 	modifiedBody += "</ul>";
+
+	return modifiedBody;
+}
+
+string makeFilterForm(){
+	string filterForm;
+	filterForm += "<form action='/home' method='post'>";
+	filterForm += "<input type='text' placeholder='Director Name' name='director' value='' />";
+	filterForm += "<button type='submit'> Filter </button>";
+	filterForm += "</form>";
+	filterForm += "<br>";
+
+	return filterForm;
+}
+
+string accumulateBodyOfHtmlForHomePage(const string& body , const string& director , MiniNet* miniNetAccess){
+	string modifiedBody = body;
+	modifiedBody += "<body>";
+	modifiedBody = accumulateNavbar(modifiedBody , miniNetAccess);
+	modifiedBody += makeFilterForm();
+	modifiedBody += "<div>"; 
+	modifiedBody += miniNetAccess->loadHomePageDatas(director);
+	modifiedBody += "</div>";
+	modifiedBody += "</body>";
 
 	return modifiedBody;
 }
@@ -82,27 +108,12 @@ Response* HomePageHandler::callback(Request* request){
 	string body;
 	body += "<!DOCTYPE html>";
     body += "<html>";
-    body = accumulateHeadOfHtml(body , "submit-film");
-    body = accumulateBodyOfHtml(body);
+    body = accumulateHeadOfHtml(body , "Home");
+    body = accumulateBodyOfHtmlForHomePage(body , "" , miniNetAccess);
     body += "</html>";
 	response->setBody(body);
 
 	return response;
-}
-
-string HomePageHandler::accumulateBodyOfHtml(const string& body){
-	string modifiedBody = body;
-	modifiedBody += "<body>";
-	modifiedBody = accumulateNavbar(modifiedBody);
-	if(miniNetAccess->isRequestingUserPublisher() )
-    	modifiedBody += "<li><a class='active' href='/addFilm'>Add Film On Net</a></li>";
-	
-	modifiedBody += "<div>"; 
-	modifiedBody += miniNetAccess->loadHomePageDatas();
-	modifiedBody += "</div>";
-	modifiedBody += "</body>";
-
-	return modifiedBody;
 }
 
 Response* LogoutHandler::callback(Request* request){
@@ -158,9 +169,8 @@ Response* ProfilePageHandler::callback(Request* request){
 std::string ProfilePageHandler::accumulateBodyOfHtml(const std::string& body){
 	string modifiedBody = body;
 	modifiedBody += "<body>";
-	modifiedBody = accumulateNavbar(modifiedBody);
-	if(miniNetAccess->isRequestingUserPublisher() )
-    	modifiedBody += "<li><a class='active' href='/addFilm'>Add Film On Net</a></li>";
+	modifiedBody = accumulateNavbar(modifiedBody , miniNetAccess);
+	
 	
 	modifiedBody += showCredit();
 	modifiedBody += makeAccountChargeButton();
@@ -201,5 +211,24 @@ Response* ChargeMoneyHandler::callback(Request* request){
 	miniNetAccess->addMoney(stoi(request->getBodyParam(MONEY_AMOUNT_KEY) ) );
 
 	Response* response = Response::redirect("/profile");
+	return response;
+}
+
+FilterFilmsHanlder::FilterFilmsHanlder(MiniNet* theMiniNet){
+	miniNetAccess = theMiniNet;
+}
+
+Response* FilterFilmsHanlder::callback(Request* request){
+	Response* response = new Response();
+	response->setHeader("Content-Type", "text/html");
+	miniNetAccess->updateRequestingUser(request->getSessionId() );
+	string body;
+	body += "<!DOCTYPE html>";
+    body += "<html>";
+    body = accumulateHeadOfHtml(body , "Home");
+    body = accumulateBodyOfHtmlForHomePage(body , request->getBodyParam(FILM_DIRECTOR_KEY) , miniNetAccess );
+    body += "</html>";
+	response->setBody(body);
+
 	return response;
 }

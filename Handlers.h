@@ -28,7 +28,6 @@ public:
 	virtual Response* callback(Request* request);
 private:
 	MiniNet* miniNetAccess;	
-	std::string accumulateBodyOfHtml(const std::string& body);
 };
 
 class LogoutHandler : public RequestHandler{
@@ -66,6 +65,14 @@ private:
 class ChargeMoneyHandler : public RequestHandler {
 public:
 	ChargeMoneyHandler(MiniNet* theMiniNet);
+	virtual Response* callback(Request* request);
+private:
+	MiniNet* miniNetAccess;	
+};
+
+class FilterFilmsHanlder : public RequestHandler {
+public:
+	FilterFilmsHanlder(MiniNet* theMiniNet);
 	virtual Response* callback(Request* request);
 private:
 	MiniNet* miniNetAccess;	
