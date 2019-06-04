@@ -70,6 +70,7 @@ void MiniNet::startNet(){
     server.get("/profile" , new ProfilePageHandler(this) );
     server.post("/chargeAccount" , new ChargeMoneyHandler(this) );
     server.post("/seeFurther" , new MoreInfoPageHandler(this) );
+    server.post("/buyFilm" , new BuyFilmHandler(this) );
     server.run();
   	} catch (Server::Exception e) {
     	cerr << e.getMessage() << endl;

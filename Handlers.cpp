@@ -257,9 +257,9 @@ string MoreInfoPageHandler::makeBuyButton(unsigned int id , MiniNet* miniNetAcce
 	buyButton += ("<input type='hidden' name='film_id' value='" + to_string(id) + "'/>" );
 	buyButton += "<button type='submit'";
 	if(!miniNetAccess->hasRequestingUserMoneyForFilm(id) )
-		buyButton += "disabled='disabled'>";
+		buyButton += "disabled='disabled'";
 
-	buyButton += "Buy This Film</button> ";
+	buyButton += ">Buy This Film</button> ";
 	buyButton += "</form>";
 	buyButton += "<br>";
 	return buyButton;
@@ -290,3 +290,16 @@ string MoreInfoPageHandler::accumulateBodyOfHtml(const string& body , unsigned i
 
 	return modifiedBody;
 }
+
+BuyFilmHandler::BuyFilmHandler(MiniNet* theMiniNet){
+	miniNetAccess = theMiniNet;
+}
+
+Response* BuyFilmHandler::callback(Request* request){
+	miniNetAccess->updateRequestingUser(request->getSessionId() );
+	miniNetAccess->buyFilm(stoi(request->getBodyParam(FILM_ID_KEY) ) );
+
+	Response* response = Response::redirect("/profile");
+	return response;
+}
+

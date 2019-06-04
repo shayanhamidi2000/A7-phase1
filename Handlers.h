@@ -89,5 +89,13 @@ private:
 	std::string makeRateForm(unsigned int filmId);
 };
 
+class BuyFilmHandler : public RequestHandler {
+public:
+	BuyFilmHandler(MiniNet* theMiniNet);
+	virtual Response* callback(Request* request);
+private:
+	MiniNet* miniNetAccess;	
+};
+
 
 #endif
