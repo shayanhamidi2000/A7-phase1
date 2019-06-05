@@ -62,6 +62,7 @@ void MiniNet::startNet(){
     server.post("/register" , new RegisterHandler(this));
     server.post("/" , new LoginHandler(this));
     server.get("/home" , new HomePageHandler(this) );
+    server.get("/css" , new ShowPage("static/MYCSS.css") );
     server.post("/home" , new FilterFilmsHanlder(this) );
     server.get("/logout" , new LogoutHandler() );
     server.get("/addFilm" , new ShowPage("static/addFilm.html") );
@@ -109,8 +110,10 @@ void MiniNet::loginUser(string username , string password){
 
 string MiniNet::loadHomePageDatas(string director){
 	string homePageDatas;
-	if(isRequestingUserPublisher() )
+	if(isRequestingUserPublisher() ){
 		homePageDatas += getPublishedList(director , 0 , 0 , 0 , 0 , "");
+		homePageDatas += "<br><br><br>";
+	}
 
 	homePageDatas += searchFilmsInDatabase(director , 0 , 0 , 0 , 0 , "");
 	return homePageDatas;
@@ -136,8 +139,10 @@ void MiniNet::deleteAFilm(unsigned int id){
 }
 
 string MiniNet::getPublishedList(string directorName , unsigned int minPoint , unsigned int minYear , unsigned int price , unsigned int maxYear , string name){
-	string publishedFilmsDatas = "<h1>The Films You have Uploaded</h1> <br>";
+	string publishedFilmsDatas = "<table id='Films'>";
+	publishedFilmsDatas += "<caption>The Films You have Uploaded</caption>";
 	publishedFilmsDatas += films->getPublihsedList( ((Publisher*) requestingUser)->getUploadedFilms() , name , minPoint , minYear , price , maxYear , directorName);
+	publishedFilmsDatas += "</table>";
 	return publishedFilmsDatas;
 }
 
@@ -204,8 +209,10 @@ void MiniNet::getMoneyFromNet(){
 }
 
 string MiniNet::getPurchasedList(string name , unsigned int minYear , unsigned int price , unsigned int maxYear , string directorName){
-	string purchasedFilmsDatas = "<h1> The Films You Bought</h1><br>";
+	string purchasedFilmsDatas = "<table id='Films'>";
+	purchasedFilmsDatas += "<caption>The Films You Bought</caption>";
 	purchasedFilmsDatas += films->getPurchasedList( requestingUser->getPurchasedFilms() , name , NOT_A_FACTOR , minYear , price , maxYear , directorName);
+	purchasedFilmsDatas += "</table>";
 	return purchasedFilmsDatas;
 }
 
@@ -241,18 +248,21 @@ void MiniNet::getAllMessages(unsigned int limit){
 }
 
 string MiniNet::searchFilmsInDatabase(string directorName  , unsigned int minPoint , unsigned int minYear  , unsigned int price , unsigned int maxYear , string name ){
-	string searchedFilmsDatas = "<h1>The Films On The Net</h1> <br>";
+	string searchedFilmsDatas = "<table id='Films'>";
+	searchedFilmsDatas += "<caption>The Films On The Net</caption>";
 	searchedFilmsDatas += films->getSearchedDatabaseList(name , minPoint , minYear , price , maxYear , directorName);
+	searchedFilmsDatas += "</table>";
 	return searchedFilmsDatas;
 }
 
 string MiniNet::showFurtherInfo(unsigned int filmId){
 	string filmFurtherInfo;
 	Film* desiredFilm = films->findFilmByIdInDatabase(filmId);
-	filmFurtherInfo += "<h2>Details :</h2><br>";
 	filmFurtherInfo += desiredFilm->printDetailedVersionOfYourself();
-	filmFurtherInfo += "<br>";
+	filmFurtherInfo += "<br><br><br>";
+	filmFurtherInfo += "<center><table id='Films2'>";
+	filmFurtherInfo += "<caption>Recommended Films</caption>";
 	filmFurtherInfo += films->giveRecommendation(requestingUser , desiredFilm);
-
+	filmFurtherInfo += "</table></center><br><br>";
 	return filmFurtherInfo;
 }

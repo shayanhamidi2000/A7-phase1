@@ -78,12 +78,12 @@ string Film::printYourself() const{
 	stringstream avgPointStream;
 	avgPointStream << setprecision(2) << this->averagePoint;
 	string avgPointString = avgPointStream.str();
-	return  name + A_GAP + to_string(length) + A_GAP + to_string(price) + A_GAP + avgPointString +  A_GAP + to_string(manufacturedYear) + A_GAP + directorName;
+	return  "<td>" + name + A_GAP + to_string(length) + A_GAP + to_string(price) + A_GAP + avgPointString +  A_GAP + to_string(manufacturedYear) + A_GAP + directorName + "</td>";
 }
 
 string Film::printRecommendedEdition() const{
 	string recommendedDetail;
-	recommendedDetail += (name + A_GAP + to_string(length) + A_GAP + directorName);
+	recommendedDetail += ("<td>" + name + A_GAP + to_string(length) + A_GAP + directorName + "</td>");
 
  	return recommendedDetail;
  }
@@ -175,23 +175,33 @@ string Film::printDetailedVersionOfYourself() const{
 	avgPointStream << setprecision(2) << this->averagePoint;
 	string avgPointString = avgPointStream.str();
 
-	detailedData += "Name :   " + name + "<br>";
-	detailedData += "Director :   " + directorName + "<br>";
-	detailedData += "Length :   " + to_string(length) + "<br>";
-	detailedData += "Year :   " + to_string(manufacturedYear) + "<br>";
-	detailedData += "Summary :   " + summary + "<br>";
-	detailedData += "Rate :   " + avgPointString + "<br>";
-	detailedData += "Price :   " + to_string(price) + "<br>";
-	detailedData += "<br>";
-	detailedData += printComments();
+	detailedData += "<table id='Films'>";
+	detailedData += "<caption>Details Of The Film</caption>";
+	detailedData += "<tr><th>Name</th><th>Duration</th><th>Price</th><th>Rate</th><th>Manufactured Year</th><th>Director</th><th>Summary</th></tr>";
+	detailedData += "<tr>";
+
+	detailedData += ("<td>" + name + "</td>");
+	detailedData += ("<td>" + to_string(length) + "</td>");
+	detailedData += ("<td>" + to_string(price) + "</td>");
+	detailedData += ("<td>" + avgPointString + "</td>");
+	detailedData += ("<td>" + to_string(manufacturedYear) + "</td>");
+	detailedData += ("<td>" + directorName + "</td>");
+	detailedData += ("<td>" + summary + "</td>");
+
+	detailedData += "</tr>";
+	detailedData += "</table> <br><br>";
+	if(comments.size() > 0)
+		detailedData += printComments();
 	return detailedData;
 }
 
 string Film::printComments() const {
 	string commentsDetails;
-	commentsDetails += "<h2>Comments :</h2><br>";
+	commentsDetails += "<center><table id='Comments' ><tr>";
+	commentsDetails += "<caption>Comments On This Film</caption>";
 	for(unsigned int i = 0 ; i < comments.size() ; i++)
-		commentsDetails += comments[i]->printYourself();	
+		commentsDetails += ("<td>" + comments[i]->printYourself() + "</td>" );	
 
+	commentsDetails += "</tr></table></center><br>";
 	return commentsDetails;
 }

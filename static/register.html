@@ -2,48 +2,26 @@
 <html>
   <head>
    <title>Enrollment-Page </title> 
-    <style>
-    ul {
-      list-style-type: none;
-      margin: 0;
-      padding: 0;
-      overflow: hidden;
-      background-color: #333;
-    }
-
-    li {
-      float: left;
-    }
-
-    li a {
-      display: block;
-      color: white;
-      text-align: center;
-      padding: 14px 16px;
-      text-decoration: none;
-    }
-
-    li a:hover {
-      background-color: #111;
-    }
-    </style>
+   <link rel="stylesheet" href="/css">
   </head> 
   <body style="text-align: center;">
-    <ul>
-      <li><a class="active" href="/">Login</a></li>
-    </ul>
+  <ul>
+      <li><a class="li" href="/">Login</a></li>
+   </ul>
+  <div id="bg1">
+    <div class="module">			
     <h1>Film Community</h1>
     <h2>Enroll Now!</h2>
-    <div>
-      <form action="/register" method="post">
-        Username: <input name="username" type="text" placeholder="Username" required="required" /> <br><br>
-        Email: <input name="email" type="email" placeholder="Email" required="required" /> <br><br>
-        Age: <input name="age" type="number" placeholder="Age" required="required" min="1" /> <br><br>
-        Password: <input type="password" name="password" placeholder="Password" required="required" /> <br><br>
-        Confirm Password: <input type="password" name="confirmedPassword" placeholder="Password" required="required" /> <br><br>
+      <form action="/register" method="post" class="form">
+        Username: <input name="username" type="text" placeholder="Username" required="required" class="textbox" /> <br><br>
+        Email: <input name="email" type="email" placeholder="Email" required="required" class="textbox"/> <br><br>
+        Age: <input name="age" type="number" placeholder="Age" required="required" min="1" class="textbox" /> <br><br>
+        Password: <input type="password" name="password" placeholder="Password" required="required" class="textbox" /> <br><br>
+        Confirm Password: <input type="password" name="confirmedPassword" placeholder="Password" class="textbox" required="required" /> <br><br>
         Publishing State: <input type="radio" name="publishingState" value="customer" checked>Customer          <input type="radio" name="publishingState" value="publisher">Publisher <br><br>
-        <button type="submit" >Sign-up</button>
+        <button type="submit" class="button">Sign-up</button>
       </form>
     </div>
+  </div>	
   </body>
 </html>

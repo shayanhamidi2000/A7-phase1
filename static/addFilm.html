@@ -2,50 +2,28 @@
 <html>
 <head>
   <title>submit-film</title>
-    <style>
-    ul {
-      list-style-type: none;
-      margin: 0;
-      padding: 0;
-      overflow: hidden;
-      background-color: #333;
-    }
-
-    li {
-      float: left;
-    }
-
-    li a {
-      display: block;
-      color: white;
-      text-align: center;
-      padding: 14px 16px;
-      text-decoration: none;
-    }
-
-    li a:hover {
-      background-color: #111;
-    }
-    </style>
+	<link rel="stylesheet" href="/css">
   </head>
 <body style="text-align: center;">
     <ul>
-      <li><a class="active" href="/logout">Logout</a></li>
-      <li><a class="active" href="/home">Home</a></li>
-      <li><a class="active" href="/profile">My Profile</a></li>
+      <li><a class="li" href="/logout">Logout</a></li>
+      <li><a class="li" href="/home">Home</a></li>
+      <li><a class="li" href="/profile">My Profile</a></li>
     </ul>
+    <div id="bg3">
+    <div class="module">	
     <h1>Film Community</h1>
     <h2>Add Your New Film On Net!</h2>
-    <div>
-      <form action="/addFilm" method="post">
-        Name: <input name="name" type="text" placeholder="Name" required="required" /> <br><br>
-        Duration: <input type="number" name="length" placeholder="Duration in minutes" required="required" min="1" /> <br><br>
-        Price: <input name="price" type="number" placeholder="Price" min="1" required="required" /> <br><br>
-        Manufactured Year: <input type="number" name="year" placeholder="Year" min="1" required="required" /> <br><br>
-        Director Name: <input name="director" type="text" placeholder="DirectorX" required="required" /> <br><br>
-        Summary: <textarea name="summary" placeholder="Once upon a time..." required="required" > </textarea> <br><br>
-        <button type="submit" >Submit</button>
+      <form action="/addFilm" method="post" class="form">
+        Name: <input name="name" type="text" placeholder="Name" class="textbox" required="required" /> <br><br>
+        Duration: <input type="number" name="length" class="textbox" placeholder="Duration in minutes" required="required" min="1" /> <br><br>
+        Price: <input name="price" type="number" class="textbox" placeholder="Price" min="1" required="required" /> <br><br>
+        Manufactured Year: <input type="number" name="year" class="textbox" placeholder="Year" min="1" required="required" /> <br><br>
+        Director Name: <input name="director" type="text" placeholder="DirectorX" class="textbox" required="required" /> <br><br>
+        <textarea name="summary" placeholder="Summary..." required="required" class="textarea" > </textarea> <br><br>
+        <button type="submit" class="button">Submit</button>
       </form>
+    </div>
     </div>
   </body>
 </html>

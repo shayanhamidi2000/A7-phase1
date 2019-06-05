@@ -201,11 +201,12 @@ vector<Film*> FilmRepository::filterFilmsMaxYear(vector<Film*> givenFilmList , u
 
 string FilmRepository::printPurchasedFilms(vector<Film*> desiredList){
 	string filmsDatas;
-	filmsDatas += "<h2> -> Name | Duration | Price | Rate | Year | Director </h2> <br>";
+	filmsDatas += "<tr><th>#</th><th>Name</th><th>Duration</th><th>Price</th><th>Rate</th><th>Year</th><th>Director</th></tr>";
 	for(unsigned int i = 0 ; i < desiredList.size() ; i++){
-		filmsDatas += to_string(i + 1) + ". ";
+		filmsDatas += "<tr>";
+		filmsDatas += ("<td>" + to_string(i + 1) + "</td>");
 		filmsDatas += desiredList[i]->printYourself();
-		filmsDatas += "<br>";
+		filmsDatas += "</tr>";
 	}
 	return filmsDatas;
 }
@@ -213,43 +214,47 @@ string FilmRepository::printPurchasedFilms(vector<Film*> desiredList){
 
 string FilmRepository::printPublishedFilms(vector<Film*> desiredList){
 	string filmsDatas;
-	filmsDatas += "<h2> -> Name | Duration | Price | Rate | Year | Director </h2> <br>";
+	filmsDatas += "<tr><th>#</th><th>Name</th><th>Duration</th><th>Price</th><th>Rate</th><th>Year</th><th>Director</th></tr>";
 	for(unsigned int i = 0 ; i < desiredList.size() ; i++){
-		filmsDatas += to_string(i + 1) + ". ";
+		filmsDatas += "<tr>";
+		filmsDatas += ("<td>" + to_string(i + 1) + "</td>");
 		filmsDatas += desiredList[i]->printYourself();
 		filmsDatas += makeDeleteButtonForFilm(desiredList[i]->getId() );
-		filmsDatas += "<br>";
+		filmsDatas += "</tr>";
 	}
 	return filmsDatas;
 }
 
 string FilmRepository::makeDeleteButtonForFilm(unsigned int id){
-	string deleteButton;	
-	deleteButton += "<form action='/deleteFilm' method='post' >";
+	string deleteButton = "<td>";	
+	deleteButton += "<form action='/deleteFilm' method='post'>";
 	deleteButton += ("<input type='hidden' name='film_id' value='" + to_string(id) + "'/>" );
-	deleteButton += "<button type='submit'> Delete </button> ";
+	deleteButton += "<button type='submit' class='button1'> Delete </button> ";
 	deleteButton += "</form>";
+	deleteButton += "</td>";
 	return deleteButton;
 }
 
 string FilmRepository::makeFurtherInfoButton(unsigned int id){
-	string furtherInfoButton;	
+	string furtherInfoButton = "<td>";	
 	furtherInfoButton += "<form action='/seeFurther' method='post' >";
 	furtherInfoButton += ("<input type='hidden' name='film_id' value='" + to_string(id) + "'/>" );
-	furtherInfoButton += "<button type='submit'> see More </button> ";
+	furtherInfoButton += "<button type='submit' class='button1'> see More </button> ";
 	furtherInfoButton += "</form>";
+	furtherInfoButton += "</td>";
 	return furtherInfoButton;
 }
 
 
 string FilmRepository::printFilmList(vector<Film*> desiredList){
 	string filmsDatas;
-	filmsDatas += "<h2> -> Name | Duration | Price | Rate | Year | Director </h2> <br>";
+	filmsDatas += "<tr><th>#</th><th>Name</th><th>Duration</th><th>Price</th><th>Rate</th><th>Year</th><th>Director</th></tr>";
 	for(unsigned int i = 0 ; i < desiredList.size() ; i++){
-		filmsDatas += to_string(i + 1) + ". ";
+		filmsDatas += "<tr>";
+		filmsDatas += ("<td>" + to_string(i + 1) + "</td>");
 		filmsDatas += desiredList[i]->printYourself();
 		filmsDatas += makeFurtherInfoButton(desiredList[i]->getId() );
-		filmsDatas += "<br>";
+		filmsDatas += "</tr>";
 	}
 	return filmsDatas;
 }
@@ -285,15 +290,15 @@ string FilmRepository::giveRecommendation(Customer* recommendedCustomer , Film* 
 
 string FilmRepository::printRecommendedList(vector<Film*> recommendedList){
 	string recommendedFilms;
-	recommendedFilms += "<h2>Recommended Films :</h2><br>";
-	recommendedFilms += "<h3>->Film Name | Film Length | Film Director</h3><br>";
+	recommendedFilms += "<tr><th>#</th><th>Name</th><th>Length</th><th>Film Director</th></tr>";
 	for(unsigned int i = 0 ; i < recommendedList.size() ; i++){
 		if(i == NUMBER_OF_ELEMENTS_GIVEN_AS_RECOMMENDATION_LIST )
 			break;
-		recommendedFilms += (to_string(i + 1) + ". ");
+		recommendedFilms += "<tr>";
+		recommendedFilms += ("<td>" + to_string(i + 1) + "</td>");
 		recommendedFilms += recommendedList[i]->printRecommendedEdition();
 		recommendedFilms += makeFurtherInfoButton(recommendedList[i]->getId() );
-		recommendedFilms += "<br>";
+		recommendedFilms += "</tr>";
 	}
 	return recommendedFilms;
 }

@@ -49,12 +49,7 @@ string accumulateHeadOfHtml(const string& body , const string& title){
 	string modifiedBody = body;
 	modifiedBody += "<head>";
  	modifiedBody += ("<title>" + title + "</title>");
-    modifiedBody += "<style>";
-    modifiedBody += "ul { list-style-type: none; margin: 0; padding: 0; overflow: hidden; background-color: #333; }";
-	modifiedBody += "li { float: left; }";
-    modifiedBody += "li a { display: block; color: white; text-align: center; padding: 14px 16px; text-decoration: none; }";
- 	modifiedBody += "li a:hover { background-color: #111; }";
-    modifiedBody += "</style>";
+ 	modifiedBody += "<link rel='stylesheet' href='/css'";
   	modifiedBody += "</head>";
 
 	return modifiedBody;
@@ -75,10 +70,11 @@ string accumulateNavbar(const string& body , MiniNet* miniNetAccess){
 
 string makeFilterForm(){
 	string filterForm;
-	filterForm += "<form action='/home' method='post'>";
-	filterForm += "<input type='text' placeholder='Director Name' name='director' value='' />";
-	filterForm += "<button type='submit'> Filter </button>";
-	filterForm += "</form>";
+	filterForm += "<br>";
+	filterForm += "<center><form action='/home' method='post'>";
+	filterForm += "<input type='text' placeholder='Director Name' name='director' class='textbox2' value='' />  ";
+	filterForm += "<button type='submit' class='button2'> Filter </button>";
+	filterForm += "</form></center>";
 	filterForm += "<br>";
 
 	return filterForm;
@@ -184,21 +180,20 @@ std::string ProfilePageHandler::accumulateBodyOfHtml(const std::string& body){
 
 string ProfilePageHandler::makeAccountChargeButton(){
 	string chargeButton;
-	chargeButton += "<form style='align = center;' action='/chargeAccount' method='post'>";
-	chargeButton += "<input type='number' value='0' min='0' name='amount' placeholder='Charge Your Account!' />";
-	chargeButton += "<button type='submit'>charge</button>";
+	chargeButton += "<form style='margin-left:300px;' action='/chargeAccount' method='post'>";
+	chargeButton += "<input type='number' min='0' name='amount' class='textbox2' placeholder='Charge Your Account!' />  ";
+	chargeButton += "<button type='submit' class='button2'>charge</button>";
 	chargeButton += "</form>";
-	chargeButton += "<br>";
+	chargeButton += "<br><br>";
 	return chargeButton;
 }
 
 string ProfilePageHandler::showCredit(){
 	string credit;
-	credit += "<p style='align = center;'>";
-	credit += "Your Credit:  ";
+	credit += "<p class='creditText'>";
+	credit += "Your Credit :  ";
 	credit += miniNetAccess->showCredit();
 	credit += "</p>";
-	credit += "<br>";
 	return credit;
 }
 
@@ -253,36 +248,35 @@ Response* MoreInfoPageHandler::callback(Request* request){
 
 string MoreInfoPageHandler::makeBuyButton(unsigned int id , MiniNet* miniNetAccess){
 	string buyButton;	
-	buyButton += "<form action='/buyFilm' method='post' >";
+	buyButton += "<center><form action='/buyFilm' method='post' style='margin-top:20px;'>";
 	buyButton += ("<input type='hidden' name='film_id' value='" + to_string(id) + "'/>" );
-	buyButton += "<button type='submit'";
+	buyButton += "<button type='submit' class='button2'";
 	if(!miniNetAccess->hasRequestingUserMoneyForFilm(id) )
 		buyButton += "disabled='disabled'";
 
 	buyButton += ">Buy This Film</button> ";
-	buyButton += "</form>";
-	buyButton += "<br>";
+	buyButton += "</form></center><br>";
 	return buyButton;
 }
 
 string MoreInfoPageHandler::makeRateForm(unsigned int id){
 	string rateForm;	
-	rateForm += "<form action='/rateFilm' method='post' >";
+	rateForm += "<center><form action='/rateFilm' method='post'>";
 	rateForm += ("<input type='hidden' name='film_id' value='" + to_string(id) + "'/>" );
-	rateForm += "<input type='number' name='score' min='1' max='10'/>";
-	rateForm += "<button type='submit'>Rate This Film</button> ";
-	rateForm += "</form>";
-	rateForm += "<br>";
+	rateForm += "<input type='number' name='score' min='1' max='10' class='textbox2'/>";
+	rateForm += "<button type='submit' class='button2'>Rate This Film</button> ";
+	rateForm += "</form></center>";
+	rateForm += "<br><br>";
 	return rateForm;
 }	
 
 string MoreInfoPageHandler::makeCommentForm(unsigned int filmId){
 	string commentForm;
-	commentForm += "<form action='/newComment' method='post'>";
-	commentForm += "<textarea name='content' placeholder='comment Here!' > </textarea><br>";
+	commentForm += "<center><form action='/newComment' method='post'>";
+	commentForm += "<textarea name='content' placeholder='comment Here!' class='textarea' > </textarea><br>";
 	commentForm += ("<input type='hidden' name='film_id' value='" + to_string(filmId) + "'/>" );
-	commentForm += "<button type='submit'>Comment</button>";
-	commentForm += "</form>";
+	commentForm += "<button type='submit' class='button2'>Comment</button>";
+	commentForm += "</form><center>";
 	return commentForm;
 }
 
